@@ -1,0 +1,19 @@
+{
+  "name": "ftp-nanny",
+  "version": "1.0.0",
+  "description": "An FTP update notification system and browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dbrugne/ftp-nanny.git"
+  },
+  "author": "dbrugne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dbrugne/ftp-nanny/issues"
+  },
+  "homepage": "https://github.com/dbrugne/ftp-nanny#readme"
+}
