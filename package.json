@@ -4,7 +4,8 @@
   "description": "An FTP update notification system and browser",
   "main": "app/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fetch": "node --harmony --harmony_destructuring fetch/index"
   },
   "repository": {
     "type": "git",
@@ -16,10 +17,11 @@
     "url": "https://github.com/dbrugne/ftp-nanny/issues"
   },
   "homepage": "https://github.com/dbrugne/ftp-nanny#readme",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "async": "^2.0.0-rc.2",
+    "mongoose": "^4.4.11",
+    "parse-torrent-name": "^0.5.4",
     "ssh2": "^0.5.0"
   }
 }
