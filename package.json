@@ -5,7 +5,7 @@
   "main": "app/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fetch": "node --harmony --harmony_destructuring fetch/index"
+    "fetch": "node sync"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,15 @@
     "url": "https://github.com/dbrugne/ftp-nanny/issues"
   },
   "homepage": "https://github.com/dbrugne/ftp-nanny#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^2.9.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^1.2.0",
+    "eslint-plugin-react": "^5.0.1"
+  },
   "dependencies": {
-    "async": "^2.0.0-rc.2",
+    "dotenv": "^2.0.0",
     "mongoose": "^4.4.11",
     "parse-torrent-name": "^0.5.4",
     "ssh2": "^0.5.0"
