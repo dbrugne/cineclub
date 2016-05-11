@@ -1,6 +1,6 @@
 require('dotenv').config();
-require('./lib/mongoConnect')(process.env.MONGO_DB || 'mongodb://localhost/test');
-const pushTask = require('./lib/pushTask');
+require('./lib/mongo')(process.env.MONGO_DB || 'mongodb://localhost/test');
+const pushTask = require('./lib/push/index');
 
 pushTask({
   to: process.env.MAIL_TO,

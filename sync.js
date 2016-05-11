@@ -1,6 +1,6 @@
 require('dotenv').config();
-require('./lib/mongoConnect')(process.env.MONGO_DB || 'mongodb://localhost/test');
-const syncTask = require('./lib/syncTask');
+require('./lib/mongo')(process.env.MONGO_DB || 'mongodb://localhost/test');
+const syncTask = require('./lib/sync/index');
 
 syncTask({
   host: process.env.HOST,
