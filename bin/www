@@ -4,8 +4,11 @@
  * Module dependencies.
  */
 
-require('dotenv').config();
-require('../lib/mongo')(process.env.MONGO_DB || 'mongodb://localhost/test');
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+require('../lib/mongo')(process.env.MONGO_URI || 'mongodb://localhost/test');
 
 const app = require('../lib/http/app');
 const debug = require('debug')('ftp-nanny:server');

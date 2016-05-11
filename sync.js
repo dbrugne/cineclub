@@ -1,4 +1,7 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 require('./lib/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
 const syncTask = require('./lib/sync/index');
 
