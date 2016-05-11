@@ -3,5 +3,9 @@
     "installedESLint": true,
     "plugins": [
         "react"
-    ]
+    ],
+    "globals": {
+        "describe": true,
+        "it": true
+    }
 }
