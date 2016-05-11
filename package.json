@@ -4,8 +4,8 @@
   "description": "An FTP update notification system and browser",
   "main": "app/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "fetch": "node sync"
+    "sync": "node sync",
+    "push": "node push"
   },
   "repository": {
     "type": "git",
@@ -26,8 +26,13 @@
   },
   "dependencies": {
     "dotenv": "^2.0.0",
+    "ejs": "^2.4.1",
+    "exit": "^0.1.2",
     "mongoose": "^4.4.11",
+    "nodemailer": "^2.3.2",
+    "nodemailer-mailgun-transport": "^1.0.2",
     "parse-torrent-name": "^0.5.4",
+    "premailer-api": "^1.0.4",
     "ssh2": "^0.5.0"
   }
 }
