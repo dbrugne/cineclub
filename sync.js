@@ -1,5 +1,5 @@
 require('dotenv').config();
-require('./lib/mongo')(process.env.MONGO_DB || 'mongodb://localhost/test');
+require('./lib/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
 const syncTask = require('./lib/sync/index');
 
 syncTask({
