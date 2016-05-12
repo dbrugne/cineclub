@@ -37,3 +37,7 @@ node_modules
 
 # dotenv
 .env
+
+# CSS
+public/stylesheets/style.css
+public/stylesheets/style.css.map
