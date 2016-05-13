@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
 const pushTask = require('./lib/push/index');
+const exit = require('exit');
 
 pushTask({
   to: process.env.MAIL_TO,
@@ -14,4 +15,9 @@ pushTask({
   mailgunDomain: process.env.MAILGUN_DOMAIN,
   mailgunApiKey: process.env.MAILGUN_API_KEY,
   subjectTemplate: process.env.MAIL_SUBJECT,
-});
+})
+  .then(() => exit(0))
+  .catch((err) => {
+    console.error(err);
+    exit(1);
+  });
