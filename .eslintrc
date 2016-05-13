@@ -1,11 +1,12 @@
 {
-    "extends": "airbnb",
-    "installedESLint": true,
-    "plugins": [
-        "react"
-    ],
-    "globals": {
-        "describe": true,
-        "it": true
-    }
+  "extends": "airbnb",
+  "installedESLint": true,
+  "plugins": [
+    "react"
+  ],
+  "globals": {
+    "describe": true,
+    "it": true,
+    "expect": true
+  }
 }
