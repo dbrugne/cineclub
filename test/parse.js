@@ -26,7 +26,8 @@ describe('util::parse', () => {
   });
 
   it('valid tv', () => {
-    const r = parser('dir/subdir/The.Big.Bang.Theory.S09E18.FASTSUB.VOSTFR.1080p.HDTV.x264.AAC-GOBO2S.mkv');
+    const p = 'dir/sub/The.Big.Bang.Theory.S09E18.FASTSUB.VOSTFR.1080p.HDTV.x264.AAC-GOBO2S.mkv';
+    const r = parser(p);
     r.should.be.an('object');
     r.should.deep.equal({
       season: 9,
