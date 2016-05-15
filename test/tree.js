@@ -37,7 +37,6 @@ describe('sync::tree', () => {
         files[0].file.should.be.an('object');
         const file = files[0].file;
 
-        file.should.property('parent', 'remote');
         file.should.property('size', '0');
         file.should.property('dir', fixtures);
         file.should.property('mtime');
