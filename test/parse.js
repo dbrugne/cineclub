@@ -1,7 +1,7 @@
 const chai = require('chai');
 chai.should();
 
-const parser = require('../lib/util/parse');
+const parser = require('../lib/decorate/parse');
 
 describe('util::parse', () => {
   it('is function', () => {
