@@ -66,7 +66,39 @@ describe('models::cache', () => {
           .then((keyResult) => {
             should.exist(keyResult);
             keyResult.should.be.an('object');
-            keyResult.should.deep.equal(result);
+            keyResult.should.deep.equal(Object.assign({ from_cache: true }, result));
+            done();
+          })
+          .catch(err => done(err));
+      })
+      .catch(err => done(err));
+  });
+
+  it('empty result', (done) => {
+    Cache.setKey(method, query, {})
+      .then(() => {
+        Cache.getKey(method, query)
+          .then((keyResult) => {
+            should.exist(keyResult);
+            keyResult.should.be.an('object');
+            keyResult.should.deep.equal({ from_cache: true });
+            done();
+          })
+          .catch(err => done(err));
+      })
+      .catch(err => done(err));
+  });
+
+  it('not save from_cache', (done) => {
+    Cache.setKey(method, query, Object.assign({ from_cache: true }, result))
+      .then(() => {
+        const key = Cache.generateKey(method, query);
+        Cache.findOne({ key }).exec()
+          .then((doc) => {
+            should.exist(doc);
+            doc.should.be.an('object');
+            doc.should.property('key', key);
+            doc.result.should.deep.equal(result);
             done();
           })
           .catch(err => done(err));
