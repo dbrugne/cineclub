@@ -22,6 +22,7 @@ describe('util::parse', () => {
         'TRUEFRENCH',
         'mHD',
       ],
+      parsed: true,
     });
   });
 
@@ -42,6 +43,7 @@ describe('util::parse', () => {
         'FASUB.VOSTFR',
         'HDTV',
       ],
+      parsed: true,
     });
   });
 
@@ -59,6 +61,7 @@ describe('util::parse', () => {
         'TRUEFRENCH',
         'mHD',
       ],
+      parsed: true,
     });
   });
 
@@ -74,12 +77,13 @@ describe('util::parse', () => {
       group: 'JMT',
       title: 'Braquo',
       episodeName: 'FiNAL FRENCH',
+      parsed: true,
     });
   });
 
   it('invalid', () => {
     const r = parser('invalid.mkv');
     r.should.be.an('object');
-    r.should.deep.equal({});
+    r.should.deep.equal({ title: 'invalid' });
   });
 });
