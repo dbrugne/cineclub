@@ -7,7 +7,7 @@ const syncTask = require('./lib/sync/index');
 const exit = require('exit');
 
 const SftpDriver = require('./lib/sync/sftp');
-const Ignore = require('./lib/sync/ignore');
+const factory = require('./lib/sync/ignore');
 
 const driver = new SftpDriver({
   host: process.env.SFTP_HOST,
@@ -16,7 +16,7 @@ const driver = new SftpDriver({
   password: process.env.SFTP_PASSWORD,
 });
 
-const ignore = new Ignore(process.env.SFTP_IGNORE, process.env.SFTP_DIR);
+const ignore = factory(process.env.SFTP_IGNORE, process.env.SFTP_DIR);
 
 syncTask({
   driver,
