@@ -142,5 +142,77 @@
         "total_results": 1
       }
     }
+  },
+  "torrent": {
+    "invalid": {
+      "file": "invalid.mkv",
+      "result": {
+        "title": "invalid"
+      }
+    },
+    "movie": {
+      "file": "/dir/sub/Divergente.2.2015.TRUEFRENCH.720p.mHD.AC3.x264-ROMKENT.mkv",
+      "result": {
+        "year": 2015,
+        "resolution": "720p",
+        "codec": "x264",
+        "audio": "AC3",
+        "group": "ROMKENT",
+        "title": "Divergente 2",
+        "excess": [
+          "TRUEFRENCH",
+          "mHD"
+        ],
+        "parsed": true
+      }
+    },
+    "tv": {
+      "file": "/dir/sub/The.Big.Bang.Theory.S09E18.FASTSUB.VOSTFR.1080p.HDTV.x264.AAC-GOBO2S.mkv",
+      "result": {
+        "season": 9,
+        "episode": 18,
+        "resolution": "1080p",
+        "quality": "TS",
+        "codec": "x264",
+        "audio": "AAC",
+        "group": "GOBO2S",
+        "title": "The Big Bang Theory",
+        "excess": [
+          "FASUB.VOSTFR",
+          "HDTV"
+        ],
+        "parsed": true
+      }
+    },
+    "nodot": {
+      "file": "Divergente 2 2015 TRUEFRENCH 720p mHD AC3 x264 ROMKENT.mkv",
+      "result": {
+        "year": 2015,
+        "resolution": "720p",
+        "codec": "x264",
+        "audio": "AC3",
+        "title": "Divergente 2",
+        "group": "ROMKENT",
+        "excess": [
+          "TRUEFRENCH",
+          "mHD"
+        ],
+        "parsed": true
+      }
+    },
+    "parent": {
+      "file": "Braquo.S03E08.FiNAL.FRENCH.720p.BluRay.x264-JMT/episode.mkv",
+      "result": {
+        "season": 3,
+        "episode": 8,
+        "resolution": "720p",
+        "quality": "BluRay",
+        "codec": "x264",
+        "group": "JMT",
+        "title": "Braquo",
+        "episodeName": "FiNAL FRENCH",
+        "parsed": true
+      }
+    }
   }
 }

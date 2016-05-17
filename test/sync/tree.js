@@ -1,15 +1,14 @@
-const chai = require('chai');
-chai.should();
+const should = require('chai').should();
 
 const path = require('path');
 const fs = require('fs');
-const tree = require('../lib/sync/tree');
-const Filesystem = require('../lib/sync/filesystem');
-const Ignore = require('../lib/sync/ignore');
+const tree = require('../../lib/sync/tree');
+const Filesystem = require('../../lib/sync/filesystem');
+const factory = require('../../lib/sync/ignore');
 
-const fixtures = path.join(__dirname, './fixtures/remote');
+const fixtures = path.join(__dirname, '../fixtures/remote');
 
-describe('sync::tree', () => {
+describe('sync/tree', () => {
   before(done => {
     // git doesn't version empty dir
     const emptyDir = `${fixtures}/empty`;
@@ -70,7 +69,7 @@ describe('sync::tree', () => {
   });
 
   it('ignore', (done) => {
-    const ignore = new Ignore('/foo', fixtures);
+    const ignore = factory('/foo', fixtures);
     tree(filesystem, ignore, fixtures)
       .then(files => {
         files.should.be.an('array');

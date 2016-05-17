@@ -1,9 +1,9 @@
 const should = require('chai').should();
 
-const util = require('../lib/util/tests');
-const Cache = require('../lib/models/cache');
+const util = require('../../lib/util/tests');
+const Cache = require('../../lib/models/cache');
 
-describe('models::cache', () => {
+describe('models/cache', () => {
   before(util.before);
   beforeEach(util.beforeEach);
   after(util.after);

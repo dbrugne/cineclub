@@ -1,14 +1,14 @@
 const should = require('chai').should();
 
-const util = require('../lib/util/tests');
-const fixtures = require('./fixtures.json');
+const util = require('../../lib/util/tests');
+const fixtures = require('../fixtures/data.json');
 const opts = {
   api: util.tmdbMockup(fixtures.tmdb),
 };
 
-const extract = require('../lib/decorate/extract');
+const extract = require('../../lib/decorate/extract');
 
-describe('decorate::extract', () => {
+describe('decorate/extract', () => {
   before(util.before);
   beforeEach(util.beforeEach);
   after(util.after);

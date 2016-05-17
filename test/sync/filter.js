@@ -1,8 +1,8 @@
 const should = require('chai').should();
 
-const filter = require('../lib/sync/filter');
+const filter = require('../../lib/sync/filter');
 
-describe('sync::ignore', () => {
+describe('sync/filter', () => {
   it('is function', () => {
     filter.should.be.a('function');
   });

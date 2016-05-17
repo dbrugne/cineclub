@@ -1,9 +1,8 @@
-const chai = require('chai');
-chai.should();
+const should = require('chai').should();
 
-const diff = require('../lib/sync/diff');
+const diff = require('../../lib/sync/diff');
 
-describe('sync::diff', () => {
+describe('sync/diff', () => {
   it('is function', () => {
     diff.should.be.a('function');
   });

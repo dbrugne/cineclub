@@ -1,15 +1,15 @@
 const should = require('chai').should();
 
-const util = require('../lib/util/tests');
-const fixtures = require('./fixtures.json');
+const util = require('../../lib/util/tests');
+const fixtures = require('../fixtures/data.json');
 const opts = {
   api: util.tmdbMockup(fixtures.tmdb),
 };
 
-const Medias = require('../lib/models/medias');
-const decorate = require('../lib/decorate/index');
+const Medias = require('../../lib/models/medias');
+const decorate = require('../../lib/decorate/index');
 
-describe('decorate::index', () => {
+describe('decorate/index', () => {
   before(util.before);
   beforeEach(util.beforeEach);
   after(util.after);
