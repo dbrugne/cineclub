@@ -2,6 +2,7 @@ const chai = require('chai');
 chai.should();
 
 const path = require('path');
+const fs = require('fs');
 const tree = require('../lib/sync/tree');
 const Filesystem = require('../lib/sync/filesystem');
 const Ignore = require('../lib/sync/ignore');
@@ -9,6 +10,24 @@ const Ignore = require('../lib/sync/ignore');
 const fixtures = path.join(__dirname, './fixtures/remote');
 
 describe('sync::tree', () => {
+  before(done => {
+    // git doesn't version empty dir
+    const emptyDir = `${fixtures}/empty`;
+    fs.access(emptyDir, fs.F_OK, (notExists) => {
+      if (notExists) {
+        fs.mkdirSync(emptyDir);
+      }
+
+      // check that folder is really empty
+      const existingFiles = fs.readdirSync(emptyDir);
+      if (existingFiles.length) {
+        return done(new Error('empty/ is not empty'));
+      }
+
+      return done();
+    });
+  });
+
   it('is function', () => {
     tree.should.be.a('function');
   });
@@ -47,7 +66,7 @@ describe('sync::tree', () => {
 
         done();
       })
-      .catch(err => done(err));
+      .catch(err => done(new Error(err)));
   });
 
   it('ignore', (done) => {
@@ -58,6 +77,6 @@ describe('sync::tree', () => {
         files.length.should.equal(2);
         done();
       })
-      .catch(err => done(err));
+      .catch(err => done(new Error(err)));
   });
 });
