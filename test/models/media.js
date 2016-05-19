@@ -168,6 +168,26 @@ describe('models/cache', () => {
       .catch(done);
   });
   it('poster', () => {
-    // @todo
+    const withPoster = new Media({
+      path: '',
+      info: { poster_path: '/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg' },
+    });
+    withPoster.getPosterUrl()
+      .should.equal('https://image.tmdb.org/t/p/w92/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg');
+    withPoster.getPosterUrl(92)
+      .should.equal('https://image.tmdb.org/t/p/w92/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg');
+    withPoster.getPosterUrl(154)
+      .should.equal('https://image.tmdb.org/t/p/w154/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg');
+
+    const withoutInfo = new Media({
+      path: '',
+    });
+    should.not.exist(withoutInfo.getPosterUrl());
+
+    const withoutPoster = new Media({
+      path: '',
+      info: {},
+    });
+    should.not.exist(withoutInfo.getPosterUrl());
   });
 });
