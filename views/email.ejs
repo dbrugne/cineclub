@@ -118,7 +118,7 @@
         font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
         font-weight: 200;
         line-height: 1.2em;
-        margin: 40px 0 10px;
+        margin: 30px 0 10px;
       }
 
         h1 {
@@ -182,18 +182,22 @@
           font-size: 12px;
         }
         table.medias {
-
+          border-top: 1px solid #EAEAEA;
         }
         .m-img {
-          width: 100px;
+          width: 92px;
           vertical-align: top;
+          border-bottom: 1px solid #EAEAEA;
+          padding-top: 8px;
         }
         .m-img-img {
-          width: 100px;
+          width: 92px;
         }
         .m-infos {
           padding-left: 15px;
-          vertical-align: top
+          padding-top: 5px;
+          vertical-align: top;
+          border-bottom: 1px solid #EAEAEA;
         }
         .m-title {
           margin-bottom: 5px;
@@ -215,11 +219,10 @@
         }
         .m-unparsed {
           font-size: 12px;
-          color: #666666;
         }
         .m-removed {
           font-size: 12px;
-          color: #666666;
+          color: #c40d0e;
         }
 
       </style>
@@ -240,10 +243,9 @@
               <p class="today"><%=subject%></p>
               <p>Salut les copinous,</p>
               <p>Mais que s'est-il passé aujourd'hui sur le FTP ? Chaque soir nous vous proposons un résumé rapide et synthétique des trucs à savoir.</p>
-
+              <p>A très bientôt les copinous.</p>
               <% if (movies.length || series.length) { %>
-              <h1>Nouveautés</h1>
-              <p>Les nouveaux films et épisodes arrivés aujourd'hui.</p>
+              <h1>What's new today</h1>
               <% } %>
 
               <% if (movies.length) { %>
@@ -254,8 +256,12 @@
                   <td class="m-img"><img class="m-img-img" src="<%=i.cover%>" alt="cover"></td>
                   <td class="m-infos">
                     <p class="m-title"><b><%=i.title%></b></p>
-                    <p class="m-underline"><%=i.underline%></p>
-                    <p class="m-description"><%=i.description%></p>
+                    <p class="m-underline">
+                      <span><%=i.year%></span>
+                      <span>| <%=i.genres%></span>
+                      <span>| <%=i.vote%></span>
+                    </p>
+                    <p class="m-description"><%=i.overview%></p>
                     <p class="m-link"><a href="<%=i.url%>">voir plus</a></p>
                   </td>
                 </tr>
@@ -263,21 +269,24 @@
               </table>
               <% } %>
 
-              <% if (series.length) { %>
+              <% if (tv.length) { %>
               <h3>Nouveaux épisodes de séries</h3>
               <table class="medias" cellpadding="0" cellspacing="0" border="0">
-                <% series.forEach((s) => { %>
+                <% tv.forEach((s) => { %>
                 <tr>
                   <td class="m-img"><img class="m-img-img" src="<%=s.cover%>" alt="cover"></td>
                   <td class="m-infos">
                     <p class="m-title"><b><%=s.title%></b></p>
+                    <p class="m-underline">
+                      <span><%=s.genres%></span>
+                      <span>| <%=s.vote%></span>
+                    </p>
+                    <p class="m-description"><%=s.overview%></p>
                     <p class="m-episodes">
-                      <% s.episodes.forEach((e) => { %>
+                      <% s.episodes.forEach(e => { %>
                       Saison <b><%=e.season%></b> épisode <b><%=e.episode%></b>
-                      <% if (e.title) { %>
-                       - "<i><%=e.title%></i>"
-                      <% } %>
-                      <a href="<%=e.url%>">voir plus</a><br>
+                      -
+                      <a class="m-link" href="<%=e.url%>">voir plus</a><br>
                       <% }); %>
                     </p>
                   </td>
@@ -289,22 +298,20 @@
               <% if (unparsed && unparsed.length) { %>
               <h3>Nouveaux médias non identifiés</h3>
               <p class="m-unparsed">
-                <% unparsed.forEach((r) => { %>
-                <i><%=r.path%></i> <a href="<%=r.url%>">voir plus</a><br>
+                <% unparsed.forEach((u) => { %>
+                <i><%=u.path%></i> <a href="<%=u.url%>">voir plus</a><br>
                 <% }); %>
               </p>
               <% } %>
 
               <% if (removed && removed.length) { %>
-              <h3>Médias supprimés récements (admin)</h3>
+              <h3>Médias supprimés récements</h3>
               <p class="m-removed">
                 <% removed.forEach((r) => { %>
                 <i><%=r.path%></i><br>
                 <% }); %>
               </p>
               <% } %>
-
-              <p>A très bientôt les copinous.</p>
             </td>
           </tr>
         </table>
