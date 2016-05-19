@@ -6,7 +6,7 @@ const opts = {
   api: util.tmdbMockup(fixtures.tmdb),
 };
 
-const Medias = require('../../lib/models/medias');
+const Media = require('../../lib/models/media');
 const decorate = require('../../lib/decorate/index');
 
 describe('decorate/index', () => {
@@ -40,7 +40,7 @@ describe('decorate/index', () => {
     });
   });
   it('1 doc', (done) => {
-    const doc = new Medias({
+    const doc = new Media({
       path: fixtures.tmdb.alien.file,
       created: Date.now(),
     });
@@ -60,11 +60,11 @@ describe('decorate/index', () => {
   });
   it('n docs', (done) => {
     const docs = [
-      new Medias({
+      new Media({
         path: fixtures.tmdb.alien.file,
         created: Date.now(),
       }),
-      new Medias({
+      new Media({
         path: fixtures.tmdb.jfk.file,
         created: Date.now(),
       }),
@@ -91,7 +91,7 @@ describe('decorate/index', () => {
       .catch(err => done(err));
   });
   it('unable to decorate', (done) => {
-    const doc = new Medias({
+    const doc = new Media({
       path: 'invalid.mkv',
       created: Date.now(),
     });
@@ -108,7 +108,7 @@ describe('decorate/index', () => {
   });
   describe('already decorated', () => {
     it('1 doc', (done) => {
-      const doc = new Medias({
+      const doc = new Media({
         path: fixtures.tmdb.alien.file,
         created: Date.now(),
         info: fixtures.tmdb.alien.result.results[0],
@@ -125,12 +125,12 @@ describe('decorate/index', () => {
     });
     it('n docs', (done) => {
       const docs = [
-        new Medias({
+        new Media({
           path: fixtures.tmdb.alien.file,
           created: Date.now(),
           info: fixtures.tmdb.alien.result.results[0],
         }),
-        new Medias({
+        new Media({
           path: fixtures.tmdb.jfk.file,
           created: Date.now(),
         }),
