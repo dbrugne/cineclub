@@ -7,6 +7,9 @@
         "results": [],
         "total_pages": 1,
         "total_results": 0
+      },
+      "done": {
+        "title": "Unknown"
       }
     },
     "alien": {
@@ -58,6 +61,33 @@
         ],
         "total_pages": 1,
         "total_results": 2
+      },
+      "done": {
+        "category": "movie",
+        "year": 1979,
+        "resolution": "720p",
+        "quality": "BrRip",
+        "codec": "x264",
+        "group": "YIFY",
+        "adult": false,
+        "backdrop_path": "/si4PH5RjbpdQZi3BQvV6eiBNjYD.jpg",
+        "genre_ids": [
+          27,
+          28,
+          53,
+          878
+        ],
+        "id": 348,
+        "original_language": "en",
+        "original_title": "Alien",
+        "overview": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed.",
+        "release_date": "1979-05-25",
+        "poster_path": "/2h00HrZs89SL3tXB4nbkiM7BKHs.jpg",
+        "popularity": 5.227939,
+        "title": "Alien",
+        "video": false,
+        "vote_average": 7.5,
+        "vote_count": 2201
       }
     },
     "mad men": {
@@ -109,6 +139,35 @@
         ],
         "total_pages": 1,
         "total_results": 2
+      },
+      "done": {
+        "category": "tv",
+        "season": 7,
+        "episode": 2,
+        "resolution": "720p",
+        "quality": "WEB-DL",
+        "codec": "H.264",
+        "audio": "DD5.1",
+        "group": "FANATiK",
+        "title": "Mad Men",
+        "episodeName": "VOSTFR",
+        "backdrop_path": "/c8A5IYqIT1ez15sqA8wX5tCDTmF.jpg",
+        "first_air_date": "2007-07-19",
+        "genre_ids": [
+          18
+        ],
+        "id": 1104,
+        "original_language": "en",
+        "original_name": "Mad Men",
+        "overview": "Mad Men is set in the 1960s, initially at the fictional Sterling Cooper advertising agency on Madison Avenue in New York City, and later at the newly created firm, Sterling Cooper Draper Pryce, located nearby in the Time-Life Building, at 1271 Avenue of the Americas. According to the show's pilot, the phrase \"mad men\" was a slang term coined in the 1950s by advertisers working on Madison Avenue to refer to themselves. The focal point of the series is Don Draper, creative director at Sterling Cooper and a founding partner at Sterling Cooper Draper Pryce, and the people in his life, both in and out of the office. The plot focuses on the business of the agencies as well as the personal lives of the characters, regularly depicting the changing moods and social mores of the United States in the 1960s.",
+        "origin_country": [
+          "US"
+        ],
+        "poster_path": "/6R3PCqGzyTh12Lafhop0U0MNJDz.jpg",
+        "popularity": 5.618832,
+        "name": "Mad Men",
+        "vote_average": 7.6,
+        "vote_count": 66
       }
     },
     "jfk": {
@@ -140,6 +199,28 @@
         ],
         "total_pages": 1,
         "total_results": 1
+      },
+      "done": {
+        "category": "movie",
+        "adult": false,
+        "backdrop_path": "/3vrtpYhLZB9uxpG89Fps1ngANs4.jpg",
+        "genre_ids": [
+          18,
+          53,
+          36
+        ],
+        "id": 820,
+        "original_language": "en",
+        "original_title": "JFK",
+        "overview": "New Orleans District Attorney Jim Garrison discovers there's more to the Kennedy assassination than the official story.",
+        "release_date": "1991-12-20",
+        "poster_path": "/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg",
+        "popularity": 2.199036,
+        "title": "JFK",
+        "video": false,
+        "vote_average": 7.1,
+        "vote_count": 200,
+        "media_type": "movie"
       }
     }
   },
