@@ -6,7 +6,8 @@ const opts = {
   api: util.tmdbMockup(fixtures.tmdb),
 };
 
-const Media = require('../../lib/models/media');
+const Medias = require('../../lib/models/media');
+const Cache = require('../../lib/models/cache');
 const decorate = require('../../lib/decorate/index');
 
 describe('decorate/index', () => {
@@ -40,7 +41,7 @@ describe('decorate/index', () => {
     });
   });
   it('1 doc', (done) => {
-    const doc = new Media({
+    const doc = new Medias({
       path: fixtures.tmdb.alien.file,
       created: Date.now(),
     });
@@ -60,11 +61,11 @@ describe('decorate/index', () => {
   });
   it('n docs', (done) => {
     const docs = [
-      new Media({
+      new Medias({
         path: fixtures.tmdb.alien.file,
         created: Date.now(),
       }),
-      new Media({
+      new Medias({
         path: fixtures.tmdb.jfk.file,
         created: Date.now(),
       }),
@@ -91,7 +92,7 @@ describe('decorate/index', () => {
       .catch(err => done(err));
   });
   it('unable to decorate', (done) => {
-    const doc = new Media({
+    const doc = new Medias({
       path: 'invalid.mkv',
       created: Date.now(),
     });
@@ -108,7 +109,7 @@ describe('decorate/index', () => {
   });
   describe('already decorated', () => {
     it('1 doc', (done) => {
-      const doc = new Media({
+      const doc = new Medias({
         path: fixtures.tmdb.alien.file,
         created: Date.now(),
         info: fixtures.tmdb.alien.result.results[0],
@@ -125,12 +126,12 @@ describe('decorate/index', () => {
     });
     it('n docs', (done) => {
       const docs = [
-        new Media({
+        new Medias({
           path: fixtures.tmdb.alien.file,
           created: Date.now(),
           info: fixtures.tmdb.alien.result.results[0],
         }),
-        new Media({
+        new Medias({
           path: fixtures.tmdb.jfk.file,
           created: Date.now(),
         }),
@@ -155,5 +156,28 @@ describe('decorate/index', () => {
         })
         .catch(err => done(err));
     });
+  });
+  it('sequential run', (done) => {
+    const sameDocs = [
+      new Medias({
+        path: fixtures.tmdb.alien.file,
+        created: Date.now(),
+      }),
+      new Medias({
+        path: fixtures.tmdb.alien.file,
+        created: Date.now(),
+      }),
+    ];
+    decorate(sameDocs, opts)
+      .then(r => {
+        r.should.be.an('array');
+        r.length.should.equal(2);
+      })
+      .then(() => Cache.where({}).count().exec())
+      .then(count => {
+        count.should.equal(1);
+        done();
+      })
+      .catch(err => done(err));
   });
 });
