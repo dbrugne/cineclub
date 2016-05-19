@@ -1,4 +1,6 @@
-const should = require('chai').should();
+const chai = require('chai');
+const should = chai.should();
+chai.use(require('chai-properties'));
 
 const util = require('../../lib/util/tests');
 const fixtures = require('../fixtures/data.json');
@@ -33,8 +35,7 @@ describe('decorate/extract', () => {
     extract(fixtures.tmdb.alien.file, opts)
       .then((r) => {
         should.exist(r);
-        r.should.deep.equal(fixtures.tmdb.alien.result.results[0]);
-        r.should.property('category', 'movie');
+        r.should.have.properties(fixtures.tmdb.alien.done);
         done();
       })
       .catch(err => done(new Error(err)));
@@ -43,8 +44,7 @@ describe('decorate/extract', () => {
     extract(fixtures.tmdb['mad men'].file, opts)
       .then((r) => {
         should.exist(r);
-        r.should.deep.equal(fixtures.tmdb['mad men'].result.results[0]);
-        r.should.property('category', 'tv');
+        r.should.have.properties(fixtures.tmdb['mad men'].done);
         done();
       })
       .catch(done);
@@ -53,8 +53,7 @@ describe('decorate/extract', () => {
     extract(fixtures.tmdb.jfk.file, opts)
       .then((r) => {
         should.exist(r);
-        r.should.deep.equal(fixtures.tmdb.jfk.result.results[0]);
-        r.should.property('category', 'movie');
+        r.should.have.properties(fixtures.tmdb.jfk.done);
         done();
       })
       .catch(err => done(new Error(err)));
@@ -64,17 +63,15 @@ describe('decorate/extract', () => {
     extract(fixtures.tmdb.jfk.file, opts)
       .then(first => {
         should.exist(first);
-        first.should.deep.equal(fixtures.tmdb.jfk.result.results[0]);
+        first.should.have.properties(fixtures.tmdb.jfk.done);
+        first.should.not.property('from_cache');
 
         // 2nd call
         extract(fixtures.tmdb.jfk.file, opts)
           .then(second => {
             should.exist(second);
-            const fromCache = Object.assign(
-              { from_cache: true },
-              fixtures.tmdb.jfk.result.results[0]
-            );
-            second.should.deep.equal(fromCache);
+            second.should.have.properties(fixtures.tmdb.jfk.done);
+            second.should.property('from_cache', true);
             done();
           })
           .catch(err => done(new Error(err)));
@@ -85,7 +82,6 @@ describe('decorate/extract', () => {
     extract(`/series/${fixtures.tmdb.jfk.file}`, opts)
       .then((r) => {
         should.exist(r);
-        r.should.deep.equal(fixtures.tmdb.jfk.result.results[0]);
         r.should.property('category', 'tv');
         done();
       })
