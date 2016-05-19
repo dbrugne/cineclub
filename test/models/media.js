@@ -167,7 +167,7 @@ describe('models/cache', () => {
       })
       .catch(done);
   });
-  it('poster', () => {
+  it('getPosterUrl', () => {
     const withPoster = new Media({
       path: '',
       info: { poster_path: '/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg' },
@@ -189,5 +189,68 @@ describe('models/cache', () => {
       info: {},
     });
     should.not.exist(withoutInfo.getPosterUrl());
+  });
+  describe('getGenres', () => {
+    it('no info', () => {
+      const doc = new Media({
+        path: '',
+      });
+      should.not.exist(doc.getGenres());
+    });
+    it('no info.genre_ids', () => {
+      const doc = new Media({
+        path: '',
+        info: {},
+      });
+      should.not.exist(doc.getGenres());
+    });
+    it('empty info.genre_ids', () => {
+      const doc = new Media({
+        path: '',
+        info: { genre_ids: [] },
+      });
+      should.not.exist(doc.getGenres());
+    });
+    it('unknow category', () => {
+      const doc = new Media({
+        path: '',
+        info: { category: 'person', genre_ids: [28] },
+      });
+      should.not.exist(doc.getGenres());
+    });
+    it('unknow genre', () => {
+      const doc = new Media({
+        path: '',
+        info: { category: 'movie', genre_ids: [-1] },
+      });
+      should.not.exist(doc.getGenres());
+    });
+    it('one movie genre', () => {
+      const doc = new Media({
+        path: '',
+        info: { category: 'movie', genre_ids: [28] },
+      });
+      const genres = doc.getGenres();
+      should.exist(genres);
+      genres.should.deep.equal(['Action']);
+    });
+    it('n genres', () => {
+      const doc = new Media({
+        path: '',
+        info: { category: 'movie', genre_ids: [28, 12] },
+      });
+      const genres = doc.getGenres();
+      should.exist(genres);
+      genres.should.deep.equal(['Action', 'Adventure']);
+    });
+    it('one tv genre', () => {
+      const doc = new Media({
+        path: '',
+        info: { category: 'tv', genre_ids: [16] },
+      });
+      const genres = doc.getGenres();
+      should.exist(genres);
+      genres.should.deep.equal(['Animation']);
+    });
   });
 });
