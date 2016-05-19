@@ -58,7 +58,6 @@ describe('models/cache', () => {
           .catch(err => done(err));
       });
   });
-
   it('getKey', (done) => {
     Cache.setKey(method, query, result)
       .then(() => {
@@ -73,7 +72,6 @@ describe('models/cache', () => {
       })
       .catch(err => done(err));
   });
-
   it('empty result', (done) => {
     Cache.setKey(method, query, {})
       .then(() => {
@@ -88,7 +86,6 @@ describe('models/cache', () => {
       })
       .catch(err => done(err));
   });
-
   it('not save from_cache', (done) => {
     Cache.setKey(method, query, Object.assign({ from_cache: true }, result))
       .then(() => {
@@ -104,5 +101,34 @@ describe('models/cache', () => {
           .catch(err => done(err));
       })
       .catch(err => done(err));
+  });
+  it('purge', (done) => {
+    const timestamp = Date.now();
+    Cache.collection.insert([
+      {
+        key: 'keep',
+        created: new Date(),
+        result: {},
+      },
+      {
+        key: 'purge',
+        created: new Date(timestamp - 1000 * 3600 * 24 * 8),
+        result: {},
+      },
+      {
+        key: 'purge_other',
+        created: new Date(timestamp - 1000 * 3600 * 24 * 10),
+        result: {},
+      },
+    ])
+      .then(() => Cache.purge())
+      .then(() => Cache.find({}).exec())
+      .then((docs) => {
+        docs.should.be.an('array');
+        docs.length.should.equal(1);
+        docs[0].key.should.equal('keep');
+        done();
+      })
+      .catch(done);
   });
 });
