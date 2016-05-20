@@ -6,7 +6,6 @@ const decorate = require('../lib/decorate/index');
 const render = require('../lib/push/render');
 const tmdbApi = require('moviedb');
 
-/* GET home page. */
 router.get('/', (req, res, next) => {
   const opts = {
     baseUrl: process.env.BASE_URL,
@@ -14,7 +13,15 @@ router.get('/', (req, res, next) => {
     premailer: false,
     api: tmdbApi(process.env.TMBDP_API_KEY),
   };
-  const period = 1; // day
+
+  let period = 1; // days
+  if (req.query && req.query.period) {
+    const int = parseInt(req.query.period, 10);
+    if (int > 1 && int < 7) {
+      period = req.query.period;
+    }
+  }
+
   let added;
   let removed;
   Media.retrieveAdded(period)
