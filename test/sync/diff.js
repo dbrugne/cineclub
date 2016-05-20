@@ -19,14 +19,28 @@ describe('sync/diff', () => {
   const oneFile = [
     { path: 'dir/file1.mkv' },
   ];
-  it('added', () => {
-    diff(twoFiles, []).should.deep.equal({ added: twoFiles, removed: [] });
-    diff(twoFiles, twoFiles).should.deep.equal({ added: [], removed: [] });
-    diff(twoFiles, oneFile).should.deep.equal({ added: [{ path: 'dir/file2.mkv' }], removed: [] });
+  describe('added', () => {
+    it('all', () => {
+      diff(twoFiles, []).should.deep.equal({ added: twoFiles, removed: [] });
+    });
+    it('no one', () => {
+      diff(twoFiles, twoFiles).should.deep.equal({ added: [], removed: [] });
+    });
+    it('only one', () => {
+      diff(twoFiles, oneFile)
+        .should.deep.equal({ added: [{ path: 'dir/file2.mkv' }], removed: [] });
+    });
   });
-  it('removed', () => {
-    diff([], twoFiles).should.deep.equal({ added: [], removed: twoFiles });
-    diff(twoFiles, twoFiles).should.deep.equal({ added: [], removed: [] });
-    diff(oneFile, twoFiles).should.deep.equal({ added: [], removed: [{ path: 'dir/file2.mkv' }] });
+  describe('removed', () => {
+    it('all', () => {
+      diff([], twoFiles).should.deep.equal({ added: [], removed: twoFiles });
+    });
+    it('no one', () => {
+      diff(twoFiles, twoFiles).should.deep.equal({ added: [], removed: [] });
+    });
+    it('only one', () => {
+      diff(oneFile, twoFiles)
+        .should.deep.equal({ added: [], removed: [{ path: 'dir/file2.mkv' }] });
+    });
   });
 });

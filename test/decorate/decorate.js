@@ -53,7 +53,7 @@ describe('decorate/index', () => {
         r.should.be.an('array').and.to.have.lengthOf(1);
         doc.should.have.property('isNew', false);
         doc.info.should.have.properties(fixtures.tmdb.alien.done);
-        doc.should.equal(r[0]); // same object
+        doc.should.equal(r[0]);
         done();
       })
       .catch(err => done(err));
@@ -76,12 +76,12 @@ describe('decorate/index', () => {
         // doc 1
         docs[0].should.have.property('isNew', false);
         docs[0].info.should.have.properties(fixtures.tmdb.alien.done);
-        docs[0].should.equal(r[0]); // same object
+        docs[0].should.equal(r[0]);
 
         // doc 2
         docs[1].should.have.property('isNew', false);
         docs[1].info.should.have.properties(fixtures.tmdb.jfk.done);
-        docs[1].should.equal(r[1]); // same object
+        docs[1].should.equal(r[1]);
 
         done();
       })
@@ -112,7 +112,7 @@ describe('decorate/index', () => {
       decorate([doc], opts)
         .then(r => {
           r.should.be.an('array').and.to.have.lengthOf(1);
-          r[0].should.equal(doc); // same object
+          r[0].should.equal(doc);
           doc.should.have.property('isNew', true);
           done();
         })

@@ -92,7 +92,7 @@ describe('models/cache', () => {
       {
         path: '/title1',
         file: {
-          mtime: new Date(Date.now() - 1000 * 3600 * 1),
+          mtime: new Date(Date.now() - 1000 * 3600),
         },
       },
       {
@@ -107,20 +107,19 @@ describe('models/cache', () => {
         result.result.ok.should.equal(1);
         Media.find({ path: { $in: ['/title1', '/title2'] } }).exec()
           .then(docs => {
-            docs.should.be.an('array');
-            docs.length.should.equal(2);
+            docs.should.be.an('array').and.have.lengthOf(2);
 
             // doc 1
-            docs[0].isNew.should.be.false;
-            docs[0].should.property('path', list[0].path);
+            docs[0].should.have.property('isNew', false);
+            docs[0].should.have.property('path', list[0].path);
+            docs[0].should.have.property('file').that.have.properties(list[0].file);
             docs[0].created.getTime().should.equal(list[0].file.mtime.getTime());
-            docs[0].file.should.deep.equal(list[0].file);
 
             // doc 2
-            docs[1].isNew.should.be.false;
-            docs[1].should.property('path', list[1].path);
+            docs[1].should.have.property('isNew', false);
+            docs[1].should.have.property('path', list[1].path);
+            docs[1].should.have.property('file').that.have.properties(list[1].file);
             docs[1].created.getTime().should.equal(list[1].file.mtime.getTime());
-            docs[1].file.should.deep.equal(list[1].file);
 
             done();
           })
@@ -133,8 +132,7 @@ describe('models/cache', () => {
       .then(() => {
         Media.retrieveRemoved(1)
           .then((docs) => {
-            docs.should.be.an('array');
-            docs.length.should.equal(2);
+            docs.should.be.an('array').and.have.lengthOf(2);
             docs[0].should.property('path', '/added.txt');
             docs[1].should.property('path', '/removed.txt');
             done();
@@ -163,8 +161,8 @@ describe('models/cache', () => {
       })
       .then(docWithInfo => {
         should.exist(docWithInfo);
-        docWithInfo.info.should.deep.equal(info);
-        (docWithoutInfo === docWithInfo).should.true; // same object
+        docWithInfo.should.have.property('info').that.have.properties(info);
+        docWithoutInfo.should.equal(docWithInfo);
         done();
       })
       .catch(done);
@@ -190,7 +188,7 @@ describe('models/cache', () => {
       path: '',
       info: {},
     });
-    should.not.exist(withoutInfo.getPosterUrl());
+    should.not.exist(withoutPoster.getPosterUrl());
   });
   describe('getGenres', () => {
     it('no info', () => {
