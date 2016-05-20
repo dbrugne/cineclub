@@ -1,4 +1,6 @@
-const should = require('chai').should();
+const chai = require('chai');
+const should = chai.should();
+chai.use(require('chai-properties'));
 
 const fixtures = require('../fixtures/data');
 
