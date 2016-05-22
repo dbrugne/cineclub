@@ -31,7 +31,7 @@ describe('decorate/index', () => {
           r.should.be.an('array').and.to.have.lengthOf(0);
           done();
         })
-        .catch(err => done(new Error(err)));
+        .catch(done);
     });
     it('undefined', (done) => {
       decorate([], opts)
@@ -39,7 +39,7 @@ describe('decorate/index', () => {
           r.should.be.an('array').and.to.have.lengthOf(0);
           done();
         })
-        .catch(err => done(new Error(err)));
+        .catch(done);
     });
   });
   it('1 doc', (done) => {

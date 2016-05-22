@@ -1,5 +1,4 @@
 const chai = require('chai');
-const should = chai.should();
 chai.use(require('chai-properties'));
 
 const path = require('path');
@@ -67,7 +66,7 @@ describe('sync/tree', () => {
 
         done();
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
 
   it('ignore', (done) => {
@@ -78,6 +77,6 @@ describe('sync/tree', () => {
         files.length.should.equal(2);
         done();
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
 });

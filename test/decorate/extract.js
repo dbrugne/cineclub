@@ -29,7 +29,7 @@ describe('decorate/extract', () => {
         should.not.exist(r);
         done();
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
   it('movie', (done) => {
     extract(fixtures.tmdb.alien.file, opts)
@@ -38,7 +38,7 @@ describe('decorate/extract', () => {
         r.should.have.properties(fixtures.tmdb.alien.done);
         done();
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
   it('tv', (done) => {
     extract(fixtures.tmdb['mad men'].file, opts)
@@ -56,7 +56,7 @@ describe('decorate/extract', () => {
         r.should.have.properties(fixtures.tmdb.jfk.done);
         done();
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
   it('get from cache', (done) => {
     // 1st call
@@ -74,9 +74,9 @@ describe('decorate/extract', () => {
             second.should.property('from_cache', true);
             done();
           })
-          .catch(err => done(new Error(err)));
+          .catch(done);
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
   it('force category for series/', (done) => {
     extract(`/series/${fixtures.tmdb.jfk.file}`, opts)
@@ -85,6 +85,6 @@ describe('decorate/extract', () => {
         r.should.property('category', 'tv');
         done();
       })
-      .catch(err => done(new Error(err)));
+      .catch(done);
   });
 });
