@@ -182,13 +182,14 @@ describe('models/cache', () => {
     const withoutInfo = new Media({
       path: '',
     });
-    should.not.exist(withoutInfo.getPosterUrl());
+    withoutInfo.getPosterUrl().should.equal('http://placehold.it/92?text=no+image');
+    withoutInfo.getPosterUrl(154).should.equal('http://placehold.it/154?text=no+image');
 
     const withoutPoster = new Media({
       path: '',
       info: {},
     });
-    should.not.exist(withoutPoster.getPosterUrl());
+    withoutPoster.getPosterUrl().should.equal('http://placehold.it/92?text=no+image');
   });
   describe('getGenres', () => {
     it('no info', () => {
