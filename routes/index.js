@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
   let period = 1; // days
   if (req.query && req.query.period) {
     const int = parseInt(req.query.period, 10);
-    if (int > 1 && int < 7) {
+    if (int >= 1 && int <= 10) {
       period = req.query.period;
     }
   }
