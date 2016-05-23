@@ -253,7 +253,7 @@
               <table class="medias" cellpadding="0" cellspacing="0" border="0">
                 <% movies.forEach((i) => { %>
                 <tr>
-                  <td class="m-img"><img class="m-img-img" src="<%=i.cover%>" alt="cover"></td>
+                  <td class="m-img"><img class="m-img-img" src="<%=i.poster%>" alt="cover"></td>
                   <td class="m-infos">
                     <p class="m-title"><b><%=i.title%></b></p>
                     <p class="m-underline">
@@ -262,7 +262,7 @@
                       <span>| <%=i.vote%></span>
                     </p>
                     <p class="m-description"><%=i.overview%></p>
-                    <p class="m-link"><a href="<%=i.url%>">voir plus</a></p>
+                    <p class="m-link"><a href="<%=i.url%>" target="_blank">voir plus</a></p>
                   </td>
                 </tr>
                 <% }); %>
@@ -274,7 +274,7 @@
               <table class="medias" cellpadding="0" cellspacing="0" border="0">
                 <% tv.forEach((s) => { %>
                 <tr>
-                  <td class="m-img"><img class="m-img-img" src="<%=s.cover%>" alt="cover"></td>
+                  <td class="m-img"><img class="m-img-img" src="<%=s.poster%>" alt="cover"></td>
                   <td class="m-infos">
                     <p class="m-title"><b><%=s.title%></b></p>
                     <p class="m-underline">
@@ -286,7 +286,7 @@
                       <% s.episodes.forEach(e => { %>
                       Saison <b><%=e.season%></b> épisode <b><%=e.episode%></b>
                       -
-                      <a class="m-link" href="<%=e.url%>">voir plus</a><br>
+                      <a class="m-link" href="<%=e.url%>" target="_blank">voir plus</a><br>
                       <% }); %>
                     </p>
                   </td>
@@ -299,7 +299,7 @@
               <h3>Nouveaux médias non identifiés</h3>
               <p class="m-unparsed">
                 <% unparsed.forEach((u) => { %>
-                <i><%=u.path%></i> <a href="<%=u.url%>">voir plus</a><br>
+                <i><%=u.path%></i> <a href="<%=u.url%>" target="_blank">voir plus</a><br>
                 <% }); %>
               </p>
               <% } %>
