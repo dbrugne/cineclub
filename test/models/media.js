@@ -5,7 +5,7 @@ chai.use(require('chai-properties'));
 const util = require('../../lib/util/tests');
 const Media = require('../../lib/models/media');
 
-describe('models/cache', () => {
+describe('models/media', () => {
   before(util.before);
   beforeEach((done) => {
     util.beforeEach(() => {
@@ -166,92 +166,5 @@ describe('models/cache', () => {
         done();
       })
       .catch(done);
-  });
-  it('getPosterUrl', () => {
-    const withPoster = new Media({
-      path: '',
-      info: { poster_path: '/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg' },
-    });
-    withPoster.getPosterUrl()
-      .should.equal('https://image.tmdb.org/t/p/w92/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg');
-    withPoster.getPosterUrl(92)
-      .should.equal('https://image.tmdb.org/t/p/w92/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg');
-    withPoster.getPosterUrl(154)
-      .should.equal('https://image.tmdb.org/t/p/w154/9bmXpKDJv2kdtD4QNexErjGTIOz.jpg');
-
-    const withoutInfo = new Media({
-      path: '',
-    });
-    withoutInfo.getPosterUrl().should.equal('http://placehold.it/92?text=no+image');
-    withoutInfo.getPosterUrl(154).should.equal('http://placehold.it/154?text=no+image');
-
-    const withoutPoster = new Media({
-      path: '',
-      info: {},
-    });
-    withoutPoster.getPosterUrl().should.equal('http://placehold.it/92?text=no+image');
-  });
-  describe('getGenres', () => {
-    it('no info', () => {
-      const doc = new Media({
-        path: '',
-      });
-      should.not.exist(doc.getGenres());
-    });
-    it('no info.genre_ids', () => {
-      const doc = new Media({
-        path: '',
-        info: {},
-      });
-      should.not.exist(doc.getGenres());
-    });
-    it('empty info.genre_ids', () => {
-      const doc = new Media({
-        path: '',
-        info: { genre_ids: [] },
-      });
-      should.not.exist(doc.getGenres());
-    });
-    it('unknow category', () => {
-      const doc = new Media({
-        path: '',
-        info: { category: 'person', genre_ids: [28] },
-      });
-      should.not.exist(doc.getGenres());
-    });
-    it('unknow genre', () => {
-      const doc = new Media({
-        path: '',
-        info: { category: 'movie', genre_ids: [-1] },
-      });
-      should.not.exist(doc.getGenres());
-    });
-    it('one movie genre', () => {
-      const doc = new Media({
-        path: '',
-        info: { category: 'movie', genre_ids: [28] },
-      });
-      const genres = doc.getGenres();
-      should.exist(genres);
-      genres.should.deep.equal(['Action']);
-    });
-    it('n genres', () => {
-      const doc = new Media({
-        path: '',
-        info: { category: 'movie', genre_ids: [28, 12] },
-      });
-      const genres = doc.getGenres();
-      should.exist(genres);
-      genres.should.deep.equal(['Action', 'Adventure']);
-    });
-    it('one tv genre', () => {
-      const doc = new Media({
-        path: '',
-        info: { category: 'tv', genre_ids: [16] },
-      });
-      const genres = doc.getGenres();
-      should.exist(genres);
-      genres.should.deep.equal(['Animation']);
-    });
   });
 });
