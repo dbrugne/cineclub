@@ -21,14 +21,7 @@ router.get('/:id', (req, res, next) => {
       return next();
     }
 
-    return res.json({
-      _id: doc.id,
-      path: doc.path,
-      created: doc.created,
-      removed: doc.removed,
-      file: doc.file,
-      info: doc.info,
-    });
+    return res.render('media', { data: doc.getApiData() });
   });
 });
 
