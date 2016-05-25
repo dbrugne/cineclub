@@ -2,10 +2,10 @@
   "name": "ftp-nanny",
   "version": "1.0.0",
   "description": "An FTP update notification system and browser",
-  "main": "app/index.js",
+  "main": "server.js",
   "scripts": {
     "test": "node_modules/.bin/mocha",
-    "start": "node ./bin/www",
+    "start": "node server",
     "sync": "node sync",
     "push": "node push",
     "purge": "node purge"

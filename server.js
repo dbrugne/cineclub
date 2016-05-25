@@ -8,9 +8,9 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-require('../lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
+require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
 
-const app = require('../lib/http/app');
+const app = require('./lib/server/index');
 const debug = require('debug')('ftp-nanny:server');
 const http = require('http');
 
