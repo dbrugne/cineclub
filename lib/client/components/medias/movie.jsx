@@ -77,14 +77,14 @@ class Movie extends React.Component {
     }
     return (
       <div className="row p-media mb15">
-        <div className="col-md-2">
+        <div className="col-xs-3 col-lg-2">
           <img
             className="img-responsive poster"
             src={data.poster}
             alt={`${data.title} poster`}
           />
         </div>
-        <div className="col-md-10">
+        <div className="col-xs-9 col-lg-10">
           <h3 className="mt0">
             {data.title} <small>{data.category}, {data.year}</small>
           </h3>
