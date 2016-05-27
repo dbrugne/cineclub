@@ -4,6 +4,7 @@ module.exports = {
   entry: {
     jsx: './lib/client/index.js',
     vendor: [
+      './webpack.init.js',
       'react',
       'react-dom',
       'react-redux',
