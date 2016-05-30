@@ -1,6 +1,4 @@
-require('../../lib/util/tests');
-
-const fixtures = require('../fixtures/data');
+const { fixtures } = require('../../lib/util/tests');
 
 const parser = require('../../lib/decorate/parse');
 

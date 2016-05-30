@@ -4,11 +4,11 @@ const {
   beforeEachHelper,
   afterHelper,
   tmdbMockup,
+  fixtures,
 } = require('../../lib/util/tests');
 
-const fixtures = require('../fixtures/data.json');
 const opts = {
-  api: tmdbMockup(fixtures.tmdb),
+  api: tmdbMockup(),
 };
 
 const Medias = require('../../lib/models/media');
