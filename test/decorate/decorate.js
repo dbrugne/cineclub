@@ -1,11 +1,14 @@
-const chai = require('chai');
-const should = chai.should();
-chai.use(require('chai-properties'));
+const {
+  should,
+  beforeHelper,
+  beforeEachHelper,
+  afterHelper,
+  tmdbMockup,
+} = require('../../lib/util/tests');
 
-const util = require('../../lib/util/tests');
 const fixtures = require('../fixtures/data.json');
 const opts = {
-  api: util.tmdbMockup(fixtures.tmdb),
+  api: tmdbMockup(fixtures.tmdb),
 };
 
 const Medias = require('../../lib/models/media');
@@ -13,9 +16,9 @@ const Cache = require('../../lib/models/cache');
 const decorate = require('../../lib/decorate/index');
 
 describe('decorate/index', () => {
-  before(util.before);
-  beforeEach(util.beforeEach);
-  after(util.after);
+  before(beforeHelper);
+  beforeEach(beforeEachHelper);
+  after(afterHelper);
 
   it('is function', () => {
     decorate.should.be.a('function');

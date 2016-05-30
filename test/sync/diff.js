@@ -1,5 +1,4 @@
-const chai = require('chai');
-chai.use(require('chai-properties'));
+require('../../lib/util/tests');
 
 const diff = require('../../lib/sync/diff');
 

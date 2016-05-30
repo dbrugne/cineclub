@@ -1,6 +1,4 @@
-const chai = require('chai');
-const should = chai.should();
-chai.use(require('chai-properties'));
+const { should } = require('../../lib/util/tests');
 
 const filter = require('../../lib/sync/filter');
 

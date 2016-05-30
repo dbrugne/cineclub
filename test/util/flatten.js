@@ -1,7 +1,4 @@
-const chai = require('chai');
-chai.use(require('chai-properties'));
-const should = chai.should();
-
+require('../../lib/util/tests');
 const flatten = require('../../lib/util/flatten');
 
 describe('util/flatten', () => {

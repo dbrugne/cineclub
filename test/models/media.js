@@ -1,14 +1,11 @@
-const chai = require('chai');
-const should = chai.should();
-chai.use(require('chai-properties'));
+const { should, beforeHelper, beforeEachHelper, afterHelper } = require('../../lib/util/tests');
 
-const util = require('../../lib/util/tests');
 const Media = require('../../lib/models/media');
 
 describe('models/media', () => {
-  before(util.before);
+  before(beforeHelper);
   beforeEach((done) => {
-    util.beforeEach(() => {
+    beforeEachHelper(() => {
       const timestamp = Date.now();
       Media.collection.insert([
         {
@@ -42,7 +39,7 @@ describe('models/media', () => {
       ]).then(() => done());
     });
   });
-  after(util.after);
+  after(afterHelper);
 
   it('is object and has expected functions', () => {
     Media.should.be.an('function').and.property('schema');

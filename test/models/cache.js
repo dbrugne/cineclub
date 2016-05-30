@@ -1,14 +1,11 @@
-const chai = require('chai');
-const should = chai.should();
-chai.use(require('chai-properties'));
+const { should, beforeHelper, beforeEachHelper, afterHelper } = require('../../lib/util/tests');
 
-const util = require('../../lib/util/tests');
 const Cache = require('../../lib/models/cache');
 
 describe('models/cache', () => {
-  before(util.before);
-  beforeEach(util.beforeEach);
-  after(util.after);
+  before(beforeHelper);
+  beforeEach(beforeEachHelper);
+  after(afterHelper);
 
   it('is object and has expected functions', () => {
     Cache.should.be.an('function').and.property('schema');
