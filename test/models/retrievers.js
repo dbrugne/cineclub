@@ -1,4 +1,10 @@
-const { beforeHelper, beforeEachHelper, afterHelper } = require('../../lib/util/tests');
+const {
+  beforeHelper,
+  beforeEachHelper,
+  afterHelper,
+  inject,
+  fixtures,
+} = require('../../lib/util/tests');
 
 const Media = require('../../lib/models/media');
 
@@ -6,34 +12,8 @@ describe('models/media:retrieve', () => {
   before(beforeHelper);
   beforeEach((done) => {
     beforeEachHelper(() => {
-      Media.collection.insert([
-        {
-          path: '/media1.txt',
-          created: new Date(),
-          file: {},
-        },
-        {
-          path: '/media2.txt',
-          created: new Date(),
-          file: {},
-        },
-        {
-          path: '/media3.txt',
-          created: new Date(),
-          file: {},
-        },
-        {
-          path: '/media4.txt',
-          created: new Date(),
-          file: {},
-        },
-        {
-          path: '/removed.txt',
-          created: new Date(),
-          removed: new Date(),
-          file: {},
-        },
-      ]).then(() => done());
+      inject(fixtures.models.retrievers)
+        .then(() => done());
     });
   });
   after(afterHelper);

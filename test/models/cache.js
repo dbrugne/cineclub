@@ -1,4 +1,11 @@
-const { should, beforeHelper, beforeEachHelper, afterHelper } = require('../../lib/util/tests');
+const {
+  should,
+  beforeHelper,
+  beforeEachHelper,
+  afterHelper,
+  inject,
+  fixtures,
+} = require('../../lib/util/tests');
 
 const Cache = require('../../lib/models/cache');
 
@@ -99,24 +106,7 @@ describe('models/cache', () => {
       .catch(err => done(err));
   });
   it('purge', (done) => {
-    const timestamp = Date.now();
-    Cache.collection.insert([
-      {
-        key: 'keep',
-        created: new Date(),
-        result: {},
-      },
-      {
-        key: 'purge',
-        created: new Date(timestamp - 1000 * 3600 * 24 * 8),
-        result: {},
-      },
-      {
-        key: 'purge_other',
-        created: new Date(timestamp - 1000 * 3600 * 24 * 10),
-        result: {},
-      },
-    ])
+    inject(fixtures.models.purge)
       .then(() => Cache.purge())
       .then(() => Cache.find({}).exec())
       .then((docs) => {

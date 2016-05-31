@@ -317,4 +317,119 @@ module.exports = {
       },
     },
   },
+  models: {
+    purge: {
+      cache: [
+        {
+          key: 'keep',
+          created: new Date(),
+          result: {},
+        },
+        {
+          key: 'purge',
+          created: new Date(Date.now() - 1000 * 3600 * 24 * 8),
+          result: {},
+        },
+        {
+          key: 'purge_other',
+          created: new Date(Date.now() - 1000 * 3600 * 24 * 10),
+          result: {},
+        },
+      ],
+    },
+    media: {
+      media: [
+        {
+          path: '/added.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/old.txt',
+          created: new Date(Date.now() - 1000 * 3600 * 24 * 2),
+          file: {},
+        },
+        {
+          path: '/removed.txt',
+          created: new Date(),
+          removed: new Date(),
+          file: {},
+        },
+        {
+          path: '/purge.txt',
+          created: new Date(),
+          removed: new Date(Date.now() - 1000 * 3600 * 24 * 8),
+          file: {},
+        },
+        {
+          path: '/purge_other.txt',
+          created: new Date(),
+          removed: new Date(Date.now() - 1000 * 3600 * 24 * 10),
+          file: {},
+        },
+      ],
+    },
+    getters: {
+      media: [
+        {
+          path: '/added.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/old.txt',
+          created: new Date(Date.now() - 1000 * 3600 * 24 * 2),
+          file: {},
+        },
+        {
+          path: '/removed.txt',
+          created: new Date(),
+          removed: new Date(),
+          file: {},
+        },
+        {
+          path: '/purge.txt',
+          created: new Date(),
+          removed: new Date(Date.now() - 1000 * 3600 * 24 * 8),
+          file: {},
+        },
+        {
+          path: '/purge_other.txt',
+          created: new Date(),
+          removed: new Date(Date.now() - 1000 * 3600 * 24 * 10),
+          file: {},
+        },
+      ],
+    },
+    retrievers: {
+      media: [
+        {
+          path: '/media1.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/media2.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/media3.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/media4.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/removed.txt',
+          created: new Date(),
+          removed: new Date(),
+          file: {},
+        },
+      ],
+    },
+  },
 };
