@@ -56,6 +56,9 @@ describe('util/flatten', () => {
         key3: 'value3',
         key4: undefined,
       },
+      other: {
+        key5: undefined,
+      },
     });
     r.should.be.an('object');
 
@@ -64,5 +67,6 @@ describe('util/flatten', () => {
 
     r.should.have.property('deep[key3]', 'value3');
     r.should.not.have.property('deep[key4]');
+    r.should.not.have.property('other[key5]');
   });
 });
