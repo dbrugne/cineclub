@@ -406,12 +406,20 @@ module.exports = {
         {
           path: '/media1.txt',
           created: new Date(),
-          file: {},
+          file: {
+            name: 'foo',
+          },
+          info: {
+            category: 'movie',
+          },
         },
         {
           path: '/media2.txt',
           created: new Date(),
           file: {},
+          info: {
+            title: 'foo',
+          },
         },
         {
           path: '/media3.txt',
@@ -420,6 +428,51 @@ module.exports = {
         },
         {
           path: '/media4.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/removed.txt',
+          created: new Date(),
+          removed: new Date(),
+          file: {},
+        },
+      ],
+    },
+  },
+  api: {
+    medias: {
+      media: [
+        {
+          path: '/file1.txt',
+          created: new Date(),
+          file: {
+            name: 'foo',
+          },
+          info: {
+            category: 'movie',
+          },
+        },
+        {
+          path: '/file2.txt',
+          created: new Date(),
+          file: {},
+          info: {
+            title: 'foo',
+          },
+        },
+        {
+          path: '/file3.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/file4.txt',
+          created: new Date(),
+          file: {},
+        },
+        {
+          path: '/file5.txt',
           created: new Date(),
           file: {},
         },
