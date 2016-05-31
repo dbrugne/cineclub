@@ -48,4 +48,21 @@ describe('util/flatten', () => {
       'verydeep[deeper][key4]': 'value4',
     });
   });
+  it('ignore undefined', () => {
+    const r = flatten({
+      key1: 'value1',
+      key2: undefined,
+      deep: {
+        key3: 'value3',
+        key4: undefined,
+      },
+    });
+    r.should.be.an('object');
+
+    r.should.have.property('key1', 'value1');
+    r.should.not.have.property('key2');
+
+    r.should.have.property('deep[key3]', 'value3');
+    r.should.not.have.property('deep[key4]');
+  });
 });
