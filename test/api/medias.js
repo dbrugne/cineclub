@@ -3,13 +3,14 @@ const {
   beforeHelper,
   beforeEachHelper,
   afterHelper,
+  collections,
   inject,
   fixtures,
 } = require('../../lib/util/tests');
 
 const app = require('../../lib/server/index');
 
-describe('GET /api/medias', () => {
+describe('/api/medias', () => {
   before(beforeHelper);
   beforeEach(done => {
     beforeEachHelper(() => {
@@ -19,202 +20,234 @@ describe('GET /api/medias', () => {
   });
   after(afterHelper);
 
-  it('GET unknown ObjectId', done => {
-    request(app)
-      .get('/api/medias/1042c88d282c219c2373d0fd')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(404, done);
-  });
-  it('GET /api/medias/not-valid-id', done => {
-    request(app)
-      .get('/api/medias/not-valid-id')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(500, done);
-  });
-  it('simple', done => {
-    request(app)
-      .get('/api/medias')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(res => {
-        const body = res.body;
-        body.should.be.an('object');
-        body.should.have.property('meta');
-        body.meta.should.have.property('total-pages', 1);
-        body.links.should.have.property('self',
-          'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10');
-        body.links.should.not.have.property('first');
-        body.links.should.not.have.property('last');
-        body.links.should.not.have.property('prev');
-        body.links.should.not.have.property('next');
+  describe('GET /', () => {
+    it('simple', done => {
+      request(app)
+        .get('/api/medias')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object');
+          body.should.have.property('meta');
+          body.meta.should.have.property('total-pages', 1);
+          body.links.should.have.property('self',
+            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10');
+          body.links.should.not.have.property('first');
+          body.links.should.not.have.property('last');
+          body.links.should.not.have.property('prev');
+          body.links.should.not.have.property('next');
 
-        body.data.should.be.an('array').and.have.lengthOf(5);
-        body.data[0].should.be.an('object').and.have.properties({
-          path: '/file1.txt',
-          removed: false,
-          category: 'movie',
-          poster: 'http://placehold.it/342?text=no+image',
+          body.data.should.be.an('array').and.have.lengthOf(5);
+          body.data[0].should.be.an('object').and.have.properties({
+            path: '/file1.txt',
+            removed: false,
+            category: 'movie',
+            poster: 'http://placehold.it/342?text=no+image',
+          });
+          body.data[0].should.have.property('id')
+            .and.match(/^[a-fA-F0-9]{24}$/);
+          body.data[0].should.have.property('created')
+            .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
+
+          body.data[0].links.should.be.an('object')
+            .and.have.property('self')
+            .and.match(/^http:\/\/127\.0\.0\.1\/api\/medias\/[a-fA-F0-9]{24}$/);
+
+          body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
+          body.data[2].should.be.an('object').and.have.property('path', '/file3.txt');
+          body.data[3].should.be.an('object').and.have.property('path', '/file4.txt');
+          body.data[4].should.be.an('object').and.have.property('path', '/file5.txt');
+        })
+        .expect(200, done);
+    });
+    describe('pagination', () => {
+      it('empty result', done => {
+        // empty collections
+        beforeEachHelper(() => {
+          request(app)
+            .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=10')
+            .set('Accept', 'application/json')
+            .expect(204, done);
         });
-        body.data[0].should.have.property('id')
-          .and.match(/^[a-fA-F0-9]{24}$/);
-        body.data[0].should.have.property('created')
-          .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
-
-        body.data[0].links.should.be.an('object')
-          .and.have.property('self')
-          .and.match(/^http:\/\/127\.0\.0\.1\/api\/medias\/[a-fA-F0-9]{24}$/);
-
-        body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
-        body.data[2].should.be.an('object').and.have.property('path', '/file3.txt');
-        body.data[3].should.be.an('object').and.have.property('path', '/file4.txt');
-        body.data[4].should.be.an('object').and.have.property('path', '/file5.txt');
-      })
-      .expect(200, done);
-  });
-  describe('pagination', () => {
-    it('empty result', done => {
-      // empty collections
-      beforeEachHelper(() => {
+      });
+      it('first page', done => {
         request(app)
-          .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=10')
+          .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=2')
           .set('Accept', 'application/json')
-          .expect(204, done);
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 3);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
+            body.links.should.have.property('first',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
+            body.links.should.have.property('last',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
+            body.links.should.have.property('next',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
+            body.links.should.not.have.property('prev');
+            body.data.should.be.an('array').and.have.lengthOf(2);
+            body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
+            body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
+          })
+          .expect(200, done);
+      });
+      it('page 2', done => {
+        request(app)
+          .get('/api/medias?page%5Bnumber%5D=2&page%5Bsize%5D=2')
+          .set('Accept', 'application/json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 3);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
+            body.links.should.have.property('first',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
+            body.links.should.have.property('last',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
+            body.links.should.have.property('prev',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
+            body.links.should.have.property('next',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
+            body.data.should.be.an('array').and.have.lengthOf(2);
+            body.data[0].should.be.an('object').and.have.property('path', '/file3.txt');
+            body.data[1].should.be.an('object').and.have.property('path', '/file4.txt');
+          })
+          .expect(200, done);
+      });
+      it('last page', done => {
+        request(app)
+          .get('/api/medias?page%5Bnumber%5D=3&page%5Bsize%5D=2')
+          .set('Accept', 'application/json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 3);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
+            body.links.should.have.property('first',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
+            body.links.should.have.property('last',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
+            body.links.should.have.property('prev',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
+            body.links.should.not.have.property('next');
+            body.data.should.be.an('array').and.have.lengthOf(1);
+            body.data[0].should.be.an('object').and.have.property('path', '/file5.txt');
+          })
+          .expect(200, done);
+      });
+      it('out of range', done => {
+        request(app)
+          .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=2')
+          .set('Accept', 'application/json')
+          .expect(404, done);
+      });
+      it('invalid page size value', done => {
+        request(app)
+          .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=200')
+          .set('Accept', 'application/json')
+          .expect(400, done);
       });
     });
-    it('first page', done => {
-      request(app)
-        .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 3);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
-          body.links.should.have.property('first',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
-          body.links.should.have.property('last',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
-          body.links.should.have.property('next',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
-          body.links.should.not.have.property('prev');
-          body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
-        })
-        .expect(200, done);
-    });
-    it('page 2', done => {
-      request(app)
-        .get('/api/medias?page%5Bnumber%5D=2&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 3);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
-          body.links.should.have.property('first',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
-          body.links.should.have.property('last',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
-          body.links.should.have.property('prev',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
-          body.links.should.have.property('next',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
-          body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file3.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file4.txt');
-        })
-        .expect(200, done);
-    });
-    it('last page', done => {
-      request(app)
-        .get('/api/medias?page%5Bnumber%5D=3&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 3);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
-          body.links.should.have.property('first',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=2');
-          body.links.should.have.property('last',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
-          body.links.should.have.property('prev',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
-          body.links.should.not.have.property('next');
-          body.data.should.be.an('array').and.have.lengthOf(1);
-          body.data[0].should.be.an('object').and.have.property('path', '/file5.txt');
-        })
-        .expect(200, done);
-    });
-    it('out of range', done => {
-      request(app)
-        .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
-        .expect(404, done);
-    });
-    it('invalid page size value', done => {
-      request(app)
-        .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=200')
-        .set('Accept', 'application/json')
-        .expect(400, done);
+    describe('filter', () => {
+      it('search', done => {
+        request(app)
+          .get('/api/medias?filter%5Bsearch%5D=foo')
+          .set('Accept', 'application/json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 1);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=foo');
+            body.links.should.not.have.property('first');
+            body.links.should.not.have.property('last');
+            body.links.should.not.have.property('prev');
+            body.links.should.not.have.property('next');
+            body.data.should.be.an('array').and.have.lengthOf(2);
+            body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
+            body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
+          })
+          .expect(200, done);
+      });
+      it('category', done => {
+        request(app)
+          .get('/api/medias?filter%5Bcategory%5D=movie')
+          .set('Accept', 'application/json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 1);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bcategory%5D=movie');
+            body.links.should.not.have.property('first');
+            body.links.should.not.have.property('last');
+            body.links.should.not.have.property('prev');
+            body.links.should.not.have.property('next');
+            body.data.should.be.an('array').and.have.lengthOf(1);
+            body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
+          })
+          .expect(200, done);
+      });
+      it('invalid category', done => {
+        request(app)
+          .get('/api/medias?filter%5Bcategory%5D=foo')
+          .set('Accept', 'application/json')
+          .expect(400, done);
+      });
     });
   });
-  describe('filter', () => {
-    it('search', done => {
-      request(app)
-        .get('/api/medias?filter%5Bsearch%5D=foo')
-        .set('Accept', 'application/json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 1);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=foo');
-          body.links.should.not.have.property('first');
-          body.links.should.not.have.property('last');
-          body.links.should.not.have.property('prev');
-          body.links.should.not.have.property('next');
-          body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
+  describe('GET /medias/:id', () => {
+    it('exists', done => {
+      collections.media.findOne({ path: '/file1.txt' }).exec()
+        .then(doc => {
+          request(app)
+            .get(`/api/medias/${doc.id}`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(res => {
+              const body = res.body;
+              body.should.be.an('object');
+              body.should.have.property('links');
+              body.links.should.have.property('self',
+                `http://127.0.0.1/api/medias/${doc.id}`
+              );
+              body.data.should.be.an('object').and.have.properties({
+                path: '/file1.txt',
+                id: doc.id,
+                removed: false,
+                category: 'movie',
+                poster: 'http://placehold.it/342?text=no+image',
+              });
+              body.data.should.have.property('created')
+                .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
+            })
+            .expect(200, done);
         })
-        .expect(200, done);
+        .catch(done);
     });
-    it('category', done => {
+    it('GET unknown ObjectId', done => {
       request(app)
-        .get('/api/medias?filter%5Bcategory%5D=movie')
+        .get('/api/medias/1042c88d282c219c2373d0fd')
         .set('Accept', 'application/json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 1);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bcategory%5D=movie');
-          body.links.should.not.have.property('first');
-          body.links.should.not.have.property('last');
-          body.links.should.not.have.property('prev');
-          body.links.should.not.have.property('next');
-          body.data.should.be.an('array').and.have.lengthOf(1);
-          body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
-        })
-        .expect(200, done);
+        .expect('Content-Type', /json/)
+        .expect(404, done);
     });
-    it('invalid category', done => {
+    it('GET /api/medias/not-valid-id', done => {
       request(app)
-        .get('/api/medias?filter%5Bcategory%5D=foo')
+        .get('/api/medias/not-valid-id')
         .set('Accept', 'application/json')
-        .expect(400, done);
+        .expect('Content-Type', /json/)
+        .expect(500, done);
     });
   });
 });
