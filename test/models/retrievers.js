@@ -10,7 +10,7 @@ const Media = require('../../lib/models/media');
 
 describe('models/media:retrieve', () => {
   before(beforeHelper);
-  beforeEach((done) => {
+  beforeEach(done => {
     beforeEachHelper(() => {
       inject(fixtures.models.retrievers)
         .then(() => done());

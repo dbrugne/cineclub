@@ -11,7 +11,7 @@ const Media = require('../../lib/models/media');
 
 describe('models/media', () => {
   before(beforeHelper);
-  beforeEach((done) => {
+  beforeEach(done => {
     beforeEachHelper(() => {
       inject(fixtures.models.media)
         .then(() => done());
