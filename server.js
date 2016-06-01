@@ -15,6 +15,14 @@ const debug = require('debug')('ftp-nanny:server');
 const http = require('http');
 
 /**
+ * App locals
+ */
+
+app.locals.baseUrl = process.env.BASE_URL;
+app.locals.replyTo = process.env.MAIL_REPLY_TO;
+app.locals.tmdbApiKey = process.env.TMDB_API_KEY;
+
+/**
  * Create HTTP server.
  */
 
