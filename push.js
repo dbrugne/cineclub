@@ -17,7 +17,7 @@ pushTask({
   mailgunDomain: process.env.MAILGUN_DOMAIN,
   mailgunApiKey: process.env.MAILGUN_API_KEY,
   subjectTemplate: process.env.MAIL_SUBJECT,
-  api: tmdb(process.env.TMBDP_API_KEY),
+  api: tmdb(process.env.TMDB_API_KEY),
   period: process.env.PUSH_PERIOD, // days
 })
   .then(() => exit(0))
