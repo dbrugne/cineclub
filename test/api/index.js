@@ -1,9 +1,10 @@
-const { request } = require('../../lib/util/tests');
+const { request, fixtures } = require('../../lib/util/tests');
 
 const app = require('../../lib/server/index');
+app.locals.tmdbApiKey = fixtures.tmdb;
 
-describe('/api/', () => {
-  it('GET /', done => {
+describe('REST API index', () => {
+  it('GET /api/', done => {
     request(app)
       .get('/api/')
       .set('Accept', 'application/json')
