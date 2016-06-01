@@ -10,7 +10,7 @@ const req = {
   hostname: 'example.com',
 };
 
-describe('API middleware', () => {
+describe('API linker middleware', () => {
   it('is function', () => {
     middleware.should.be.a('function');
   });
