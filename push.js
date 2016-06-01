@@ -6,6 +6,8 @@ require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test
 const pushTask = require('./lib/push/index');
 const exit = require('exit');
 
+const tmdb = require('./lib/util/tmdb');
+
 pushTask({
   to: process.env.MAIL_TO,
   from: process.env.MAIL_FROM,
@@ -15,7 +17,7 @@ pushTask({
   mailgunDomain: process.env.MAILGUN_DOMAIN,
   mailgunApiKey: process.env.MAILGUN_API_KEY,
   subjectTemplate: process.env.MAIL_SUBJECT,
-  tmdbApiKey: process.env.TMBDP_API_KEY,
+  api: tmdb(process.env.TMBDP_API_KEY),
   period: process.env.PUSH_PERIOD, // days
 })
   .then(() => exit(0))
