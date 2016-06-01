@@ -8,7 +8,7 @@ const {
 } = require('../../lib/util/tests');
 
 const opts = {
-  api: tmdbMockup(),
+  api: tmdbMockup,
 };
 
 const extract = require('../../lib/decorate/extract');
