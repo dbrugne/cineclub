@@ -484,11 +484,17 @@ module.exports = {
           path: '/file4.txt',
           created: new Date(),
           file: {},
+          info: {
+            category: 'series',
+          },
         },
         {
-          path: '/file5.txt',
-          created: new Date(),
+          path: '/old.txt',
+          created: new Date(Date.now() - (1000 * 3600 * 24 * 2)),
           file: {},
+          info: {
+            category: 'unknown',
+          },
         },
         {
           path: '/removed.txt',

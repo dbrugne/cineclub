@@ -59,7 +59,7 @@ describe('REST API medias', () => {
           body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
           body.data[2].should.be.an('object').and.have.property('path', '/undecorated.txt');
           body.data[3].should.be.an('object').and.have.property('path', '/file4.txt');
-          body.data[4].should.be.an('object').and.have.property('path', '/file5.txt');
+          body.data[4].should.be.an('object').and.have.property('path', '/old.txt');
         })
         .expect(200, done);
     });
@@ -158,7 +158,7 @@ describe('REST API medias', () => {
             'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
           body.links.should.not.have.property('next');
           body.data.should.be.an('array').and.have.lengthOf(1);
-          body.data[0].should.be.an('object').and.have.property('path', '/file5.txt');
+          body.data[0].should.be.an('object').and.have.property('path', '/old.txt');
         })
         .expect(200, done);
     });
@@ -277,14 +277,14 @@ describe('REST API medias', () => {
         })
         .catch(done);
     });
-    it('unknown ObjectId', done => {
+    it('not exists', done => {
       request(app)
         .get('/api/medias/1042c88d282c219c2373d0fd')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404, done);
     });
-    it('not-valid-id', done => {
+    it('invalid period', done => {
       request(app)
         .get('/api/medias/not-valid-id')
         .set('Accept', 'application/json')
