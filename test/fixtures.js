@@ -244,6 +244,20 @@ module.exports = {
         media_type: 'movie',
       },
     },
+    undecorated: {
+      result: {
+        page: 1,
+        results: [
+          {
+            title: 'decorated',
+            overview: 'overview',
+            media_type: 'movie',
+          },
+        ],
+        total_pages: 1,
+        total_results: 1,
+      },
+    },
   },
   torrent: {
     invalid: {
@@ -462,7 +476,7 @@ module.exports = {
           },
         },
         {
-          path: '/file3.txt',
+          path: '/undecorated.txt',
           created: new Date(),
           file: {},
         },
