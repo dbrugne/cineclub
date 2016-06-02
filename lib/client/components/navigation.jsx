@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory, Link } from 'react-router';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -6,8 +7,13 @@ class Navigation extends React.Component {
     this.state = {
       active: null,
     };
+    this.onSearch = this.onSearch.bind(this);
+  }
+  onSearch() {
+    browserHistory.push('/app/medias'); // @todo
   }
   render() {
+    const active = this.props.active;
     return (
       <nav className="navbar navbar-default navbar-fixed-top">
         <div className="container">
@@ -24,24 +30,33 @@ class Navigation extends React.Component {
               <span className="icon-bar" />
               <span className="icon-bar" />
             </button>
-            <a className="navbar-brand" href="#">🎥</a>
+            <Link className="navbar-brand" to="/">Ciné-club</Link>
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li className="active">
-                <a href="#">Email <span className="sr-only">(current)</span></a>
+              <li className={(active === '/') ? 'active' : null}>
+                <Link to="/">What's new</Link>
               </li>
-              <li><a href="#">Medias</a></li>
+              <li className={(active === '/medias') ? 'active' : null}>
+                <Link to="/medias">Medias</Link>
+              </li>
             </ul>
-            <form className="navbar-form navbar-left" role="search">
+            <div className="navbar-form navbar-left" role="search">
               <div className="form-group">
                 <input type="text" className="form-control" placeholder="Search" />
               </div>
-              <button type="submit" className="btn btn-default">Submit</button>
-            </form>
+              <button
+                className="btn btn-default"
+                onClick={this.onSearch}
+              >Submit</button>
+            </div>
             <ul className="nav navbar-nav navbar-right">
-              <li><a href="#">Admin</a></li>
-              <li><a href="#">Logout</a></li>
+              <li className={(active === '/admin') ? 'active' : null}>
+                <Link to="/admin">Admin</Link>
+              </li>
+              <li className={(active === '/logout') ? 'active' : null}>
+                <Link to="/logout">Logout</Link>
+              </li>
             </ul>
           </div>
         </div>

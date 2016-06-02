@@ -1,21 +1,16 @@
 import React from 'react';
 import Navigation from './navigation';
-import Whatsnew from './whatsnew';
 
-// polyfills
-import 'whatwg-fetch';
+const App = props => (
+  <div>
+    <Navigation active={props.location.pathname} />
+    {props.children}
+  </div>
+);
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Navigation />
-        <div className="row">
-          <Whatsnew />
-        </div>
-      </div>
-    );
-  }
-}
+App.propTypes = {
+  location: React.PropTypes.object,
+  children: React.PropTypes.node,
+};
 
 export default App;
