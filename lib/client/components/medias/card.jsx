@@ -146,7 +146,7 @@ class Card extends React.Component {
     const data = this.props.data;
 
     return (
-      <div className="row p-media bb mb15">
+      <div className="row p-media bb mb15 pb10">
         <div className="col-xs-3 col-lg-2">
           <img
             className="img-responsive poster"

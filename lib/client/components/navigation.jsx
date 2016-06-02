@@ -34,8 +34,8 @@ class Navigation extends React.Component {
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li className={(active === '/') ? 'active' : null}>
-                <Link to="/">What's new</Link>
+              <li className={(active === '/whatsnew') ? 'active' : null}>
+                <Link to="/whatsnew">What's new</Link>
               </li>
               <li className={(active === '/medias') ? 'active' : null}>
                 <Link to="/medias">Medias</Link>
