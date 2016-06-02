@@ -278,6 +278,8 @@ describe('models/media', () => {
       }).getApiData().should.have.properties({ votes: '5.3/10 on 10 vote(s)' });
       new Media({ info: { vote_average: 5.3000 } }).getApiData().should.not.have.property('votes');
       new Media({ info: { vote_count: 10 } }).getApiData().should.not.have.property('votes');
+      new Media({ info: { vote_average: 10, vote_count: 0 } }).getApiData()
+        .should.have.property('votes', '0 vote');
     });
     it('codec', () => {
       new Media({ info: { codec: 'MP4', audio: 'AC3' } }).getApiData()
