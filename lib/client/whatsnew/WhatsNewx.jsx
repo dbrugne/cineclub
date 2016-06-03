@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-import PeriodSelector from './periodSelector';
-import EmailSelector from './emailSelector';
-import Media from '../components/card';
+import SelectPeriod from './SelectPeriod';
+import SelectEmail from './SelectEmail';
+import Media from '../components/Cardx';
 
 class Whatsnew extends React.Component {
   constructor(props) {
@@ -78,7 +78,7 @@ class Whatsnew extends React.Component {
             {nothing}
           </div>
           <div className="col-md-2">
-            <PeriodSelector defaultValue={this.state.period} update={this.onPeriodChange} />
+            <SelectPeriod defaultValue={this.state.period} update={this.onPeriodChange} />
             <div className="mt10 text-left">
               Jump to :
               {' '}
@@ -92,7 +92,7 @@ class Whatsnew extends React.Component {
               {' '}
             </div>
             <hr />
-            <EmailSelector period={this.state.period} />
+            <SelectEmail period={this.state.period} />
           </div>
         </div>
       </div>
