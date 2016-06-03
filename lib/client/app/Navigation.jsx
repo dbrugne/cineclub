@@ -2,14 +2,7 @@ import React from 'react';
 import { browserHistory, Link } from 'react-router';
 
 class Navigation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: null,
-    };
-    this.onSearch = this.onSearch.bind(this);
-  }
-  onSearch() {
+  static onSearch() {
     browserHistory.push('/app/medias'); // @todo
   }
   render() {
