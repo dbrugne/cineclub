@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Section = props => {
-  if (!props.children) {
+  if (!props.children.length) {
     return (<div></div>);
   }
 

@@ -18,8 +18,8 @@ const PeriodSelector = props => {
         <select
           className="form-control"
           id="period"
-          defaultValue={props.defaultValue}
-          onChange={props.update}
+          defaultValue={props.period}
+          onChange={props.onPeriodChange}
         >
           {options}
         </select>
@@ -28,8 +28,8 @@ const PeriodSelector = props => {
 };
 
 PeriodSelector.propTypes = {
-  defaultValue: React.PropTypes.number,
-  update: React.PropTypes.func,
+  period: React.PropTypes.number,
+  onPeriodChange: React.PropTypes.func,
 };
 
 export default PeriodSelector;

@@ -4,50 +4,61 @@ import Section from './Section';
 import Media from '../components/Card';
 
 const Left = props => {
-  const data = props.data;
-  if (!data) {
+  if (props.isFetching === true) {
     return <div className="col-md-10">Loading...</div>;
   }
 
-  const movies = (!data.movies || !data.movies.length)
-    ? null
-    : data.movies.map(e => (<Media key={e.data.id} data={e.data} mode="small" />));
-  const series = (!data.series || !data.series.length)
-    ? null
-    : data.series.map(e => (<Media key={e.data.title} data={e.data} mode="small" />));
-  const unknown = (!data.unknown || !data.unknown.length)
-    ? null
-    : data.unknown.map(e => (
-      <div key={e.data.id} className="small">
-        {e.data.base} - <Link to={`/medias/${e.data.id}`}>see more</Link>
-      </div>
-  ));
-  const removed = (!data.removed || !data.removed.length)
-    ? null
-    : data.removed.map(e => (
-      <div key={e.data.id} className="small">
-        {e.data.base} - <Link to={`/medias/${e.data.id}`}>see more</Link>
-      </div>
-  ));
-
-  const nothing = (!movies && !series && !unknown && !removed)
-    ? <div>Nothing for this period, try changing it in the right column.</div>
-    : null;
+  let headerCss;
+  let headerContent;
+  const isEmpty = (
+    !props.movies.length
+    && !props.series.length
+    && !props.unknown.length
+    && !props.removed.length
+  );
+  if (props.error) {
+    headerCss = 'bg-danger';
+    headerContent = `Error while retrieving what's new: ${props.error}`;
+  } else if (isEmpty) {
+    headerCss = 'bg-warning';
+    headerContent = 'Nothing new during this period, try changing it in the right column.';
+  } else {
+    headerCss = 'dn';
+  }
 
   return (
     <div className="col-md-10">
       <h1>What's new</h1>
-      <Section className="movies" title="Movies">{movies}</Section>
-      <Section className="series" title="Series">{series}</Section>
-      <Section className="unknown" title="Unknown">{unknown}</Section>
-      <Section className="removed" title="Removed">{removed}</Section>
-      {nothing}
+      <div className={`p15 ${headerCss}`}>
+        {headerContent}
+      </div>
+      <Section className="movies" title="Movies">
+        {props.movies.map(e => <Media key={e.id} data={e} mode="small" />)}
+      </Section>
+      <Section className="series" title="Series">
+        {props.series.map(e => <Media key={e.title} data={e} mode="small" />)}
+      </Section>
+      <Section className="unknown small" title="Unknown">
+        {props.unknown.map(e =>
+          <Link className="db" key={e.id} to={`/medias/${e.id}`}>{e.base}</Link>
+        )}
+      </Section>
+      <Section className="removed small" title="Removed">
+        {props.unknown.map(e =>
+          <Link className="db" key={e.id} to={`/medias/${e.id}`}>{e.base}</Link>
+        )}
+      </Section>
     </div>
   );
 };
 
 Left.propTypes = {
-  data: React.PropTypes.object,
+  isFetching: React.PropTypes.bool,
+  error: React.PropTypes.string,
+  movies: React.PropTypes.array,
+  series: React.PropTypes.array,
+  unknown: React.PropTypes.array,
+  removed: React.PropTypes.array,
 };
 
 export default Left;
