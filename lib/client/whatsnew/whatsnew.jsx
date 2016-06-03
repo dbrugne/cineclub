@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-import PeriodSelector from '../components/whatsnew/periodSelector';
-import EmailSelector from '../components/whatsnew/emailSelector';
-import Media from '../components/medias/card';
+import PeriodSelector from './periodSelector';
+import EmailSelector from './emailSelector';
+import Media from '../components/card';
 
 class Whatsnew extends React.Component {
   constructor(props) {
@@ -100,6 +100,9 @@ class Whatsnew extends React.Component {
   }
 }
 
+/**
+ * @return {null}
+ */
 const Block = props => {
   if (!props.children) {
     return null;
