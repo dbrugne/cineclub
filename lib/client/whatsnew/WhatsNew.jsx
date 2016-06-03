@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import SelectPeriod from './SelectPeriod';
 import SelectEmail from './SelectEmail';
-import Media from '../components/Cardx';
+import Media from '../components/Card';
 
 class Whatsnew extends React.Component {
   constructor(props) {

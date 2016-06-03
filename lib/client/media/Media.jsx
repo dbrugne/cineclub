@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '../components/Cardx';
+import Card from '../components/Card';
 
 class Media extends React.Component {
   constructor(props) {
