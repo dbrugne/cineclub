@@ -18,11 +18,14 @@ class Card extends React.Component {
         : null;
       right = `${data.category}, ${season}${episode}`;
     }
+
+    const title = (data.category !== 'tv' || this.props.mode === 'large')
+      ? (<Link to={`/medias/${data.id}`}>{data.title}</Link>)
+      : data.title;
+
     return (
       <h3 className="mt0">
-        {data.title}
-        {' '}
-        <small>{right}</small>
+        {title}{' '}<small>{right}</small>
       </h3>
     );
   }
@@ -68,13 +71,11 @@ class Card extends React.Component {
           const episode = leftPad(e.episode);
           return (
             <div key={e.id}>
-              Season <strong>{season}</strong>
-              {' '}
-              episode <strong>{episode}</strong>
-              {' '}
-              -
-              {' '}
-              <Link to={`/medias/${e.id}`}>see more</Link>
+              <Link to={`/medias/${e.id}`}>
+                Season <strong>{season}</strong>
+                {' '}
+                episode <strong>{episode}</strong>
+              </Link>
             </div>
           );
         })}
