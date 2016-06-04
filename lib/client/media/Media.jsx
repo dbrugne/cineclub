@@ -25,12 +25,4 @@ Media.propTypes = {
   isFetching: React.PropTypes.bool,
 };
 
-function mapStateToProps(state) {
-  return {
-    error: state.media.error,
-    isFetching: state.media.isFetching,
-    data: state.media.data,
-  };
-}
-
-export default connect(mapStateToProps)(Media);
+export default connect(({ media }) => media)(Media);
