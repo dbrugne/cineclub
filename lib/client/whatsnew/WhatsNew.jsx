@@ -42,18 +42,6 @@ Whatsnew.propTypes = {
   removed: React.PropTypes.array,
 };
 
-function mapStateToProps(state) {
-  return {
-    error: state.whatsnew.error,
-    period: state.whatsnew.period,
-    isFetching: state.whatsnew.isFetching,
-    movies: state.whatsnew.movies,
-    series: state.whatsnew.series,
-    unknown: state.whatsnew.unknown,
-    removed: state.whatsnew.removed,
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     onPeriodChange: period => dispatch(changePeriod(period)),
@@ -62,6 +50,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  mapStateToProps,
+  ({ whatsnew }) => whatsnew,
   mapDispatchToProps
 )(Whatsnew);
