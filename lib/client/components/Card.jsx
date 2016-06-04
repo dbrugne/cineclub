@@ -19,9 +19,9 @@ class Card extends React.Component {
       right = `${data.category}, ${season}${episode}`;
     }
 
-    const title = (data.category !== 'tv' || this.props.mode === 'large')
+    const title = (!data.episodes)
       ? (<Link to={`/medias/${data.id}`}>{data.title}</Link>)
-      : data.title;
+      : data.title; // @todo : link to search with tv show name
 
     return (
       <h3 className="mt0">
@@ -48,12 +48,18 @@ class Card extends React.Component {
     );
   }
   overview() {
-    return !this.props.data.overview
-      ? null
-      : (
+    if (!this.props.data.overview) {
+      return null;
+    }
+
+    const overview = (this.props.data.overview.length > 230)
+      ? `${this.props.data.overview.substr(0, 230)} (...)`
+      : this.props.data.overview;
+
+    return (
       <div className="mt10">
         <h4>Synopsis</h4>
-        <div className="overview">{this.props.data.overview}</div>
+        <div className="overview">{overview}</div>
       </div>
     );
   }
@@ -148,14 +154,14 @@ class Card extends React.Component {
 
     return (
       <div className="row p-media bb mb15 pb10">
-        <div className="col-xs-3 col-lg-2">
+        <div className="col-xs-2 col-lg-1">
           <img
             className="img-responsive poster"
             src={data.poster}
             alt={`${data.title} poster`}
           />
         </div>
-        <div className="col-xs-9 col-lg-10">
+        <div className="col-xs-10 col-lg-11">
           {this.title()}
           {this.detail()}
           {this.overview()}
