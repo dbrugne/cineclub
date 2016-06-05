@@ -9,7 +9,7 @@ class Card extends React.Component {
     let right = null;
     if (data.category === 'movie') {
       right = `${data.category}, ${data.year}`;
-    } else if (data.category === 'serie') {
+    } else if (data.category === 'tv' && !data.episodes) {
       const season = (data.season)
         ? `S${leftPad(data.season)}`
         : null;
@@ -17,6 +17,8 @@ class Card extends React.Component {
         ? `E${leftPad(data.episode)}`
         : null;
       right = `${data.category}, ${season}${episode}`;
+    } else {
+      right = data.category;
     }
 
     const title = (!data.episodes)
@@ -52,7 +54,7 @@ class Card extends React.Component {
       return null;
     }
 
-    const overview = (this.props.data.overview.length > 230)
+    const overview = (this.props.mode === 'small' && this.props.data.overview.length > 230)
       ? `${this.props.data.overview.substr(0, 230)} (...)`
       : this.props.data.overview;
 
@@ -137,13 +139,17 @@ class Card extends React.Component {
     );
   }
   seemore() {
-    return (this.props.mode !== 'small' || this.props.data.category !== 'movie')
-      ? null
-      : (
+    if (this.props.mode === 'large') {
+      return null;
+    }
+    if (this.props.data.episodes) {
+      return null;
+    }
+    return (
       <p className="text-right mt10">
         <Link to={`/medias/${this.props.data.id}`}>see more</Link>
       </p>
-      );
+    );
   }
   render() {
     if (!this.props.data) {
