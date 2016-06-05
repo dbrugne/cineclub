@@ -44,7 +44,7 @@ const Left = props => {
         )}
       </Section>
       <Section className="removed" title="Removed">
-        {props.unknown.map(e =>
+        {props.removed.map(e =>
           <Link className="db" key={e.id} to={`/medias/${e.id}`}>{e.base}</Link>
         )}
       </Section>
