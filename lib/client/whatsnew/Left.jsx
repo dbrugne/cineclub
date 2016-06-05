@@ -38,12 +38,12 @@ const Left = props => {
       <Section className="series" title="Series">
         {props.series.map(e => <Media key={e.title} data={e} mode="small" />)}
       </Section>
-      <Section className="unknown small" title="Unknown">
+      <Section className="unknown" title="Unknown">
         {props.unknown.map(e =>
           <Link className="db" key={e.id} to={`/medias/${e.id}`}>{e.base}</Link>
         )}
       </Section>
-      <Section className="removed small" title="Removed">
+      <Section className="removed" title="Removed">
         {props.unknown.map(e =>
           <Link className="db" key={e.id} to={`/medias/${e.id}`}>{e.base}</Link>
         )}
