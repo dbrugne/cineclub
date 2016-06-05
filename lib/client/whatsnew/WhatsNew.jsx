@@ -17,12 +17,7 @@ class Whatsnew extends React.Component {
     return (
       <div className="row">
         <Left
-          error={this.props.error}
-          isFetching={this.props.isFetching}
-          movies={this.props.movies}
-          series={this.props.series}
-          unknown={this.props.unknown}
-          removed={this.props.removed}
+          {...this.props}
         />
         <Right period={this.props.period} onPeriodChange={this.props.onPeriodChange} />
       </div>
