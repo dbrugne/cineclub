@@ -433,6 +433,7 @@ module.exports = {
           file: {},
           info: {
             title: 'foo',
+            category: 'unknown',
           },
         },
         {
