@@ -180,12 +180,40 @@ describe('REST API medias', () => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=2')
         .set('Accept', 'application/vnd.api+json')
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 404,
+            title: 'Out of pagination range',
+            source: {
+              pointer: '/query/page/number',
+            },
+          });
+        })
         .expect(404, done);
     });
     it('invalid page size value', done => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=200')
         .set('Accept', 'application/vnd.api+json')
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 400,
+            title: 'page[size] should be in 1-30 range',
+            source: {
+              pointer: '/query/page/size',
+            },
+          });
+        })
         .expect(400, done);
     });
     it('search', done => {
@@ -233,6 +261,20 @@ describe('REST API medias', () => {
       request(app)
         .get('/api/medias?filter%5Bcategory%5D=foo')
         .set('Accept', 'application/vnd.api+json')
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 400,
+            title: 'category should be movie, tv or unknown',
+            source: {
+              pointer: '/query/filter/category',
+            },
+          });
+        })
         .expect(400, done);
     });
   });
@@ -296,6 +338,17 @@ describe('REST API medias', () => {
         .get('/api/medias/1042c88d282c219c2373d0fd')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 404,
+            title: 'Not Found',
+          });
+        })
         .expect(404, done);
     });
     it('invalid period', done => {
@@ -303,6 +356,20 @@ describe('REST API medias', () => {
         .get('/api/medias/not-valid-id')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 400,
+            title: 'invalid id',
+            source: {
+              pointer: '/query/id',
+            },
+          });
+        })
         .expect(400, done);
     });
   });

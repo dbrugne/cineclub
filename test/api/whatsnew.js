@@ -108,6 +108,20 @@ describe('REST API index', () => {
       .get('/api/whatsnew?period=100')
       .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
+      .expect(res => {
+        const body = res.body;
+        body.should.be.an('object').that.not.have.property('data');
+        body.should.have.a.property('errors')
+          .that.is.an('array')
+          .and.have.lengthOf(1);
+        body.errors[0].should.be.an('object').that.has.properties({
+          status: 400,
+          title: 'page size should be in 1-10 range',
+          source: {
+            pointer: '/query/period',
+          },
+        });
+      })
       .expect(400, done);
   });
 });
