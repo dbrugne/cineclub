@@ -87,7 +87,21 @@ describe('REST API medias', () => {
         request(app)
           .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=10')
           .set('Accept', 'application/json')
-          .expect(204, done);
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 0);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10');
+            body.links.should.not.have.property('first');
+            body.links.should.not.have.property('last');
+            body.links.should.not.have.property('prev');
+            body.links.should.not.have.property('next');
+
+            body.data.should.be.an('array').and.have.lengthOf(0);
+          })
+          .expect(200, done);
       });
     });
     it('first page', done => {
