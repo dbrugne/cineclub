@@ -7,7 +7,7 @@ describe('REST API index', () => {
   it('GET /api/', done => {
     request(app)
       .get('/api/')
-      .set('Accept', 'application/json')
+      .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
       .expect(res => {
         const body = res.body;

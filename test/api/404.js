@@ -12,14 +12,14 @@ describe('404 errors', () => {
   it('get 404 (json)', (done) => {
     request(app)
       .get('/not-exists')
-      .set('Accept', 'application/json')
+      .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
       .expect(404, done);
   });
   it('get 404 from API', (done) => {
     request(app)
       .get('/api/not-exists')
-      .set('Accept', 'application/json')
+      .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
       .expect(404, done);
   });

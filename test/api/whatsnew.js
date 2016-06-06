@@ -27,7 +27,7 @@ describe('REST API index', () => {
         .then(() => {
           request(app)
             .get('/api/whatsnew')
-            .set('Accept', 'application/json')
+            .set('Accept', 'application/vnd.api+json')
             .expect('Content-Type', /json/)
             .expect(res => {
               const body = res.body;
@@ -49,7 +49,7 @@ describe('REST API index', () => {
     it('simple', done => {
       request(app)
         .get('/api/whatsnew')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
         .expect(res => {
           const body = res.body;
@@ -83,7 +83,7 @@ describe('REST API index', () => {
   it('longer period', done => {
     request(app)
       .get('/api/whatsnew?period=4')
-      .set('Accept', 'application/json')
+      .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
       .expect(res => {
         const body = res.body;
@@ -106,7 +106,7 @@ describe('REST API index', () => {
   it('invalid period', done => {
     request(app)
       .get('/api/whatsnew?period=100')
-      .set('Accept', 'application/json')
+      .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
       .expect(400, done);
   });

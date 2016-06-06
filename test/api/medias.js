@@ -26,7 +26,7 @@ describe('REST API medias', () => {
     it('no parameters', done => {
       request(app)
         .get('/api/medias')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
         .expect(res => {
           const body = res.body;
@@ -66,7 +66,7 @@ describe('REST API medias', () => {
     it('decorate', done => {
       request(app)
         .get('/api/medias')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
         .expect(res => {
           const body = res.body;
@@ -86,7 +86,7 @@ describe('REST API medias', () => {
       beforeEachHelper(() => {
         request(app)
           .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=10')
-          .set('Accept', 'application/json')
+          .set('Accept', 'application/vnd.api+json')
           .expect(res => {
             const body = res.body;
             body.should.be.an('object');
@@ -107,7 +107,7 @@ describe('REST API medias', () => {
     it('first page', done => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
           body.should.be.an('object');
@@ -131,7 +131,7 @@ describe('REST API medias', () => {
     it('page 2', done => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=2&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
           body.should.be.an('object');
@@ -156,7 +156,7 @@ describe('REST API medias', () => {
     it('last page', done => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=3&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
           body.should.be.an('object');
@@ -179,19 +179,19 @@ describe('REST API medias', () => {
     it('out of range', done => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=2')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(404, done);
     });
     it('invalid page size value', done => {
       request(app)
         .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=200')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(400, done);
     });
     it('search', done => {
       request(app)
         .get('/api/medias?filter%5Bsearch%5D=foo')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
           body.should.be.an('object');
@@ -212,7 +212,7 @@ describe('REST API medias', () => {
     it('category', done => {
       request(app)
         .get('/api/medias?filter%5Bcategory%5D=movie')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
           body.should.be.an('object');
@@ -232,7 +232,7 @@ describe('REST API medias', () => {
     it('invalid category', done => {
       request(app)
         .get('/api/medias?filter%5Bcategory%5D=foo')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect(400, done);
     });
   });
@@ -242,7 +242,7 @@ describe('REST API medias', () => {
         .then(doc => {
           request(app)
             .get(`/api/medias/${doc.id}`)
-            .set('Accept', 'application/json')
+            .set('Accept', 'application/vnd.api+json')
             .expect('Content-Type', /json/)
             .expect(res => {
               const body = res.body;
@@ -271,7 +271,7 @@ describe('REST API medias', () => {
           should.not.exist(doc.info);
           request(app)
             .get(`/api/medias/${doc.id}`)
-            .set('Accept', 'application/json')
+            .set('Accept', 'application/vnd.api+json')
             .expect('Content-Type', /json/)
             .expect(res => {
               const body = res.body;
@@ -294,14 +294,14 @@ describe('REST API medias', () => {
     it('not exists', done => {
       request(app)
         .get('/api/medias/1042c88d282c219c2373d0fd')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
         .expect(404, done);
     });
     it('invalid period', done => {
       request(app)
         .get('/api/medias/not-valid-id')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
         .expect(400, done);
     });
