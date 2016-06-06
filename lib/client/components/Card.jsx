@@ -23,7 +23,7 @@ class Card extends React.Component {
 
     const title = (!data.episodes)
       ? (<Link to={`/medias/${data.id}`}>{data.title}</Link>)
-      : data.title; // @todo : link to search with tv show name
+      : data.title;
 
     return (
       <h3 className="mt0">
@@ -160,14 +160,14 @@ class Card extends React.Component {
 
     return (
       <div className="row p-media bb mb15 pb10">
-        <div className="col-xs-2 col-lg-1">
+        <div className="col-xs-2">
           <img
             className="img-responsive poster"
             src={data.poster}
             alt={`${data.title} poster`}
           />
         </div>
-        <div className="col-xs-10 col-lg-11">
+        <div className="col-xs-10">
           {this.title()}
           {this.detail()}
           {this.overview()}
