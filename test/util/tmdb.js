@@ -49,7 +49,7 @@ describe('tmdb', () => {
         .catch(done);
     });
   });
-  describe('regular', () => {
+  describe('real', () => {
     const api = tmdb('tmdb-api-key');
     it('is function and return promise', () => {
       api.should.be.a('function');
