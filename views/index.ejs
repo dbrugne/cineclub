@@ -1,6 +1,8 @@
+<div class="container">
 <%- include('_head', { title: data.title }); %>
 <div id="app" class="pt15"></div>
 <% if (data.scripts && data.scripts.length) { data.scripts.forEach(s => { %>
 <script src="<%=s-%>"></script>
 <%}); } %>
 <%- include('_foot', {}); %>
+</div>
