@@ -181,7 +181,7 @@ class Card extends React.Component {
 }
 
 Card.propTypes = {
-  data: React.PropTypes.object.isRequired,
+  data: React.PropTypes.object,
   mode: React.PropTypes.oneOf(['small', 'large']).isRequired,
 };
 

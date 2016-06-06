@@ -19,8 +19,6 @@ class Media extends React.Component {
   render() {
     if (this.props.isFetching === true) {
       return <div>Loading...</div>;
-    } else if (!this.props.data) {
-      return null;
     }
 
     let headerCss;
