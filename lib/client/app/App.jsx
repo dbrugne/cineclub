@@ -3,7 +3,7 @@ import Navigation from './Navigation';
 
 const App = props => (
   <div>
-    <Navigation active={props.location.pathname} />
+    <Navigation currentLocation={props.location.pathname} />
     {props.children}
   </div>
 );
