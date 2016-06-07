@@ -4,12 +4,13 @@
   "description": "An FTP update notification system and browser",
   "main": "server.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha",
+    "build": "node_modules/.bin/webpack",
     "dev": "node_modules/.bin/webpack-dev-server -d --history-api-fallback --hot --inline --progress --colors",
+    "purge": "node purge",
+    "push": "node push",
     "start": "node server",
     "sync": "node sync",
-    "push": "node push",
-    "purge": "node purge"
+    "test": "node_modules/.bin/mocha"
   },
   "engines": {
     "node": "6.1.0"

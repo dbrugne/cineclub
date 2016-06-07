@@ -11,6 +11,8 @@ module.exports = {
       'react-router',
       'react-router-redux',
       'redux',
+      'redux-logger',
+      'redux-thunk',
       'whatwg-fetch',
     ],
   },
@@ -34,8 +36,5 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
-    new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development') },
-    }),
   ],
 };
