@@ -21,6 +21,12 @@ Cleanup MongoDB cache collection with entries older than 7 days.
 
 >$ npm run purge
 
+### npm run build
+
+Build production bundles.
+
+>$ npm run build
+
 ## Server
 
 Serve frontend pages, client and REST API.
