@@ -1,3 +1,9 @@
+const now = new Date();
+function nextDate() {
+  now.setMinutes(now.getMinutes() + 1);
+  return new Date(now.getTime());
+}
+
 module.exports = {
   tmdb: {
     unknown: {
@@ -336,7 +342,7 @@ module.exports = {
       cache: [
         {
           key: 'keep',
-          created: new Date(),
+          created: nextDate(),
           result: {},
         },
         {
@@ -355,7 +361,7 @@ module.exports = {
       media: [
         {
           path: '/added.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
         },
         {
@@ -365,19 +371,19 @@ module.exports = {
         },
         {
           path: '/removed.txt',
-          created: new Date(),
-          removed: new Date(),
+          created: nextDate(),
+          removed: nextDate(),
           file: {},
         },
         {
           path: '/purge.txt',
-          created: new Date(),
+          created: nextDate(),
           removed: new Date(Date.now() - 1000 * 3600 * 24 * 8),
           file: {},
         },
         {
           path: '/purge_other.txt',
-          created: new Date(),
+          created: nextDate(),
           removed: new Date(Date.now() - 1000 * 3600 * 24 * 10),
           file: {},
         },
@@ -387,7 +393,7 @@ module.exports = {
       media: [
         {
           path: '/added.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
         },
         {
@@ -397,19 +403,19 @@ module.exports = {
         },
         {
           path: '/removed.txt',
-          created: new Date(),
-          removed: new Date(),
+          created: nextDate(),
+          removed: nextDate(),
           file: {},
         },
         {
           path: '/purge.txt',
-          created: new Date(),
+          created: nextDate(),
           removed: new Date(Date.now() - 1000 * 3600 * 24 * 8),
           file: {},
         },
         {
           path: '/purge_other.txt',
-          created: new Date(),
+          created: nextDate(),
           removed: new Date(Date.now() - 1000 * 3600 * 24 * 10),
           file: {},
         },
@@ -419,7 +425,7 @@ module.exports = {
       media: [
         {
           path: '/media1.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {
             name: 'foo',
           },
@@ -429,7 +435,7 @@ module.exports = {
         },
         {
           path: '/media2.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
           info: {
             title: 'foo',
@@ -438,18 +444,62 @@ module.exports = {
         },
         {
           path: '/media3.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
         },
         {
           path: '/media4.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
         },
         {
           path: '/removed.txt',
-          created: new Date(),
-          removed: new Date(),
+          created: nextDate(),
+          removed: nextDate(),
+          file: {},
+        },
+      ],
+    },
+    text: {
+      media: [
+        {
+          path: '/media1.txt',
+          created: nextDate(),
+          file: {
+            name: 'foo',
+          },
+          info: {},
+        },
+        {
+          path: '/media2.txt',
+          created: nextDate(),
+          file: {},
+          info: {
+            title: 'this is foo',
+            original_title: 'totally foo',
+          },
+        },
+        {
+          path: '/media3.txt',
+          created: nextDate(),
+          file: {},
+          info: {
+            overview: 'lorem ipsum foo lorem',
+          },
+        },
+        {
+          path: '/media4.txt',
+          created: nextDate(),
+          file: {},
+          info: {
+            name: 'Foo',
+            original_name: 'foo',
+          },
+        },
+        {
+          path: '/removed.txt',
+          created: nextDate(),
+          removed: nextDate(),
           file: {},
         },
       ],
@@ -460,7 +510,7 @@ module.exports = {
       media: [
         {
           path: '/file1.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {
             name: 'foo',
           },
@@ -470,7 +520,7 @@ module.exports = {
         },
         {
           path: '/file2.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
           info: {
             title: 'foo',
@@ -478,12 +528,12 @@ module.exports = {
         },
         {
           path: '/undecorated.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
         },
         {
           path: '/file4.txt',
-          created: new Date(),
+          created: nextDate(),
           file: {},
           info: {
             category: 'series',
@@ -499,8 +549,8 @@ module.exports = {
         },
         {
           path: '/removed.txt',
-          created: new Date(),
-          removed: new Date(),
+          created: nextDate(),
+          removed: nextDate(),
           file: {},
         },
       ],

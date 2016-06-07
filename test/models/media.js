@@ -198,8 +198,8 @@ describe('models/media', () => {
       Media.retrieve('foo')
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(2);
-          docs[0].should.property('path', '/media1.txt');
-          docs[1].should.property('path', '/media2.txt');
+          docs[0].should.property('path', '/media2.txt');
+          docs[1].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);
@@ -217,9 +217,9 @@ describe('models/media', () => {
       Media.retrieve(null, 'unknown')
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(3);
-          docs[0].should.property('path', '/media2.txt');
+          docs[0].should.property('path', '/media4.txt');
           docs[1].should.property('path', '/media3.txt');
-          docs[2].should.property('path', '/media4.txt');
+          docs[2].should.property('path', '/media2.txt');
           done();
         })
         .catch(done);
@@ -237,10 +237,10 @@ describe('models/media', () => {
       Media.retrieve()
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(4);
-          docs[0].should.property('path', '/media1.txt');
-          docs[1].should.property('path', '/media2.txt');
-          docs[2].should.property('path', '/media3.txt');
-          docs[3].should.property('path', '/media4.txt');
+          docs[0].should.property('path', '/media4.txt');
+          docs[1].should.property('path', '/media3.txt');
+          docs[2].should.property('path', '/media2.txt');
+          docs[3].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);
@@ -249,8 +249,8 @@ describe('models/media', () => {
       Media.retrieve(null, null, 2, 0)
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(2);
-          docs[0].should.property('path', '/media1.txt');
-          docs[1].should.property('path', '/media2.txt');
+          docs[0].should.property('path', '/media4.txt');
+          docs[1].should.property('path', '/media3.txt');
           done();
         })
         .catch(done);
@@ -259,8 +259,8 @@ describe('models/media', () => {
       Media.retrieve(null, null, 2, 2)
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(2);
-          docs[0].should.property('path', '/media3.txt');
-          docs[1].should.property('path', '/media4.txt');
+          docs[0].should.property('path', '/media2.txt');
+          docs[1].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);
@@ -269,9 +269,9 @@ describe('models/media', () => {
       Media.retrieve(null, null, 0, 1)
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(3);
-          docs[0].should.property('path', '/media2.txt');
-          docs[1].should.property('path', '/media3.txt');
-          docs[2].should.property('path', '/media4.txt');
+          docs[0].should.property('path', '/media3.txt');
+          docs[1].should.property('path', '/media2.txt');
+          docs[2].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);
@@ -280,7 +280,27 @@ describe('models/media', () => {
       Media.retrieve('foo', null, 1, 1)
         .then((docs) => {
           docs.should.be.an('array').and.have.lengthOf(1);
-          docs[0].should.property('path', '/media2.txt');
+          docs[0].should.property('path', '/media1.txt');
+          done();
+        })
+        .catch(done);
+    });
+  });
+  describe('text search', () => {
+    beforeEach(done => {
+      beforeEachHelper(() => {
+        inject(fixtures.models.text)
+          .then(() => done());
+      });
+    });
+    it('search', done => {
+      Media.retrieve('foo')
+        .then((docs) => {
+          docs.should.be.an('array').and.have.lengthOf(4);
+          docs[0].should.property('path', '/media4.txt');
+          docs[1].should.property('path', '/media2.txt');
+          docs[2].should.property('path', '/media3.txt');
+          docs[3].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);

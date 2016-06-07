@@ -41,24 +41,25 @@ describe('REST API medias', () => {
           body.links.should.not.have.property('next');
 
           body.data.should.be.an('array').and.have.lengthOf(5);
-          body.data[0].should.be.an('object').and.have.properties({
+          const subject = body.data[3];
+          subject.should.be.an('object').and.have.properties({
             path: '/file1.txt',
             removed: false,
             category: 'movie',
             poster: 'http://placehold.it/342?text=no+image',
           });
-          body.data[0].should.have.property('id')
+          subject.should.have.property('id')
             .and.match(/^[a-fA-F0-9]{24}$/);
-          body.data[0].should.have.property('created')
+          subject.should.have.property('created')
             .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
 
-          body.data[0].links.should.be.an('object')
+          subject.links.should.be.an('object')
             .and.have.property('self')
             .and.match(/^http:\/\/127\.0\.0\.1\/api\/medias\/[a-fA-F0-9]{24}$/);
 
-          body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
-          body.data[2].should.be.an('object').and.have.property('path', '/undecorated.txt');
-          body.data[3].should.be.an('object').and.have.property('path', '/file4.txt');
+          body.data[0].should.be.an('object').and.have.property('path', '/file4.txt');
+          body.data[1].should.be.an('object').and.have.property('path', '/undecorated.txt');
+          body.data[2].should.be.an('object').and.have.property('path', '/file2.txt');
           body.data[4].should.be.an('object').and.have.property('path', '/old.txt');
         })
         .expect(200, done);
@@ -72,7 +73,7 @@ describe('REST API medias', () => {
           const body = res.body;
           body.should.be.an('object');
           body.data.should.be.an('array').and.have.lengthOf(5);
-          body.data[2].should.be.an('object').and.have.properties({
+          body.data[1].should.be.an('object').and.have.properties({
             path: '/undecorated.txt',
             category: 'movie',
             title: 'decorated',
@@ -123,8 +124,8 @@ describe('REST API medias', () => {
             'http://127.0.0.1/api/medias/?page%5Bnumber%5D=2&page%5Bsize%5D=2');
           body.links.should.not.have.property('prev');
           body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
+          body.data[0].should.be.an('object').and.have.property('path', '/file4.txt');
+          body.data[1].should.be.an('object').and.have.property('path', '/undecorated.txt');
         })
         .expect(200, done);
     });
@@ -148,8 +149,8 @@ describe('REST API medias', () => {
           body.links.should.have.property('next',
             'http://127.0.0.1/api/medias/?page%5Bnumber%5D=3&page%5Bsize%5D=2');
           body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/undecorated.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file4.txt');
+          body.data[0].should.be.an('object').and.have.property('path', '/file2.txt');
+          body.data[1].should.be.an('object').and.have.property('path', '/file1.txt');
         })
         .expect(200, done);
     });
@@ -232,8 +233,8 @@ describe('REST API medias', () => {
           body.links.should.not.have.property('prev');
           body.links.should.not.have.property('next');
           body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file2.txt');
+          body.data[0].should.be.an('object').and.have.property('path', '/file2.txt');
+          body.data[1].should.be.an('object').and.have.property('path', '/file1.txt');
         })
         .expect(200, done);
     });
