@@ -64,23 +64,43 @@ describe('REST API medias', () => {
         })
         .expect(200, done);
     });
-    it('decorate', done => {
-      request(app)
-        .get('/api/medias')
-        .set('Accept', 'application/vnd.api+json')
-        .expect('Content-Type', /json/)
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.data.should.be.an('array').and.have.lengthOf(5);
-          body.data[1].should.be.an('object').and.have.properties({
-            path: '/undecorated.txt',
-            category: 'movie',
-            title: 'decorated',
-            overview: 'overview',
-          });
-        })
-        .expect(200, done);
+    describe('decoration', () => {
+      it('is done', done => {
+        request(app)
+          .get('/api/medias')
+          .set('Accept', 'application/vnd.api+json')
+          .expect('Content-Type', /json/)
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.data.should.be.an('array').and.have.lengthOf(5);
+            body.data[1].should.be.an('object').and.have.properties({
+              path: '/undecorated.txt',
+              category: 'movie',
+              title: 'decorated',
+              overview: 'overview',
+            });
+          })
+          .expect(200, done);
+      });
+      it('is avoided', done => {
+        request(app)
+          .get('/api/medias?filter%5Bcategory%5D=unknown')
+          .set('Accept', 'application/vnd.api+json')
+          .expect('Content-Type', /json/)
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.data.should.be.an('array').and.have.lengthOf(3);
+            const subject = body.data[0];
+            subject.should.be.an('object');
+            subject.should.have.property('path', '/undecorated.txt');
+            subject.should.have.property('category', 'unknown');
+            subject.should.should.not.have.property('decorated');
+            subject.should.should.not.have.property('overview');
+          })
+          .expect(200, done);
+      });
     });
     it('empty result', done => {
       // empty collections
