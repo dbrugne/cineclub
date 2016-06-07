@@ -1,7 +1,4 @@
-const chai = require('chai');
-chai.use(require('chai-properties'));
-
-const fixtures = require('../fixtures/data');
+const { fixtures } = require('../../lib/util/tests');
 
 const parser = require('../../lib/decorate/parse');
 

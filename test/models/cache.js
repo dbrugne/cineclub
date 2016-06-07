@@ -1,14 +1,18 @@
-const chai = require('chai');
-const should = chai.should();
-chai.use(require('chai-properties'));
+const {
+  should,
+  beforeHelper,
+  beforeEachHelper,
+  afterHelper,
+  inject,
+  fixtures,
+} = require('../../lib/util/tests');
 
-const util = require('../../lib/util/tests');
 const Cache = require('../../lib/models/cache');
 
 describe('models/cache', () => {
-  before(util.before);
-  beforeEach(util.beforeEach);
-  after(util.after);
+  before(beforeHelper);
+  beforeEach(beforeEachHelper);
+  after(afterHelper);
 
   it('is object and has expected functions', () => {
     Cache.should.be.an('function').and.property('schema');
@@ -102,24 +106,7 @@ describe('models/cache', () => {
       .catch(err => done(err));
   });
   it('purge', (done) => {
-    const timestamp = Date.now();
-    Cache.collection.insert([
-      {
-        key: 'keep',
-        created: new Date(),
-        result: {},
-      },
-      {
-        key: 'purge',
-        created: new Date(timestamp - 1000 * 3600 * 24 * 8),
-        result: {},
-      },
-      {
-        key: 'purge_other',
-        created: new Date(timestamp - 1000 * 3600 * 24 * 10),
-        result: {},
-      },
-    ])
+    inject(fixtures.models.purge)
       .then(() => Cache.purge())
       .then(() => Cache.find({}).exec())
       .then((docs) => {

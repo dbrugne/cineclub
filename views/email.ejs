@@ -190,8 +190,8 @@
           border-bottom: 1px solid #EAEAEA;
           padding-top: 8px;
         }
-        .m-img-img {
-          width: 92px;
+        img.m-img-img {
+          width: 92px !important;
         }
         .m-infos {
           padding-left: 15px;
@@ -242,9 +242,9 @@
             <td>
               <p class="today"><%=subject%></p>
               <p>Salut les copinous,</p>
-              <p>Mais que s'est-il passé aujourd'hui sur le FTP ? Chaque soir nous vous proposons un résumé rapide et synthétique des trucs à savoir.</p>
-              <p>A très bientôt les copinous.</p>
-              <% if (movies.length || tv.length) { %>
+              <p>Mais que s'est-il passé aujourd'hui sur le FTP ? Chaque soir un résumé rapide et synthétique des trucs à savoir.</p>
+              <p>A bientôt.</p>
+              <% if (movies.length || series.length) { %>
               <h1>What's new today</h1>
               <% } %>
 
@@ -259,34 +259,36 @@
                     <p class="m-underline">
                       <span><%=i.year%></span>
                       <span>| <%=i.genres%></span>
-                      <span>| <%=i.vote%></span>
+                      <span>| <%=i.votes%></span>
                     </p>
-                    <p class="m-description"><%=i.overview%></p>
-                    <p class="m-link"><a href="<%=i.url%>" target="_blank">voir plus</a></p>
+                    <% const overview = (i.overview && i.overview.length > 100) ? `${i.overview.substr(0, 100)} (...)` : i.overview; %>
+                    <p class="m-description"><%=overview%></p>
+                    <p class="m-link"><a href="<%=baseUrl%>/media/<%=i.id%>" target="_blank">voir plus</a></p>
                   </td>
                 </tr>
                 <% }); %>
               </table>
               <% } %>
 
-              <% if (tv.length) { %>
+              <% if (series.length) { %>
               <h3>Nouveaux épisodes de séries</h3>
               <table class="medias" cellpadding="0" cellspacing="0" border="0">
-                <% tv.forEach((s) => { %>
+                <% series.forEach((s) => { %>
                 <tr>
                   <td class="m-img"><img class="m-img-img" src="<%=s.poster%>" alt="cover"></td>
                   <td class="m-infos">
                     <p class="m-title"><b><%=s.title%></b></p>
                     <p class="m-underline">
                       <span><%=s.genres%></span>
-                      <span>| <%=s.vote%></span>
+                      <span>| <%=s.votes%></span>
                     </p>
-                    <p class="m-description"><%=s.overview%></p>
+                    <% const overview = (s.overview && s.overview.length > 100) ? `${s.overview.substr(0, 100)} (...)` : s.overview; %>
+                    <p class="m-description"><%=overview%></p>
                     <p class="m-episodes">
                       <% s.episodes.forEach(e => { %>
                       Saison <b><%=e.season%></b> épisode <b><%=e.episode%></b>
                       -
-                      <a class="m-link" href="<%=e.url%>" target="_blank">voir plus</a><br>
+                      <a class="m-link" href="<%=baseUrl%>/media/<%=e.id%>" target="_blank">voir plus</a><br>
                       <% }); %>
                     </p>
                   </td>
@@ -298,8 +300,8 @@
               <% if (unparsed && unparsed.length) { %>
               <h3>Nouveaux médias non identifiés</h3>
               <p class="m-unparsed">
-                <% unparsed.forEach((u) => { %>
-                <i><%=u.path%></i> <a href="<%=u.url%>" target="_blank">voir plus</a><br>
+                <% unparsed.forEach(u => { %>
+                <i><%=u.path%></i> <a href="<%=baseUrl%>/media/<%=u.id%>" target="_blank">voir plus</a><br>
                 <% }); %>
               </p>
               <% } %>
@@ -307,7 +309,7 @@
               <% if (removed && removed.length) { %>
               <h3>Médias supprimés récements</h3>
               <p class="m-removed">
-                <% removed.forEach((r) => { %>
+                <% removed.forEach(r => { %>
                 <i><%=r.path%></i><br>
                 <% }); %>
               </p>
