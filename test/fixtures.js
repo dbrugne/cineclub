@@ -516,6 +516,7 @@ module.exports = {
           },
           info: {
             category: 'movie',
+            title: 'name with spaces',
           },
         },
         {

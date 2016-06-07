@@ -237,26 +237,45 @@ describe('REST API medias', () => {
         })
         .expect(400, done);
     });
-    it('search', done => {
-      request(app)
-        .get('/api/medias?filter%5Bsearch%5D=foo')
-        .set('Accept', 'application/vnd.api+json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 1);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=foo');
-          body.links.should.not.have.property('first');
-          body.links.should.not.have.property('last');
-          body.links.should.not.have.property('prev');
-          body.links.should.not.have.property('next');
-          body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file2.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file1.txt');
-        })
-        .expect(200, done);
+    describe('search', () => {
+      it('word', done => {
+        request(app)
+          .get('/api/medias?filter%5Bsearch%5D=foo')
+          .set('Accept', 'application/vnd.api+json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 1);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=foo');
+            body.links.should.not.have.property('first');
+            body.links.should.not.have.property('last');
+            body.links.should.not.have.property('prev');
+            body.links.should.not.have.property('next');
+            body.data.should.be.an('array').and.have.lengthOf(2);
+            body.data[0].should.be.an('object').and.have.property('path', '/file2.txt');
+            body.data[1].should.be.an('object').and.have.property('path', '/file1.txt');
+          })
+          .expect(200, done);
+      });
+      it('with spaces', done => {
+        request(app)
+          .get('/api/medias?filter%5Bsearch%5D=with%20spaces')
+          .set('Accept', 'application/vnd.api+json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 1);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=with%20spaces'
+            );
+            body.data.should.be.an('array').and.have.lengthOf(1);
+            body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
+          })
+          .expect(200, done);
+      });
     });
     it('category', done => {
       request(app)
