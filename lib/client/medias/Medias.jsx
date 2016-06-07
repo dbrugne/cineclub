@@ -111,7 +111,6 @@ class Medias extends React.Component {
                   <option value="">all</option>
                   <option value="movie">movie</option>
                   <option value="tv">tv</option>
-                  <option value="unknown">unknown</option>
                 </select>
               </div>
             </div>
