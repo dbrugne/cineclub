@@ -43,6 +43,9 @@ class Card extends React.Component {
     if (data.votes) {
       i.push(data.votes);
     }
+    if (data.decoration) {
+      i.push(`status: ${data.decoration}`);
+    }
     return (
       <div className="text-muted">
         {i.join(' | ')}

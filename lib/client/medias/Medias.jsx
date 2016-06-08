@@ -108,9 +108,11 @@ class Medias extends React.Component {
                   defaultValue={this.props.category}
                   onChange={change}
                 >
-                  <option value="">all</option>
+                  <option value="decorated">movie & tv</option>
                   <option value="movie">movie</option>
                   <option value="tv">tv</option>
+                  <option value="undecorated">not already analysed</option>
+                  <option value="failed">analyse failed</option>
                 </select>
               </div>
             </div>
