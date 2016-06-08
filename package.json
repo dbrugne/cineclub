@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "node_modules/.bin/webpack",
+    "decorate": "node decorate",
     "dev": "node_modules/.bin/webpack-dev-server -d --history-api-fallback --hot --inline --progress --colors",
     "purge": "node purge",
     "push": "node push",

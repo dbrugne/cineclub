@@ -48,6 +48,16 @@ describe('tmdb', () => {
         .then(() => done())
         .catch(done);
     });
+    it('ratelimit', done => {
+      api('searchMulti', { query: 'jfk' })
+        .then(res => {
+          res.should.be.an('object')
+            .and.have.property('ratelimit')
+            .that.is.a('number');
+        })
+        .then(() => done())
+        .catch(done);
+    });
   });
   describe('real', () => {
     const api = tmdb('tmdb-api-key');

@@ -24,6 +24,7 @@ describe('models/media', () => {
     Media.countAll.should.be.a('function');
     Media.retrieve.should.be.a('function');
     Media.retrieveActive.should.be.a('function');
+    Media.retrieveForDecoration.should.be.a('function');
     Media.retrieveAdded.should.be.a('function');
     Media.retrieveRemoved.should.be.a('function');
     Media.createNewMedias.should.be.a('function');
@@ -31,14 +32,15 @@ describe('models/media', () => {
     Media.purge.should.be.a('function');
 
     const doc = new Media({});
-    doc.addInfo.should.be.a('function');
+    doc.setDecoration.should.be.a('function');
+    doc.shouldDecorate.should.be.a('function');
     doc.getPosterUrl.should.be.a('function');
     doc.getGenres.should.be.a('function');
     doc.getApiData.should.be.a('function');
   });
-  it('retrieveActive', (done) => {
+  it('retrieveActive', done => {
     Media.retrieveActive()
-      .then((docs) => {
+      .then(docs => {
         docs.should.be.an('array');
         docs.length.should.equal(2);
         docs[0].should.property('path', '/added.txt');
@@ -47,9 +49,9 @@ describe('models/media', () => {
       })
       .catch(done);
   });
-  it('retrieveAdded', (done) => {
-    Media.retrieveAdded(1)
-      .then((docs) => {
+  it('retrieveForDecoration', done => {
+    Media.retrieveForDecoration()
+      .then(docs => {
         docs.should.be.an('array');
         docs.length.should.equal(1);
         docs[0].should.property('path', '/added.txt');
@@ -57,9 +59,19 @@ describe('models/media', () => {
       })
       .catch(done);
   });
-  it('retrieveRemoved', (done) => {
+  it('retrieveAdded', done => {
+    Media.retrieveAdded(1)
+      .then(docs => {
+        docs.should.be.an('array');
+        docs.length.should.equal(1);
+        docs[0].should.property('path', '/added.txt');
+        done();
+      })
+      .catch(done);
+  });
+  it('retrieveRemoved', done => {
     Media.retrieveRemoved(1)
-      .then((docs) => {
+      .then(docs => {
         docs.should.be.an('array');
         docs.length.should.equal(1);
         docs[0].should.property('path', '/removed.txt');
@@ -67,7 +79,7 @@ describe('models/media', () => {
       })
       .catch(done);
   });
-  it('createNewMedias', (done) => {
+  it('createNewMedias', done => {
     const list = [
       {
         path: '/title1',
@@ -92,12 +104,14 @@ describe('models/media', () => {
             // doc 1
             docs[0].should.have.property('isNew', false);
             docs[0].should.have.property('path', list[0].path);
+            docs[0].should.have.property('decoration', 'undecorated');
             docs[0].should.have.property('file').that.have.properties(list[0].file);
             docs[0].created.getTime().should.equal(list[0].file.mtime.getTime());
 
             // doc 2
             docs[1].should.have.property('isNew', false);
             docs[1].should.have.property('path', list[1].path);
+            docs[1].should.have.property('decoration', 'undecorated');
             docs[1].should.have.property('file').that.have.properties(list[1].file);
             docs[1].created.getTime().should.equal(list[1].file.mtime.getTime());
 
@@ -107,11 +121,11 @@ describe('models/media', () => {
       })
       .catch(done);
   });
-  it('tagRemoved', (done) => {
+  it('tagRemoved', done => {
     Media.tagRemoved([{ path: '/added.txt' }])
       .then(() => {
         Media.retrieveRemoved(1)
-          .then((docs) => {
+          .then(docs => {
             docs.should.be.an('array').and.have.lengthOf(2);
             docs[0].should.property('path', '/added.txt');
             docs[1].should.property('path', '/removed.txt');
@@ -121,31 +135,89 @@ describe('models/media', () => {
       })
       .catch(done);
   });
-  it('purge', (done) => {
+  it('purge', done => {
     Media.purge()
       .then(() => Media.find({}).exec())
-      .then((docs) => {
+      .then(docs => {
         docs.should.be.an('array');
         docs.length.should.equal(3);
         done();
       })
       .catch(done);
   });
-  it('addInfo', (done) => {
-    const info = { title: 'Title 1' };
-    let docWithoutInfo;
-    Media.findOne({ path: '/added.txt' }).exec()
-      .then(doc => {
-        docWithoutInfo = doc;
-        return doc.addInfo(info);
-      })
-      .then(docWithInfo => {
-        should.exist(docWithInfo);
-        docWithInfo.should.have.property('info').that.have.properties(info);
-        docWithoutInfo.should.equal(docWithInfo);
-        done();
-      })
-      .catch(done);
+  describe('setDecoration', () => {
+    it('decorated', done => {
+      const info = { title: 'Title 1', category: 'movie' };
+      let docWithoutInfo;
+      Media.findOne({ path: '/added.txt' }).exec()
+        .then(doc => {
+          docWithoutInfo = doc;
+          return doc.setDecoration(info);
+        })
+        .then(docWithInfo => {
+          should.exist(docWithInfo);
+          docWithInfo.should.have.property('decoration', 'decorated');
+          docWithInfo.should.have.property('info').that.have.properties(info);
+          docWithoutInfo.should.equal(docWithInfo);
+          done();
+        })
+        .catch(done);
+    });
+    it('failed (unknown category)', done => {
+      const info = { title: 'Title 1', category: 'other' };
+      let docWithoutInfo;
+      Media.findOne({ path: '/added.txt' }).exec()
+        .then(doc => {
+          docWithoutInfo = doc;
+          return doc.setDecoration(info);
+        })
+        .then(docWithInfo => {
+          should.exist(docWithInfo);
+          docWithInfo.should.have.property('decoration', 'failed');
+          docWithInfo.should.have.property('info').that.have.properties(info);
+          docWithoutInfo.should.equal(docWithInfo);
+          done();
+        })
+        .catch(done);
+    });
+    it('failed (empty)', done => {
+      let docWithoutInfo;
+      Media.findOne({ path: '/added.txt' }).exec()
+        .then(doc => {
+          docWithoutInfo = doc;
+          return doc.setDecoration({});
+        })
+        .then(docWithInfo => {
+          should.exist(docWithInfo);
+          docWithInfo.should.have.property('decoration', 'failed');
+          docWithInfo.should.have.property('info', undefined);
+          docWithoutInfo.should.equal(docWithInfo);
+          done();
+        })
+        .catch(done);
+    });
+  });
+  describe('shouldDecorate', () => {
+    it('has info', () => {
+      const doc = new Media({ decoration: 'anyvalue', info: {} });
+      doc.shouldDecorate().should.equal(false);
+    });
+    it('is decorated', () => {
+      const doc = new Media({ decoration: 'decorated', info: {} });
+      doc.shouldDecorate().should.equal(false);
+    });
+    it('is failed', () => {
+      const doc = new Media({ decoration: 'failed', info: {} });
+      doc.shouldDecorate().should.equal(false);
+    });
+    it('isn\'t decorated', () => {
+      const doc = new Media({ decoration: 'undecorated' });
+      doc.shouldDecorate().should.equal(true);
+    });
+    it('empty', () => {
+      const doc = new Media({});
+      doc.shouldDecorate().should.equal(true);
+    });
   });
   describe('countAll', () => {
     beforeEach(done => {
@@ -194,9 +266,9 @@ describe('models/media', () => {
           .then(() => done());
       });
     });
-    it('search', (done) => {
+    it('search', done => {
       Media.retrieve('foo')
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(2);
           docs[0].should.property('path', '/media2.txt');
           docs[1].should.property('path', '/media1.txt');
@@ -204,38 +276,55 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('category (movie)', (done) => {
+    it('type (decorated)', done => {
+      Media.retrieve(null, 'decorated')
+        .then(docs => {
+          docs.should.be.an('array').and.have.lengthOf(2);
+          docs[0].should.property('path', '/media3.txt');
+          docs[1].should.property('path', '/media1.txt');
+          done();
+        })
+        .catch(done);
+    });
+    it('type (movie)', done => {
       Media.retrieve(null, 'movie')
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(1);
           docs[0].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);
     });
-    it('category (unknown)', (done) => {
-      Media.retrieve(null, 'unknown')
-        .then((docs) => {
-          docs.should.be.an('array').and.have.lengthOf(3);
+    it('type (undecorated)', done => {
+      Media.retrieve(null, 'undecorated')
+        .then(docs => {
+          docs.should.be.an('array').and.have.lengthOf(1);
           docs[0].should.property('path', '/media4.txt');
-          docs[1].should.property('path', '/media3.txt');
-          docs[2].should.property('path', '/media2.txt');
           done();
         })
         .catch(done);
     });
-    it('search & category', (done) => {
+    it('type (failed)', done => {
+      Media.retrieve(null, 'failed')
+        .then(docs => {
+          docs.should.be.an('array').and.have.lengthOf(1);
+          docs[0].should.property('path', '/media2.txt');
+          done();
+        })
+        .catch(done);
+    });
+    it('search & category', done => {
       Media.retrieve('foo', 'movie')
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(1);
           docs[0].should.property('path', '/media1.txt');
           done();
         })
         .catch(done);
     });
-    it('no parameters', (done) => {
+    it('no parameters', done => {
       Media.retrieve()
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(4);
           docs[0].should.property('path', '/media4.txt');
           docs[1].should.property('path', '/media3.txt');
@@ -245,9 +334,9 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('limit', (done) => {
+    it('limit', done => {
       Media.retrieve(null, null, 2, 0)
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(2);
           docs[0].should.property('path', '/media4.txt');
           docs[1].should.property('path', '/media3.txt');
@@ -255,9 +344,9 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('limit & skip', (done) => {
+    it('limit & skip', done => {
       Media.retrieve(null, null, 2, 2)
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(2);
           docs[0].should.property('path', '/media2.txt');
           docs[1].should.property('path', '/media1.txt');
@@ -265,9 +354,9 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('skip', (done) => {
+    it('skip', done => {
       Media.retrieve(null, null, 0, 1)
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(3);
           docs[0].should.property('path', '/media3.txt');
           docs[1].should.property('path', '/media2.txt');
@@ -276,9 +365,9 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('search & pagination', (done) => {
+    it('search & pagination', done => {
       Media.retrieve('foo', null, 1, 1)
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(1);
           docs[0].should.property('path', '/media1.txt');
           done();
@@ -295,7 +384,7 @@ describe('models/media', () => {
     });
     it('search', done => {
       Media.retrieve('foo')
-        .then((docs) => {
+        .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(4);
           docs[0].should.property('path', '/media4.txt');
           docs[1].should.property('path', '/media2.txt');
@@ -416,10 +505,11 @@ describe('models/media', () => {
         const data = doc.getApiData();
         data.should.be.an('object').and.have.properties({
           id: doc.id,
-          category: 'unknown',
+          decoration: 'undecorated',
           poster: 'http://placehold.it/342?text=no+image',
           removed: false,
         });
+        data.should.not.have.property('category');
         data.should.not.have.property('genres');
         data.should.not.have.property('size');
       });
@@ -455,15 +545,25 @@ describe('models/media', () => {
         new Media({ removed: date }).getApiData()
           .should.have.property('removed', date.toISOString());
       });
+      it('decoration', () => {
+        new Media({}).getApiData()
+          .should.have.property('decoration', 'undecorated');
+        new Media({ decoration: 'decorated' }).getApiData()
+          .should.have.property('decoration', 'decorated');
+        new Media({ decoration: 'anyvalue' }).getApiData()
+          .should.have.property('decoration', 'anyvalue');
+      });
       it('category', () => {
         new Media({ info: { category: 'movie' } }).getApiData()
           .should.have.property('category', 'movie');
         new Media({ info: { category: 'tv' } }).getApiData()
           .should.have.property('category', 'tv');
         new Media({ info: { category: 'other' } }).getApiData()
-          .should.have.property('category', 'unknown');
+          .should.not.have.property('category');
+        new Media({ info: {} }).getApiData()
+          .should.not.have.property('category');
         new Media({}).getApiData()
-          .should.have.property('category', 'unknown');
+          .should.not.have.property('category');
       });
       it('titles', () => {
         let data;

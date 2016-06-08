@@ -1,5 +1,4 @@
 const {
-  should,
   request,
   beforeHelper,
   beforeEachHelper,
@@ -61,24 +60,6 @@ describe('REST API medias', () => {
           body.data[1].should.be.an('object').and.have.property('path', '/undecorated.txt');
           body.data[2].should.be.an('object').and.have.property('path', '/file2.txt');
           body.data[4].should.be.an('object').and.have.property('path', '/old.txt');
-        })
-        .expect(200, done);
-    });
-    it('decorate', done => {
-      request(app)
-        .get('/api/medias')
-        .set('Accept', 'application/vnd.api+json')
-        .expect('Content-Type', /json/)
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.data.should.be.an('array').and.have.lengthOf(5);
-          body.data[1].should.be.an('object').and.have.properties({
-            path: '/undecorated.txt',
-            category: 'movie',
-            title: 'decorated',
-            overview: 'overview',
-          });
         })
         .expect(200, done);
     });
@@ -217,30 +198,49 @@ describe('REST API medias', () => {
         })
         .expect(400, done);
     });
-    it('search', done => {
-      request(app)
-        .get('/api/medias?filter%5Bsearch%5D=foo')
-        .set('Accept', 'application/vnd.api+json')
-        .expect(res => {
-          const body = res.body;
-          body.should.be.an('object');
-          body.should.have.property('meta');
-          body.meta.should.have.property('total-pages', 1);
-          body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=foo');
-          body.links.should.not.have.property('first');
-          body.links.should.not.have.property('last');
-          body.links.should.not.have.property('prev');
-          body.links.should.not.have.property('next');
-          body.data.should.be.an('array').and.have.lengthOf(2);
-          body.data[0].should.be.an('object').and.have.property('path', '/file2.txt');
-          body.data[1].should.be.an('object').and.have.property('path', '/file1.txt');
-        })
-        .expect(200, done);
+    describe('search', () => {
+      it('word', done => {
+        request(app)
+          .get('/api/medias?filter%5Bsearch%5D=foo')
+          .set('Accept', 'application/vnd.api+json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 1);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=foo');
+            body.links.should.not.have.property('first');
+            body.links.should.not.have.property('last');
+            body.links.should.not.have.property('prev');
+            body.links.should.not.have.property('next');
+            body.data.should.be.an('array').and.have.lengthOf(2);
+            body.data[0].should.be.an('object').and.have.property('path', '/file2.txt');
+            body.data[1].should.be.an('object').and.have.property('path', '/file1.txt');
+          })
+          .expect(200, done);
+      });
+      it('with spaces', done => {
+        request(app)
+          .get('/api/medias?filter%5Bsearch%5D=with%20spaces')
+          .set('Accept', 'application/vnd.api+json')
+          .expect(res => {
+            const body = res.body;
+            body.should.be.an('object');
+            body.should.have.property('meta');
+            body.meta.should.have.property('total-pages', 1);
+            body.links.should.have.property('self',
+              'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bsearch%5D=with%20spaces'
+            );
+            body.data.should.be.an('array').and.have.lengthOf(1);
+            body.data[0].should.be.an('object').and.have.property('path', '/file1.txt');
+          })
+          .expect(200, done);
+      });
     });
-    it('category', done => {
+    it('type', done => {
       request(app)
-        .get('/api/medias?filter%5Bcategory%5D=movie')
+        .get('/api/medias?filter%5Btype%5D=movie')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
@@ -248,7 +248,7 @@ describe('REST API medias', () => {
           body.should.have.property('meta');
           body.meta.should.have.property('total-pages', 1);
           body.links.should.have.property('self',
-            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Bcategory%5D=movie');
+            'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10&filter%5Btype%5D=movie');
           body.links.should.not.have.property('first');
           body.links.should.not.have.property('last');
           body.links.should.not.have.property('prev');
@@ -258,9 +258,9 @@ describe('REST API medias', () => {
         })
         .expect(200, done);
     });
-    it('invalid category', done => {
+    it('invalid type', done => {
       request(app)
-        .get('/api/medias?filter%5Bcategory%5D=foo')
+        .get('/api/medias?filter%5Btype%5D=foo')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
           const body = res.body;
@@ -270,9 +270,9 @@ describe('REST API medias', () => {
             .and.have.lengthOf(1);
           body.errors[0].should.be.an('object').that.has.properties({
             status: 400,
-            title: 'category should be movie, tv or unknown',
+            title: 'type should be undecorated, decorated, movie, tv or failed',
             source: {
-              pointer: '/query/filter/category',
+              pointer: '/query/filter/type',
             },
           });
         })
@@ -303,32 +303,6 @@ describe('REST API medias', () => {
               });
               body.data.should.have.property('created')
                 .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
-            })
-            .expect(200, done);
-        })
-        .catch(done);
-    });
-    it('decorate', done => {
-      collections.media.findOne({ path: '/undecorated.txt' }).exec()
-        .then(doc => {
-          should.not.exist(doc.info);
-          request(app)
-            .get(`/api/medias/${doc.id}`)
-            .set('Accept', 'application/vnd.api+json')
-            .expect('Content-Type', /json/)
-            .expect(res => {
-              const body = res.body;
-              body.should.be.an('object').and.have.property('data');
-              body.data.should.be.an('object')
-                .and.have.properties({
-                  path: '/undecorated.txt',
-                  id: doc.id,
-                  removed: false,
-                  category: 'movie',
-                  poster: 'http://placehold.it/342?text=no+image',
-                  title: 'decorated',
-                  overview: 'overview',
-                });
             })
             .expect(200, done);
         })

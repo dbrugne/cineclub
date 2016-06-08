@@ -28,15 +28,19 @@ describe('decorate/extract', () => {
   it('api required', () => extract('/file.mkv').should.be.rejected);
   it('unknown', (done) => {
     extract(fixtures.tmdb.unknown.file, opts)
-      .then((r) => {
-        should.not.exist(r);
+      .then(r => {
+        r.should.be.an('object');
+        const keys = Object.keys(r);
+        keys.should.be.an('array').that.has.lengthOf(1);
+        keys[0].should.equal('ratelimit');
+        r.ratelimit.should.be.a('number');
         done();
       })
       .catch(done);
   });
   it('movie', (done) => {
     extract(fixtures.tmdb.alien.file, opts)
-      .then((r) => {
+      .then(r => {
         should.exist(r);
         r.should.have.properties(fixtures.tmdb.alien.done);
         done();
@@ -45,7 +49,7 @@ describe('decorate/extract', () => {
   });
   it('tv', (done) => {
     extract(fixtures.tmdb['mad men'].file, opts)
-      .then((r) => {
+      .then(r => {
         should.exist(r);
         r.should.have.properties(fixtures.tmdb['mad men'].done);
         done();
@@ -54,7 +58,7 @@ describe('decorate/extract', () => {
   });
   it('multi', (done) => {
     extract(fixtures.tmdb.jfk.file, opts)
-      .then((r) => {
+      .then(r => {
         should.exist(r);
         r.should.have.properties(fixtures.tmdb.jfk.done);
         done();
@@ -83,9 +87,19 @@ describe('decorate/extract', () => {
   });
   it('force category for series/', (done) => {
     extract(`/series/${fixtures.tmdb.jfk.file}`, opts)
-      .then((r) => {
+      .then(r => {
         should.exist(r);
         r.should.property('category', 'tv');
+        done();
+      })
+      .catch(done);
+  });
+  it('ratelimit', (done) => {
+    extract(fixtures.tmdb.jfk.file, opts)
+      .then(r => {
+        should.exist(r);
+        r.should.have.property('ratelimit')
+          .that.is.a('number');
         done();
       })
       .catch(done);

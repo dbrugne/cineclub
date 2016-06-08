@@ -264,6 +264,24 @@ module.exports = {
         total_results: 1,
       },
     },
+    unknowncategory: {
+      file: 'unknownCategory.mkv',
+      result: {
+        page: 1,
+        results: [
+          {
+            title: 'john doe',
+            media_type: 'person',
+          },
+        ],
+        total_pages: 1,
+        total_results: 1,
+      },
+      done: {
+        title: 'john doe',
+        media_type: 'person',
+      },
+    },
   },
   torrent: {
     invalid: {
@@ -362,30 +380,37 @@ module.exports = {
         {
           path: '/added.txt',
           created: nextDate(),
+          decoration: 'undecorated',
           file: {},
         },
         {
           path: '/old.txt',
           created: new Date(Date.now() - 1000 * 3600 * 24 * 2),
+          decoration: 'decorated',
           file: {},
+          info: {},
         },
         {
           path: '/removed.txt',
           created: nextDate(),
           removed: nextDate(),
+          decoration: 'undecorated',
           file: {},
         },
         {
           path: '/purge.txt',
           created: nextDate(),
           removed: new Date(Date.now() - 1000 * 3600 * 24 * 8),
+          decoration: 'undecorated',
           file: {},
         },
         {
           path: '/purge_other.txt',
           created: nextDate(),
           removed: new Date(Date.now() - 1000 * 3600 * 24 * 10),
+          decoration: 'decorated',
           file: {},
+          info: {},
         },
       ],
     },
@@ -426,6 +451,7 @@ module.exports = {
         {
           path: '/media1.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {
             name: 'foo',
           },
@@ -436,27 +462,36 @@ module.exports = {
         {
           path: '/media2.txt',
           created: nextDate(),
+          decoration: 'failed',
           file: {},
           info: {
             title: 'foo',
-            category: 'unknown',
           },
         },
         {
           path: '/media3.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {},
+          info: {
+            category: 'tv',
+          },
         },
         {
           path: '/media4.txt',
           created: nextDate(),
+          decoration: 'undecorated',
           file: {},
         },
         {
           path: '/removed.txt',
           created: nextDate(),
           removed: nextDate(),
+          decoration: 'decorated',
           file: {},
+          info: {
+            category: 'movie',
+          },
         },
       ],
     },
@@ -516,6 +551,7 @@ module.exports = {
           },
           info: {
             category: 'movie',
+            title: 'name with spaces',
           },
         },
         {
@@ -543,9 +579,7 @@ module.exports = {
           path: '/old.txt',
           created: new Date(Date.now() - (1000 * 3600 * 24 * 2)),
           file: {},
-          info: {
-            category: 'unknown',
-          },
+          info: {},
         },
         {
           path: '/removed.txt',

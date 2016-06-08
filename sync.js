@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
-const syncTask = require('./lib/sync/index');
+const syncTask = require('./lib/sync/task');
 const exit = require('exit');
 
 const SftpDriver = require('./lib/sync/sftp');
