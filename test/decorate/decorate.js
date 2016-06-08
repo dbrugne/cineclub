@@ -4,6 +4,7 @@ const {
   beforeEachHelper,
   afterHelper,
   tmdbMockup,
+  tmdbMockupSetLimit,
   fixtures,
 } = require('../../lib/util/tests');
 
@@ -28,7 +29,7 @@ describe('decorate/index', () => {
   });
   it('api required', () => decorate([]).should.be.rejected);
   describe('empty', () => {
-    it('array', (done) => {
+    it('array', done => {
       decorate([], opts)
         .then(r => {
           r.should.be.an('array').and.to.have.lengthOf(0);
@@ -36,7 +37,7 @@ describe('decorate/index', () => {
         })
         .catch(done);
     });
-    it('undefined', (done) => {
+    it('undefined', done => {
       decorate(undefined, opts)
         .then(r => {
           should.not.exist(r);
@@ -45,7 +46,7 @@ describe('decorate/index', () => {
         .catch(done);
     });
   });
-  it('1 doc', (done) => {
+  it('1 doc', done => {
     const doc = new Medias({
       path: fixtures.tmdb.alien.file,
       created: Date.now(),
@@ -60,9 +61,9 @@ describe('decorate/index', () => {
         doc.should.equal(r[0]);
         done();
       })
-      .catch(err => done(err));
+      .catch(done);
   });
-  it('n docs', (done) => {
+  it('n docs', done => {
     const docs = [
       new Medias({
         path: fixtures.tmdb.alien.file,
@@ -91,10 +92,10 @@ describe('decorate/index', () => {
 
         done();
       })
-      .catch(err => done(err));
+      .catch(done);
   });
   describe('failed', () => {
-    it('with no info', (done) => {
+    it('with no info', done => {
       const doc = new Medias({
         path: 'invalid.mkv',
         created: Date.now(),
@@ -108,9 +109,9 @@ describe('decorate/index', () => {
           r[0].should.equal(doc);
           done();
         })
-        .catch(err => done(err));
+        .catch(done);
     });
-    it('with info', (done) => {
+    it('with info', done => {
       const doc = new Medias({
         path: fixtures.tmdb.unknowncategory.file,
         decoration: 'undecorated',
@@ -125,11 +126,11 @@ describe('decorate/index', () => {
           r[0].should.equal(doc);
           done();
         })
-        .catch(err => done(err));
+        .catch(done);
     });
   });
   describe('already decorated', () => {
-    it('1 doc', (done) => {
+    it('1 doc', done => {
       const doc = new Medias({
         path: fixtures.tmdb.alien.file,
         created: Date.now(),
@@ -144,9 +145,9 @@ describe('decorate/index', () => {
           doc.should.have.property('decoration', 'decorated');
           done();
         })
-        .catch(err => done(err));
+        .catch(done);
     });
-    it('n docs', (done) => {
+    it('n docs', done => {
       const docs = [
         new Medias({
           path: fixtures.tmdb.alien.file,
@@ -179,10 +180,38 @@ describe('decorate/index', () => {
 
           done();
         })
-        .catch(err => done(err));
+        .catch(done);
     });
   });
-  it('sequential run', (done) => {
+  it('filter keys', done => {
+    const docs = [
+      new Medias({
+        path: fixtures.tmdb.alien.file,
+        created: Date.now(),
+      }),
+      new Medias({
+        path: fixtures.tmdb.alien.file,
+        created: Date.now(),
+      }),
+      new Medias({
+        path: fixtures.tmdb.jfk.file,
+        created: Date.now(),
+      }),
+    ];
+    decorate(docs, opts)
+      .then(r => {
+        r.should.be.an('array').that.has.lengthOf(3);
+        r[0].info.should.not.have.property('ratelimit');
+        r[0].info.should.not.have.property('from_cache');
+        r[1].info.should.not.have.property('ratelimit');
+        r[1].info.should.not.have.property('from_cache');
+        r[2].info.should.not.have.property('ratelimit');
+        r[2].info.should.not.have.property('from_cache');
+      })
+      .then(done)
+      .catch(done);
+  });
+  it('sequential run', done => {
     const sameDocs = [
       new Medias({
         path: fixtures.tmdb.alien.file,
@@ -203,6 +232,22 @@ describe('decorate/index', () => {
         count.should.equal(1);
         done();
       })
-      .catch(err => done(err));
+      .catch(done);
+  });
+  it('ratelimit', done => {
+    tmdbMockupSetLimit(2);
+    const docs = [
+      new Medias({ path: fixtures.tmdb.alien.file }),
+      new Medias({ path: fixtures.tmdb['mad men'].file }),
+      new Medias({ path: fixtures.tmdb.jfk.file }),
+    ];
+    decorate(docs, { api: tmdbMockup })
+      .then(r => {
+        r[0].decoration.should.equal('decorated');
+        r[1].decoration.should.equal('decorated');
+        r[2].decoration.should.equal('undecorated');
+      })
+      .then(done)
+      .catch(done);
   });
 });
