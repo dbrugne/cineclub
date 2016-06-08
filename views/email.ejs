@@ -263,7 +263,7 @@
                     </p>
                     <% const overview = (i.overview && i.overview.length > 100) ? `${i.overview.substr(0, 100)} (...)` : i.overview; %>
                     <p class="m-description"><%=overview%></p>
-                    <p class="m-link"><a href="<%=baseUrl%>/media/<%=i.id%>" target="_blank">voir plus</a></p>
+                    <p class="m-link"><a href="<%=baseUrl%>/app/medias/<%=i.id%>" target="_blank">voir plus</a></p>
                   </td>
                 </tr>
                 <% }); %>
@@ -288,7 +288,7 @@
                       <% s.episodes.forEach(e => { %>
                       Saison <b><%=e.season%></b> épisode <b><%=e.episode%></b>
                       -
-                      <a class="m-link" href="<%=baseUrl%>/media/<%=e.id%>" target="_blank">voir plus</a><br>
+                      <a class="m-link" href="<%=baseUrl%>/app/medias/<%=e.id%>" target="_blank">voir plus</a><br>
                       <% }); %>
                     </p>
                   </td>
@@ -301,7 +301,7 @@
               <h3>Nouveaux médias non identifiés</h3>
               <p class="m-unparsed">
                 <% unparsed.forEach(u => { %>
-                <i><%=u.path%></i> <a href="<%=baseUrl%>/media/<%=u.id%>" target="_blank">voir plus</a><br>
+                <i><%=u.path%></i> <a href="<%=baseUrl%>/app/medias/<%=u.id%>" target="_blank">voir plus</a><br>
                 <% }); %>
               </p>
               <% } %>
