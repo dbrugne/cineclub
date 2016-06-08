@@ -196,7 +196,7 @@ webpackJsonp([0],{
 	  isFetching: false,
 	  error: null,
 	  search: null,
-	  category: null,
+	  category: 'decorated',
 	  page: 1,
 	  pages: 0,
 	  items: [],
@@ -829,7 +829,7 @@ webpackJsonp([0],{
 	      filter: {}
 	    };
 	    if (category && category !== 'all') {
-	      query.filter.category = category;
+	      query.filter.type = category;
 	    }
 	    if (search) {
 	      query.filter.search = search;
@@ -1413,6 +1413,9 @@ webpackJsonp([0],{
 	      if (data.votes) {
 	        i.push(data.votes);
 	      }
+	      if (data.decoration) {
+	        i.push('status: ' + data.decoration);
+	      }
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'text-muted' },
@@ -1637,7 +1640,7 @@ webpackJsonp([0],{
 	        { className: 'row p-media bb mb15 pb10' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-2' },
+	          { className: 'col-xs-12 col-sm-2' },
 	          _react2.default.createElement('img', {
 	            className: 'img-responsive poster',
 	            src: data.poster,
@@ -1646,7 +1649,7 @@ webpackJsonp([0],{
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-10' },
+	          { className: 'col-xs-12 col-sm-10' },
 	          this.title(),
 	          this.detail(),
 	          this.overview(),
@@ -2105,8 +2108,8 @@ webpackJsonp([0],{
 	                  },
 	                  _react2.default.createElement(
 	                    'option',
-	                    { value: '' },
-	                    'all'
+	                    { value: 'decorated' },
+	                    'movie & tv'
 	                  ),
 	                  _react2.default.createElement(
 	                    'option',
@@ -2120,8 +2123,13 @@ webpackJsonp([0],{
 	                  ),
 	                  _react2.default.createElement(
 	                    'option',
-	                    { value: 'unknown' },
-	                    'unknown'
+	                    { value: 'undecorated' },
+	                    'not already analysed'
+	                  ),
+	                  _react2.default.createElement(
+	                    'option',
+	                    { value: 'failed' },
+	                    'analyse failed'
 	                  )
 	                )
 	              )
