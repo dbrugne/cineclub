@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test');
-const pushTask = require('./lib/push/index');
+const pushTask = require('./lib/push/task');
 const exit = require('exit');
 
 const tmdb = require('./lib/util/tmdb');
