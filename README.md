@@ -15,6 +15,12 @@ Retrieve medias added/removed in last 24h and send them by email.
 
 >$ npm run push
 
+### npm run decorate
+
+Decorate unknown medias in database until 40 API requests/execution.
+
+>$ npm run decorate
+
 ### npm run purge
 
 Cleanup MongoDB cache collection with entries older than 7 days.
