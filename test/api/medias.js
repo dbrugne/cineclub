@@ -95,8 +95,7 @@ describe('REST API medias', () => {
             const subject = body.data[0];
             subject.should.be.an('object');
             subject.should.have.property('path', '/undecorated.txt');
-            subject.should.have.property('category', 'unknown');
-            subject.should.should.not.have.property('decorated');
+            subject.should.have.property('decoration', 'undecorated');
             subject.should.should.not.have.property('overview');
           })
           .expect(200, done);

@@ -264,6 +264,24 @@ module.exports = {
         total_results: 1,
       },
     },
+    unknowncategory: {
+      file: 'unknownCategory.mkv',
+      result: {
+        page: 1,
+        results: [
+          {
+            title: 'john doe',
+            media_type: 'person',
+          },
+        ],
+        total_pages: 1,
+        total_results: 1,
+      },
+      done: {
+        title: 'john doe',
+        media_type: 'person',
+      },
+    },
   },
   torrent: {
     invalid: {
@@ -439,7 +457,6 @@ module.exports = {
           file: {},
           info: {
             title: 'foo',
-            category: 'unknown',
           },
         },
         {
@@ -544,9 +561,7 @@ module.exports = {
           path: '/old.txt',
           created: new Date(Date.now() - (1000 * 3600 * 24 * 2)),
           file: {},
-          info: {
-            category: 'unknown',
-          },
+          info: {},
         },
         {
           path: '/removed.txt',

@@ -37,9 +37,9 @@ describe('decorate/index', () => {
         .catch(done);
     });
     it('undefined', (done) => {
-      decorate([], opts)
+      decorate(undefined, opts)
         .then(r => {
-          r.should.be.an('array').and.to.have.lengthOf(0);
+          should.not.exist(r);
           done();
         })
         .catch(done);
@@ -55,6 +55,7 @@ describe('decorate/index', () => {
       .then(r => {
         r.should.be.an('array').and.to.have.lengthOf(1);
         doc.should.have.property('isNew', false);
+        doc.should.have.property('decoration', 'decorated');
         doc.info.should.have.properties(fixtures.tmdb.alien.done);
         doc.should.equal(r[0]);
         done();
@@ -78,11 +79,13 @@ describe('decorate/index', () => {
 
         // doc 1
         docs[0].should.have.property('isNew', false);
+        docs[0].should.have.property('decoration', 'decorated');
         docs[0].info.should.have.properties(fixtures.tmdb.alien.done);
         docs[0].should.equal(r[0]);
 
         // doc 2
         docs[1].should.have.property('isNew', false);
+        docs[1].should.have.property('decoration', 'decorated');
         docs[1].info.should.have.properties(fixtures.tmdb.jfk.done);
         docs[1].should.equal(r[1]);
 
@@ -90,26 +93,47 @@ describe('decorate/index', () => {
       })
       .catch(err => done(err));
   });
-  it('unable to decorate', (done) => {
-    const doc = new Medias({
-      path: 'invalid.mkv',
-      created: Date.now(),
+  describe('failed', () => {
+    it('with no info', (done) => {
+      const doc = new Medias({
+        path: 'invalid.mkv',
+        created: Date.now(),
+      });
+      decorate([doc], opts)
+        .then(r => {
+          r.should.be.an('array').and.to.have.lengthOf(1);
+          doc.should.have.property('isNew', false);
+          doc.should.have.property('decoration', 'failed');
+          doc.should.have.property('info', undefined);
+          r[0].should.equal(doc);
+          done();
+        })
+        .catch(err => done(err));
     });
-    decorate([doc], opts)
-      .then(r => {
-        r.should.be.an('array').and.to.have.lengthOf(1);
-        doc.should.have.property('isNew', true);
-        doc.should.not.have.ownProperty('info');
-        r[0].should.equal(doc);
-        done();
-      })
-      .catch(err => done(err));
+    it('with info', (done) => {
+      const doc = new Medias({
+        path: fixtures.tmdb.unknowncategory.file,
+        decoration: 'undecorated',
+        created: Date.now(),
+      });
+      decorate([doc], opts)
+        .then(r => {
+          r.should.be.an('array').and.to.have.lengthOf(1);
+          doc.should.have.property('isNew', false);
+          doc.should.have.property('decoration', 'failed');
+          doc.should.have.property('info').that.have.properties(fixtures.tmdb.unknowncategory.done);
+          r[0].should.equal(doc);
+          done();
+        })
+        .catch(err => done(err));
+    });
   });
   describe('already decorated', () => {
     it('1 doc', (done) => {
       const doc = new Medias({
         path: fixtures.tmdb.alien.file,
         created: Date.now(),
+        decoration: 'decorated',
         info: fixtures.tmdb.alien.done,
       });
       decorate([doc], opts)
@@ -117,6 +141,7 @@ describe('decorate/index', () => {
           r.should.be.an('array').and.to.have.lengthOf(1);
           r[0].should.equal(doc);
           doc.should.have.property('isNew', true);
+          doc.should.have.property('decoration', 'decorated');
           done();
         })
         .catch(err => done(err));
@@ -126,10 +151,12 @@ describe('decorate/index', () => {
         new Medias({
           path: fixtures.tmdb.alien.file,
           created: Date.now(),
+          decoration: 'decorated',
           info: fixtures.tmdb.alien.done,
         }),
         new Medias({
           path: fixtures.tmdb.jfk.file,
+          decoration: 'undecorated',
           created: Date.now(),
         }),
       ];
@@ -140,11 +167,13 @@ describe('decorate/index', () => {
           // doc 1
           should.exist(docs[0]);
           docs[0].should.have.property('isNew', true);
+          docs[0].should.have.property('decoration', 'decorated');
           r[0].should.equal(docs[0]);
 
           // doc 2
           should.exist(docs[1]);
           docs[1].should.have.property('isNew', false);
+          docs[1].should.have.property('decoration', 'decorated');
           docs[1].should.have.property('info');
           r[1].should.equal(docs[1]);
 
