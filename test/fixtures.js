@@ -451,6 +451,7 @@ module.exports = {
         {
           path: '/media1.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {
             name: 'foo',
           },
@@ -461,6 +462,7 @@ module.exports = {
         {
           path: '/media2.txt',
           created: nextDate(),
+          decoration: 'failed',
           file: {},
           info: {
             title: 'foo',
@@ -469,18 +471,27 @@ module.exports = {
         {
           path: '/media3.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {},
+          info: {
+            category: 'tv',
+          },
         },
         {
           path: '/media4.txt',
           created: nextDate(),
+          decoration: 'undecorated',
           file: {},
         },
         {
           path: '/removed.txt',
           created: nextDate(),
           removed: nextDate(),
+          decoration: 'decorated',
           file: {},
+          info: {
+            category: 'movie',
+          },
         },
       ],
     },

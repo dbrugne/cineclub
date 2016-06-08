@@ -276,7 +276,17 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('category (movie)', done => {
+    it('type (decorated)', done => {
+      Media.retrieve(null, 'decorated')
+        .then(docs => {
+          docs.should.be.an('array').and.have.lengthOf(2);
+          docs[0].should.property('path', '/media3.txt');
+          docs[1].should.property('path', '/media1.txt');
+          done();
+        })
+        .catch(done);
+    });
+    it('type (movie)', done => {
       Media.retrieve(null, 'movie')
         .then(docs => {
           docs.should.be.an('array').and.have.lengthOf(1);
@@ -285,13 +295,20 @@ describe('models/media', () => {
         })
         .catch(done);
     });
-    it('category (unknown)', done => {
-      Media.retrieve(null, 'unknown')
+    it('type (undecorated)', done => {
+      Media.retrieve(null, 'undecorated')
         .then(docs => {
-          docs.should.be.an('array').and.have.lengthOf(3);
+          docs.should.be.an('array').and.have.lengthOf(1);
           docs[0].should.property('path', '/media4.txt');
-          docs[1].should.property('path', '/media3.txt');
-          docs[2].should.property('path', '/media2.txt');
+          done();
+        })
+        .catch(done);
+    });
+    it('type (failed)', done => {
+      Media.retrieve(null, 'failed')
+        .then(docs => {
+          docs.should.be.an('array').and.have.lengthOf(1);
+          docs[0].should.property('path', '/media2.txt');
           done();
         })
         .catch(done);
