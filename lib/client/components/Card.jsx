@@ -160,14 +160,14 @@ class Card extends React.Component {
 
     return (
       <div className="row p-media bb mb15 pb10">
-        <div className="col-xs-2">
+        <div className="col-xs-12 col-sm-2">
           <img
             className="img-responsive poster"
             src={data.poster}
             alt={`${data.title} poster`}
           />
         </div>
-        <div className="col-xs-10">
+        <div className="col-xs-12 col-sm-10">
           {this.title()}
           {this.detail()}
           {this.overview()}
