@@ -282,6 +282,33 @@ module.exports = {
         media_type: 'person',
       },
     },
+    page1: {
+      result: {
+        page: 1,
+        results: [
+          {
+            title: 'Title 1',
+          },
+          {
+            title: 'Title 2',
+          },
+        ],
+        total_pages: 2,
+        total_results: 3,
+      },
+    },
+    page2: {
+      result: {
+        page: 2,
+        results: [
+          {
+            title: 'Title 3',
+          },
+        ],
+        total_pages: 2,
+        total_results: 3,
+      },
+    },
   },
   torrent: {
     invalid: {
