@@ -3,12 +3,12 @@ const {
   beforeHelper,
   beforeEachHelper,
   afterHelper,
-  tmdbMockup,
+  tmdbStub,
   fixtures,
 } = require('../../lib/util/tests');
 
 const opts = {
-  api: tmdbMockup,
+  api: tmdbStub,
 };
 
 const extract = require('../../lib/decorate/extract');

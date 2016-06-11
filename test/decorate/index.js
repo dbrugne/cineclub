@@ -3,13 +3,13 @@ const {
   beforeHelper,
   beforeEachHelper,
   afterHelper,
-  tmdbMockup,
-  tmdbMockupSetLimit,
+  tmdbStub,
+  tmdbStubSetLimit,
   fixtures,
 } = require('../../lib/util/tests');
 
 const opts = {
-  api: tmdbMockup,
+  api: tmdbStub,
 };
 
 const Medias = require('../../lib/models/media');
@@ -235,13 +235,13 @@ describe('decorate/index', () => {
       .catch(done);
   });
   it('ratelimit', done => {
-    tmdbMockupSetLimit(2);
+    tmdbStubSetLimit(2);
     const docs = [
       new Medias({ path: fixtures.tmdb.alien.file }),
       new Medias({ path: fixtures.tmdb['mad men'].file }),
       new Medias({ path: fixtures.tmdb.jfk.file }),
     ];
-    decorate(docs, { api: tmdbMockup })
+    decorate(docs, { api: tmdbStub })
       .then(r => {
         r[0].decoration.should.equal('decorated');
         r[1].decoration.should.equal('decorated');
