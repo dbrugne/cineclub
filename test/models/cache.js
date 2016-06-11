@@ -50,60 +50,54 @@ describe('models/cache', () => {
 
   it('setKey', (done) => {
     Cache.setKey(method, query, result)
-      .then(() => {
+      .then(data => {
+        data.should.be.an('object').and.deep.equal(result);
         const key = Cache.generateKey(method, query);
-        Cache.findOne({ key }).exec()
+        return Cache.findOne({ key }).exec()
           .then((doc) => {
             should.exist(doc);
             doc.should.be.an('object').and.have.property('_id').and.be.an('object');
             doc.should.property('key', key);
             doc.result.should.have.properties(result);
             done();
-          })
-          .catch(err => done(err));
-      });
+          });
+      })
+      .catch(done);
   });
   it('getKey', (done) => {
     Cache.setKey(method, query, result)
-      .then(() => {
-        Cache.getKey(method, query)
-          .then((keyResult) => {
-            should.exist(keyResult);
-            const expected = Object.assign({ from_cache: true }, result);
-            keyResult.should.be.an('object').and.have.properties(expected);
-            done();
-          })
-          .catch(err => done(err));
-      })
-      .catch(err => done(err));
+      .then(() => Cache.getKey(method, query)
+        .then((keyResult) => {
+          should.exist(keyResult);
+          const expected = Object.assign({ from_cache: true }, result);
+          keyResult.should.be.an('object').and.have.properties(expected);
+          done();
+        }))
+      .catch(done);
   });
   it('empty result', (done) => {
     Cache.setKey(method, query, {})
-      .then(() => {
-        Cache.getKey(method, query)
-          .then((keyResult) => {
-            should.exist(keyResult);
-            keyResult.should.be.an('object').and.have.properties({ from_cache: true });
-            done();
-          })
-          .catch(err => done(err));
-      })
-      .catch(err => done(err));
+      .then(() => Cache.getKey(method, query)
+        .then((keyResult) => {
+          should.exist(keyResult);
+          keyResult.should.be.an('object').and.have.properties({ from_cache: true });
+          done();
+        }))
+      .catch(done);
   });
   it('not save from_cache', (done) => {
     Cache.setKey(method, query, Object.assign({ from_cache: true }, result))
       .then(() => {
         const key = Cache.generateKey(method, query);
-        Cache.findOne({ key }).exec()
+        return Cache.findOne({ key }).exec()
           .then((doc) => {
             should.exist(doc);
             doc.should.be.an('object').and.have.property('key', key);
             doc.result.should.have.properties(result);
             done();
-          })
-          .catch(err => done(err));
+          });
       })
-      .catch(err => done(err));
+      .catch(done);
   });
   it('purge', (done) => {
     inject(fixtures.models.purge)
