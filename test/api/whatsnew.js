@@ -1,5 +1,6 @@
 const {
   request,
+  expressApp,
   dropCollections,
   beforeHelper,
   beforeEachHelper,
@@ -8,10 +9,7 @@ const {
   fixtures,
 } = require('../../lib/util/tests');
 
-const app = require('../../lib/server/index');
-app.locals.tmdbApiKey = fixtures.tmdb;
-
-describe('REST API index', () => {
+describe('REST API whatsnew', () => {
   before(beforeHelper);
   beforeEach(done => {
     beforeEachHelper(() => {
@@ -25,7 +23,7 @@ describe('REST API index', () => {
     it('empty', done => {
       dropCollections()
         .then(() => {
-          request(app)
+          request(expressApp)
             .get('/api/whatsnew')
             .set('Accept', 'application/vnd.api+json')
             .expect('Content-Type', /json/)
@@ -47,7 +45,7 @@ describe('REST API index', () => {
         .catch(done);
     });
     it('simple', done => {
-      request(app)
+      request(expressApp)
         .get('/api/whatsnew')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
@@ -81,7 +79,7 @@ describe('REST API index', () => {
     });
   });
   it('longer period', done => {
-    request(app)
+    request(expressApp)
       .get('/api/whatsnew?period=4')
       .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
@@ -104,7 +102,7 @@ describe('REST API index', () => {
       .expect(200, done);
   });
   it('invalid period', done => {
-    request(app)
+    request(expressApp)
       .get('/api/whatsnew?period=100')
       .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)

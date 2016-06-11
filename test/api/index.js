@@ -1,11 +1,11 @@
-const { request, fixtures } = require('../../lib/util/tests');
-
-const app = require('../../lib/server/index');
-app.locals.tmdbApiKey = fixtures.tmdb;
+const {
+  request,
+  expressApp,
+} = require('../../lib/util/tests');
 
 describe('REST API index', () => {
   it('GET /api/', done => {
-    request(app)
+    request(expressApp)
       .get('/api/')
       .set('Accept', 'application/vnd.api+json')
       .expect('Content-Type', /json/)
@@ -21,6 +21,11 @@ describe('REST API index', () => {
             medias: {
               links: {
                 self: 'http://127.0.0.1/api/medias',
+              },
+            },
+            tmdb: {
+              links: {
+                self: 'http://127.0.0.1/api/tmdb',
               },
             },
           },

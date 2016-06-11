@@ -1,5 +1,6 @@
 const {
   request,
+  expressApp,
   beforeHelper,
   beforeEachHelper,
   afterHelper,
@@ -7,9 +8,6 @@ const {
   inject,
   fixtures,
 } = require('../../lib/util/tests');
-
-const app = require('../../lib/server/index');
-app.locals.tmdbApiKey = fixtures.tmdb;
 
 describe('REST API medias', () => {
   before(beforeHelper);
@@ -23,7 +21,7 @@ describe('REST API medias', () => {
 
   describe('GET /api/medias', () => {
     it('no parameters', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
@@ -66,7 +64,7 @@ describe('REST API medias', () => {
     it('empty result', done => {
       // empty collections
       beforeEachHelper(() => {
-        request(app)
+        request(expressApp)
           .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=10')
           .set('Accept', 'application/vnd.api+json')
           .expect(res => {
@@ -87,7 +85,7 @@ describe('REST API medias', () => {
       });
     });
     it('first page', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?page%5Bnumber%5D=1&page%5Bsize%5D=2')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -111,7 +109,7 @@ describe('REST API medias', () => {
         .expect(200, done);
     });
     it('page 2', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?page%5Bnumber%5D=2&page%5Bsize%5D=2')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -136,7 +134,7 @@ describe('REST API medias', () => {
         .expect(200, done);
     });
     it('last page', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?page%5Bnumber%5D=3&page%5Bsize%5D=2')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -159,7 +157,7 @@ describe('REST API medias', () => {
         .expect(200, done);
     });
     it('out of range', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=2')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -179,7 +177,7 @@ describe('REST API medias', () => {
         .expect(404, done);
     });
     it('invalid page size value', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?page%5Bnumber%5D=4&page%5Bsize%5D=200')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -200,7 +198,7 @@ describe('REST API medias', () => {
     });
     describe('search', () => {
       it('word', done => {
-        request(app)
+        request(expressApp)
           .get('/api/medias?filter%5Bsearch%5D=foo')
           .set('Accept', 'application/vnd.api+json')
           .expect(res => {
@@ -221,7 +219,7 @@ describe('REST API medias', () => {
           .expect(200, done);
       });
       it('with spaces', done => {
-        request(app)
+        request(expressApp)
           .get('/api/medias?filter%5Bsearch%5D=with%20spaces')
           .set('Accept', 'application/vnd.api+json')
           .expect(res => {
@@ -239,7 +237,7 @@ describe('REST API medias', () => {
       });
     });
     it('type', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?filter%5Btype%5D=movie')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -259,7 +257,7 @@ describe('REST API medias', () => {
         .expect(200, done);
     });
     it('invalid type', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias?filter%5Btype%5D=foo')
         .set('Accept', 'application/vnd.api+json')
         .expect(res => {
@@ -283,7 +281,7 @@ describe('REST API medias', () => {
     it('exists', done => {
       collections.media.findOne({ path: '/file1.txt' }).exec()
         .then(doc => {
-          request(app)
+          request(expressApp)
             .get(`/api/medias/${doc.id}`)
             .set('Accept', 'application/vnd.api+json')
             .expect('Content-Type', /json/)
@@ -309,7 +307,7 @@ describe('REST API medias', () => {
         .catch(done);
     });
     it('not exists', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias/1042c88d282c219c2373d0fd')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
@@ -327,7 +325,7 @@ describe('REST API medias', () => {
         .expect(404, done);
     });
     it('invalid period', done => {
-      request(app)
+      request(expressApp)
         .get('/api/medias/not-valid-id')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)

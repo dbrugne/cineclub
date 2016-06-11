@@ -20,7 +20,7 @@ const http = require('http');
 
 app.locals.baseUrl = process.env.BASE_URL;
 app.locals.replyTo = process.env.MAIL_REPLY_TO;
-app.locals.tmdbApiKey = process.env.TMDB_API_KEY;
+app.locals.tmdbApi = require('./lib/tmdb/index')(process.env.TMDB_API_KEY);
 
 /**
  * Create HTTP server.
