@@ -6,7 +6,7 @@ require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test
 const decorateTask = require('./lib/decorate/task');
 const exit = require('exit');
 
-const tmdb = require('./lib/util/tmdb');
+const tmdb = require('./lib/tmdb/index');
 
 decorateTask({
   api: tmdb(process.env.TMDB_API_KEY),

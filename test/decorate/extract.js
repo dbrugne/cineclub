@@ -31,9 +31,7 @@ describe('decorate/extract', () => {
       .then(r => {
         r.should.be.an('object');
         const keys = Object.keys(r);
-        keys.should.be.an('array').that.has.lengthOf(1);
-        keys[0].should.equal('ratelimit');
-        r.ratelimit.should.be.a('number');
+        keys.should.be.an('array').that.has.lengthOf(0);
         done();
       })
       .catch(done);
@@ -65,41 +63,11 @@ describe('decorate/extract', () => {
       })
       .catch(done);
   });
-  it('get from cache', (done) => {
-    // 1st call
-    extract(fixtures.tmdb.jfk.file, opts)
-      .then(first => {
-        should.exist(first);
-        first.should.have.properties(fixtures.tmdb.jfk.done);
-        first.should.not.property('from_cache');
-
-        // 2nd call
-        extract(fixtures.tmdb.jfk.file, opts)
-          .then(second => {
-            should.exist(second);
-            second.should.have.properties(fixtures.tmdb.jfk.done);
-            second.should.property('from_cache', true);
-            done();
-          })
-          .catch(done);
-      })
-      .catch(done);
-  });
   it('force category for series/', (done) => {
     extract(`/series/${fixtures.tmdb.jfk.file}`, opts)
       .then(r => {
         should.exist(r);
         r.should.property('category', 'tv');
-        done();
-      })
-      .catch(done);
-  });
-  it('ratelimit', (done) => {
-    extract(fixtures.tmdb.jfk.file, opts)
-      .then(r => {
-        should.exist(r);
-        r.should.have.property('ratelimit')
-          .that.is.a('number');
         done();
       })
       .catch(done);

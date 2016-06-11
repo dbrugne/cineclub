@@ -4,7 +4,6 @@ const {
   beforeEachHelper,
   afterHelper,
   tmdbStub,
-  tmdbStubSetLimit,
   fixtures,
 } = require('../../lib/util/tests');
 
@@ -201,11 +200,8 @@ describe('decorate/index', () => {
     decorate(docs, opts)
       .then(r => {
         r.should.be.an('array').that.has.lengthOf(3);
-        r[0].info.should.not.have.property('ratelimit');
         r[0].info.should.not.have.property('from_cache');
-        r[1].info.should.not.have.property('ratelimit');
         r[1].info.should.not.have.property('from_cache');
-        r[2].info.should.not.have.property('ratelimit');
         r[2].info.should.not.have.property('from_cache');
       })
       .then(done)
@@ -235,7 +231,7 @@ describe('decorate/index', () => {
       .catch(done);
   });
   it('ratelimit', done => {
-    tmdbStubSetLimit(2);
+    tmdbStub.setLimit(2);
     const docs = [
       new Medias({ path: fixtures.tmdb.alien.file }),
       new Medias({ path: fixtures.tmdb['mad men'].file }),

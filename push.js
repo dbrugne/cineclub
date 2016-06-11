@@ -6,7 +6,7 @@ require('./lib/util/mongo')(process.env.MONGODB_URI || 'mongodb://localhost/test
 const pushTask = require('./lib/push/task');
 const exit = require('exit');
 
-const tmdb = require('./lib/util/tmdb');
+const tmdb = require('./lib/tmdb/index');
 
 pushTask({
   to: process.env.MAIL_TO,
