@@ -1,17 +1,19 @@
 const {
+  should,
   beforeHelper,
   beforeEachHelper,
   afterHelper,
+  fixtures,
   tmdbStub,
 } = require('../../lib/util/tests');
 const tmdb = require('../../lib/tmdb/index');
 
-describe('tmdb', () => {
+describe('tmdb API wrapper', () => {
   before(beforeHelper);
   beforeEach(beforeEachHelper);
   after(afterHelper);
 
-  describe('real', () => {
+  describe('with real API', () => {
     const api = tmdb('tmdb-api-key');
     it('is function and return promise', () => {
       api.should.be.a('function');
@@ -20,7 +22,7 @@ describe('tmdb', () => {
       api('searchMulti', 'foo').should.be.a('promise');
     });
   });
-  describe('stub', () => {
+  describe('with stub API', () => {
     it('is function and return promise', () => {
       tmdbStub.should.be.a('function');
       tmdbStub('searchMovie', 'foo').should.be.a('promise');
@@ -35,7 +37,6 @@ describe('tmdb', () => {
             .that.is.an('array')
             .that.has.lengthOf(2);
           res.results[0].should.be.an('object').and.have.property('title', 'Alien');
-          res.should.have.property('ratelimit').that.is.a('number');
         })
         .then(done)
         .catch(done);
@@ -48,7 +49,6 @@ describe('tmdb', () => {
             .that.is.an('array')
             .that.has.lengthOf(2);
           res.results[0].should.be.an('object').and.have.property('name', 'Mad Men');
-          res.should.have.property('ratelimit').that.is.a('number');
         })
         .then(() => done())
         .catch(done);
@@ -63,10 +63,47 @@ describe('tmdb', () => {
           res.results[0].should.be.an('object');
           res.results[0].should.have.property('title', 'JFK');
           res.results[0].should.have.property('media_type', 'movie');
-          res.should.have.property('ratelimit').that.is.a('number');
         })
         .then(done)
         .catch(done);
+    });
+    it('set and get cache', done => tmdbStub('searchMulti', { query: 'jfk' }) // 1st call
+      .then(first => {
+        should.exist(first);
+        first.should.have.properties(fixtures.tmdb.jfk.result);
+        first.should.not.property('from_cache');
+
+        return tmdbStub('searchMulti', { query: 'jfk' }) // 2nd call
+          .then(second => {
+            should.exist(second);
+            second.should.have.properties(fixtures.tmdb.jfk.result);
+            second.should.property('from_cache', true);
+            done();
+          });
+      })
+      .catch(done)
+    );
+    it('ratelimit exceeded', done => {
+      tmdbStub.setLimit(2);
+      tmdbStub('searchMulti', { query: 'jfk' })
+        .then(r => {
+          should.exist(r);
+          r.should.not.property('from_cache');
+          return tmdbStub('searchMulti', { query: 'alien' });
+        })
+        .then(r => {
+          should.exist(r);
+          r.should.not.property('from_cache');
+          return tmdbStub('searchMulti', { query: 'mad men' });
+        })
+        .then(() => done('Last request wasn\'t supposed to be done'))
+        .catch(err => {
+          if (err.name === 'TmdbRateLimitError') {
+            return done();
+          }
+
+          return done(err);
+        });
     });
   });
 });
