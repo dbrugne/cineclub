@@ -6,6 +6,7 @@ module.exports = {
     vendor: [
       './webpack.init.js',
       'react',
+      'react-bootstrap',
       'react-dom',
       'react-redux',
       'react-router',

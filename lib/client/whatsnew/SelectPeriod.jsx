@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 const PeriodSelector = props => {
   const from = 1;
@@ -12,19 +13,18 @@ const PeriodSelector = props => {
   }
 
   return (
-    <form className="form-inline pt20">
-      <div className="form-group">
-        <label className="mr10" htmlFor="period">Period</label>
-        <select
-          className="form-control"
-          id="period"
+    <Form inline className="pt20">
+      <FormGroup>
+        <ControlLabel className="mr10">Period</ControlLabel>
+        <FormControl
+          componentClass="select"
           defaultValue={props.period}
           onChange={props.onPeriodChange}
         >
           {options}
-        </select>
-      </div>
-    </form>);
+        </FormControl>
+      </FormGroup>
+    </Form>);
 };
 
 PeriodSelector.propTypes = {

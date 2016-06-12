@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { push } from 'react-router-redux';
+import { Navbar, Nav, NavItem, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { changeSearch, fetchMedias } from '../medias/MediasActions';
 
 class Navigation extends React.Component {
@@ -26,52 +27,38 @@ class Navigation extends React.Component {
   }
   render() {
     return (
-      <nav className="navbar navbar-default navbar-fixed-top">
-        <div className="container">
-          <div className="navbar-header">
-            <button
-              type="button"
-              className="navbar-toggle collapsed"
-              data-toggle="collapse"
-              data-target="#bs-example-navbar-collapse-1"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar" />
-              <span className="icon-bar" />
-              <span className="icon-bar" />
-            </button>
-            <Link className="navbar-brand" to="/">Ciné-club</Link>
-          </div>
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav">
-              <li className={(this.props.currentLocation === '/medias') ? 'active' : null}>
-                <Link to="/medias">Medias</Link>
-              </li>
-            </ul>
-            <div className="navbar-form navbar-left" role="search">
-              <div className="form-group">
-                <input
+      <Navbar fixedTop>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to="/">Ciné-club</Link>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            <NavItem eventKey={1} active={(this.props.currentLocation === '/medias')}>
+              <Link to="/medias">Medias</Link>
+            </NavItem>
+            <Navbar.Form pullLeft>
+              <FormGroup>
+                <FormControl
                   type="text"
-                  className="form-control"
                   placeholder="Search"
                   onChange={this.onSearchChange}
                   value={this.props.search}
                 />
-              </div>
-              <button className="btn btn-default" onClick={this.onSearchSubmit}>Submit</button>
-            </div>
-            <ul className="nav navbar-nav navbar-right">
-              <li className={(this.props.currentLocation === '/admin') ? 'active' : null}>
-                <Link to="/admin">Admin</Link>
-              </li>
-              <li className={(this.props.currentLocation === '/logout') ? 'active' : null}>
-                <Link to="/logout">Logout</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+              </FormGroup>
+              {' '}
+              <Button type="submit" onClick={this.onSearchSubmit}>Submit</Button>
+            </Navbar.Form>
+          </Nav>
+          <Nav pullRight>
+            <NavItem eventKey={3} active={(this.props.currentLocation === '/logout')}>
+              <Link to="/logout">Logout</Link>
+            </NavItem>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     );
   }
 }

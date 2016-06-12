@@ -1,31 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { changePeriod, fetchWhatsNew } from './WhatsNewActions';
-import Left from './Left';
-import Right from './Right';
+import { Row, Col } from 'react-bootstrap';
+import Left from './Content';
+import SelectPeriod from './SelectPeriod';
+import SelectEmail from './SelectEmail';
 
 class Whatsnew extends React.Component {
   componentDidMount() {
-    this.props.fetchWhatsNew(this.props.period);
+    this.props.dispatch(fetchWhatsNew(this.props.period));
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.period !== this.props.period) {
-      nextProps.fetchWhatsNew(nextProps.period);
+      this.props.dispatch(fetchWhatsNew(nextProps.period));
     }
   }
   render() {
     return (
-      <div className="row">
-        <Left
-          {...this.props}
-        />
-        <Right period={this.props.period} onPeriodChange={this.props.onPeriodChange} />
-      </div>
+      <Row>
+        <Col md={10}>
+          <Left {...this.props} />
+        </Col>
+        <Col md={2}>
+          <SelectPeriod
+            period={this.props.period}
+            onPeriodChange={e => this.props.dispatch(changePeriod(parseInt(e.target.value, 10)))}
+          />
+          <hr />
+          <SelectEmail period={this.props.period} />
+        </Col>
+      </Row>
     );
   }
 }
 
 Whatsnew.propTypes = {
+  dispatch: React.PropTypes.func,
   error: React.PropTypes.string,
   fetchWhatsNew: React.PropTypes.func,
   isFetching: React.PropTypes.bool,
@@ -37,14 +47,4 @@ Whatsnew.propTypes = {
   removed: React.PropTypes.array,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onPeriodChange: period => dispatch(changePeriod(period)),
-    fetchWhatsNew: period => dispatch(fetchWhatsNew(period)),
-  };
-}
-
-export default connect(
-  ({ whatsnew }) => whatsnew,
-  mapDispatchToProps
-)(Whatsnew);
+export default connect(({ whatsnew }) => whatsnew)(Whatsnew);

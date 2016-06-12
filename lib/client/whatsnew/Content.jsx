@@ -27,8 +27,20 @@ const Left = props => {
   }
 
   return (
-    <div className="col-md-10">
+    <div>
       <h1>What's new</h1>
+      <div className="mt10 mb10 text-right">
+        Jump to :
+        {' '}
+        <a href="#movies">Movies</a>
+        {' '}
+        <a href="#series">Series</a>
+        {' '}
+        <a href="#unknown">Unknown</a>
+        {' '}
+        <a href="#removed">Removed</a>
+        {' '}
+      </div>
       <div className={`p15 ${headerCss}`}>
         {headerContent}
       </div>

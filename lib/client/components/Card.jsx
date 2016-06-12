@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { Grid, Row, Col, Image } from 'react-bootstrap';
 
 const leftPad = int => ((int <= 9) ? `0${int}` : int);
 
@@ -129,7 +130,6 @@ class Card extends React.Component {
 
     return (
       <div>
-        <div className="bg-info text-center pt20 pr5 pb20 pl5 mt30 mb30">{data.path}</div>
         <ul className="list-inline text-right">
           {language} {quality} {codec} {size}
         </ul>
@@ -162,23 +162,31 @@ class Card extends React.Component {
     const data = this.props.data;
 
     return (
-      <div className="row p-media bb mb15 pb10">
-        <div className="col-xs-12 col-sm-2">
-          <img
-            className="img-responsive poster"
-            src={data.poster}
-            alt={`${data.title} poster`}
-          />
-        </div>
-        <div className="col-xs-12 col-sm-10">
-          {this.title()}
-          {this.detail()}
-          {this.overview()}
-          {this.episodes()}
-          {this.additional()}
-          {this.seemore()}
-        </div>
-      </div>
+      <Grid className="p-media bb mb15 pb10">
+        <Row>
+          <Col xs={12} sm={2}>
+            <Image
+              responsive
+              className="poster"
+              src={data.poster}
+              alt={`${data.title} poster`}
+            />
+          </Col>
+          <Col xs={12} sm={10}>
+            {this.title()}
+            {this.detail()}
+            {this.overview()}
+            {this.episodes()}
+            {this.additional()}
+            {this.seemore()}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <div className="bg-info text-center pt20 pr5 pb20 pl5">{data.path}</div>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

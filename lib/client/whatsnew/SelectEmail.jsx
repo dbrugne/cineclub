@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form, Checkbox, Button } from 'react-bootstrap';
 
 class EmailSelector extends React.Component {
   constructor(props) {
@@ -18,25 +19,12 @@ class EmailSelector extends React.Component {
   }
   render() {
     return (
-      <form className="form-inline mt10">
-        <div className="form-group">
-          <button
-            className="btn btn-default form-control"
-            onClick={this.onSeeEmail}
-          >See daily email</button>
-        </div>
-        <div className="checkbox">
-          <label>
-            <input
-              type="checkbox"
-              value="1"
-              onChange={this.onPremailerChange}
-            />
-            {' '}
-            w/ premailer
-          </label>
-        </div>
-      </form>
+      <Form inline className="mt10">
+        <Button type="submit" onClick={this.onSeeEmail}>See daily email</Button>
+        <Checkbox onChange={this.onPremailerChange}>
+          w/ premailer
+        </Checkbox>
+      </Form>
     );
   }
 }

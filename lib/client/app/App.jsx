@@ -1,10 +1,13 @@
 import React from 'react';
 import Navigation from './Navigation';
+import { Grid } from 'react-bootstrap';
 
 const App = props => (
   <div>
     <Navigation currentLocation={props.location.pathname} />
-    {props.children}
+    <Grid>
+      {props.children}
+    </Grid>
   </div>
 );
 
