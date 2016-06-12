@@ -154,20 +154,14 @@ class Card extends React.Component {
       </p>
     );
   }
-  render() {
-    if (!this.props.data) {
-      return null;
-    }
-
-    const data = this.props.data;
-
+  decorated(data) {
     return (
       <Grid className="p-media bb mb15 pb10">
         <Row>
           <Col xs={12} sm={2}>
             <Image
               responsive
-              className="poster"
+              className="poster mb10"
               src={data.poster}
               alt={`${data.title} poster`}
             />
@@ -188,6 +182,38 @@ class Card extends React.Component {
         </Row>
       </Grid>
     );
+  }
+  unknown(data) {
+    let title = data.base;
+    if (data.title) {
+      title = data.title;
+    }
+    return (
+      <Row className="p-media bb mb15 pb10">
+        <Col>
+          <h4 className="mt0">
+            <Link to={`/medias/${data.id}`}>{title}{' '}</Link>
+          </h4>
+          <ul className="list-inline text-muted small">
+            <li><strong>path:</strong> {data.path}</li>
+          </ul>
+        </Col>
+      </Row>
+    );
+  }
+  render() {
+    const data = this.props.data;
+    if (!data) {
+      return null;
+    }
+
+    if (this.props.mode === 'small') {
+      if (data.decoration === 'undecorated' || data.decoration === 'failed') {
+        return this.unknown(data);
+      }
+    }
+
+    return this.decorated(data);
   }
 }
 
