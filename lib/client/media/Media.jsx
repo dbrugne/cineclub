@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { goBack } from 'react-router-redux';
 import { fetchMedia } from './MediaActions';
 import Card from '../components/Card';
+import Decoration from '../decoration/Decoration';
 import Loading from '../components/Loading';
 
 class Media extends React.Component {
@@ -45,6 +46,10 @@ class Media extends React.Component {
           {headerContent}
         </div>
         <Card data={data} mode="large" />
+        <Decoration
+          decoration={data.decoration}
+          initialSearch={data.title}
+        />
       </div>
     );
   }
