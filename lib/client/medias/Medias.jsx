@@ -79,7 +79,7 @@ class Medias extends React.Component {
         <Pagination
           pages={this.props.pages}
           page={this.props.page}
-          onPageChange={page => this.props.dispatch(changePage(page))}
+          changePage={page => this.props.dispatch(changePage(page))}
         />
         <div>
           {this.props.items.map(
@@ -89,7 +89,7 @@ class Medias extends React.Component {
         <Pagination
           pages={this.props.pages}
           page={this.props.page}
-          onPageChange={page => this.props.dispatch(changePage(page))}
+          changePage={page => this.props.dispatch(changePage(page))}
         />
       </div>
     );

@@ -12,14 +12,14 @@ const AdvancedPagination = props => (
     items={props.pages}
     maxButtons={5}
     activePage={props.page}
-    onSelect={props.onPageChange}
+    onSelect={props.changePage}
   />
 );
 
 AdvancedPagination.propTypes = {
   pages: React.PropTypes.number,
   page: React.PropTypes.number,
-  onPageChange: React.PropTypes.func,
+  changePage: React.PropTypes.func,
 };
 
 export default AdvancedPagination;
