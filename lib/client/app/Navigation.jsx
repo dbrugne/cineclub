@@ -13,17 +13,16 @@ class Navigation extends React.Component {
   }
   onSearchChange(e) {
     if (this.props.currentLocation !== '/medias') {
-      this.props.dispatch(push('medias'));
+      this.props.goToMedias();
     }
 
-    const search = e.target.value;
-    this.props.dispatch(changeSearch(search));
+    this.props.changeSearch(e.target.value);
   }
   onSearchSubmit() {
     if (this.props.currentLocation !== '/medias') {
-      this.props.dispatch(push('medias'));
+      this.props.goToMedias();
     }
-    this.props.dispatch(fetchMedias(this.props.search, this.props.category, 1));
+    this.props.fetchMedias(this.props.search, this.props.category);
   }
   render() {
     return (
@@ -64,15 +63,22 @@ class Navigation extends React.Component {
 }
 
 Navigation.propTypes = {
-  dispatch: React.PropTypes.func,
   currentLocation: React.PropTypes.string,
   search: React.PropTypes.string,
   category: React.PropTypes.string,
+  goToMedias: React.PropTypes.func,
+  changeSearch: React.PropTypes.func,
+  fetchMedias: React.PropTypes.func,
 };
 
 export default connect(
   state => ({
     search: state.medias.search || '',
     category: state.medias.category || '',
+  }),
+  dispatch => ({
+    goToMedias: () => dispatch(push('medias')),
+    changeSearch: search => dispatch(changeSearch(search)),
+    fetchMedias: (search, category) => dispatch(fetchMedias(search, category, 1)),
   })
 )(Navigation);
