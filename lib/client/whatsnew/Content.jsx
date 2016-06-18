@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Section from './Section';
 import Media from '../components/Card';
+import Header from '../components/Header';
 import Loading from '../components/Loading';
 
 const Left = props => {
@@ -9,23 +10,12 @@ const Left = props => {
     return <Loading />;
   }
 
-  let headerCss;
-  let headerContent;
   const isEmpty = (
     !props.movies.length
     && !props.series.length
     && !props.unknown.length
     && !props.removed.length
   );
-  if (props.error) {
-    headerCss = 'bg-danger';
-    headerContent = `Error while retrieving what's new: ${props.error}`;
-  } else if (isEmpty) {
-    headerCss = 'bg-warning';
-    headerContent = 'Nothing new during this period, try changing it in the right column.';
-  } else {
-    headerCss = 'dn';
-  }
 
   return (
     <div>
@@ -42,9 +32,7 @@ const Left = props => {
         <a href="#removed">Removed</a>
         {' '}
       </div>
-      <div className={`p15 ${headerCss}`}>
-        {headerContent}
-      </div>
+      <Header error={props.error} nothing={isEmpty} />
       <Section className="movies" title="Movies">
         {props.movies.map(e => <Media key={e.id} data={e} mode="small" />)}
       </Section>

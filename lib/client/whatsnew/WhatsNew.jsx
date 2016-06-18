@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { changePeriod, fetchWhatsNew } from './WhatsNewActions';
 import { Row, Col } from 'react-bootstrap';
-import Left from './Content';
+import Content from './Content';
 import SelectPeriod from './SelectPeriod';
 import SelectEmail from './SelectEmail';
 
@@ -19,7 +19,7 @@ class Whatsnew extends React.Component {
     return (
       <Row>
         <Col md={10}>
-          <Left {...this.props} />
+          <Content {...this.props} />
         </Col>
         <Col md={2}>
           <SelectPeriod {...this.props} />

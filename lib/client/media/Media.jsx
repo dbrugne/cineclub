@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { goBack } from 'react-router-redux';
 import { fetchMedia } from './MediaActions';
+import Header from '../components/Header';
+import Loading from '../components/Loading';
 import Card from '../components/Card';
 import Decoration from '../decoration/Decoration';
-import Loading from '../components/Loading';
 
 class Media extends React.Component {
   constructor(props) {
@@ -23,18 +24,6 @@ class Media extends React.Component {
       return <Loading />;
     }
 
-    let headerCss;
-    let headerContent;
-    if (this.props.error) {
-      headerCss = 'bg-danger';
-      headerContent = `Error while retrieving: ${this.props.error}`;
-    } else if (!this.props.data) {
-      headerCss = 'bg-warning';
-      headerContent = 'Nothing found.';
-    } else {
-      headerCss = 'dn';
-    }
-
     const data = this.props.data || {};
 
     return (
@@ -42,9 +31,7 @@ class Media extends React.Component {
         <div className="mb15">
           <a href="#" onClick={this.goBack}>&lt; Back</a>
         </div>
-        <div className={`p15 ${headerCss}`}>
-          {headerContent}
-        </div>
+        <Header error={this.props.error} nothing={!this.props.data} />
         <Card data={data} mode="large" />
         <Decoration
           decoration={data.decoration}

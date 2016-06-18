@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { changeCategory, changePage, fetchMedias } from './MediasActions';
+import Header from '../components/Header';
 import Pagination from '../components/Pagination';
 import Card from '../components/Card';
 import Loading from '../components/Loading';
@@ -23,18 +24,6 @@ class Medias extends React.Component {
       return <Loading />;
     }
 
-    let headerCss;
-    let headerContent;
-    if (this.props.error) {
-      headerCss = 'bg-danger';
-      headerContent = `Error while retrieving: ${this.props.error}`;
-    } else if (!this.props.items.length) {
-      headerCss = 'bg-warning';
-      headerContent = 'Nothing found.';
-    } else {
-      headerCss = 'dn';
-    }
-
     const title = (this.props.search)
       ? `Search for: "${this.props.search}"`
       : 'Medias list';
@@ -42,9 +31,7 @@ class Medias extends React.Component {
     return (
       <div>
         <h1>{title}</h1>
-        <div className={`p15 ${headerCss}`}>
-          {headerContent}
-        </div>
+        <Header error={this.props.error} nothing={!this.props.items.length} />
         <SelectCategory {...this.props} />
         <Pagination {...this.props} />
         {this.props.items.map(
