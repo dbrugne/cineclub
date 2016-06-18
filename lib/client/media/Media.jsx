@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { goBack } from 'react-router-redux';
 import { fetchMedia } from './MediaActions';
 import Card from '../components/Card';
+import Loading from '../components/Loading';
 
 class Media extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Media extends React.Component {
   }
   render() {
     if (this.props.isFetching === true) {
-      return <div>Loading...</div>;
+      return <Loading />;
     }
 
     let headerCss;
@@ -33,6 +34,8 @@ class Media extends React.Component {
       headerCss = 'dn';
     }
 
+    const data = this.props.data || {};
+
     return (
       <div>
         <div className="mb15">
@@ -41,7 +44,7 @@ class Media extends React.Component {
         <div className={`p15 ${headerCss}`}>
           {headerContent}
         </div>
-        <Card data={this.props.data} mode="large" />
+        <Card data={data} mode="large" />
       </div>
     );
   }

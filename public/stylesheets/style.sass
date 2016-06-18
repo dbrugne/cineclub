@@ -18,3 +18,16 @@ body
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25) // iOS <4.3 & Android <4.1
     box-shadow: 0 1px 3px rgba(0,0,0,.25)
 
+.loading
+  padding: 30px 50px
+  font-size: 22px
+  color: #555555
+  >span
+    animation: spin 1000ms infinite linear
+
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(359deg)
+

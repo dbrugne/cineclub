@@ -4,6 +4,7 @@ import { changeCategory, changePage, fetchMedias } from './MediasActions';
 import { Form, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Pagination from '../components/Pagination';
 import Card from '../components/Card';
+import Loading from '../components/Loading';
 
 class Medias extends React.Component {
   componentDidMount() {
@@ -27,7 +28,7 @@ class Medias extends React.Component {
   }
   render() {
     if (this.props.isFetching === true) {
-      return <div>Loading...</div>;
+      return <Loading />;
     }
 
     let headerCss;

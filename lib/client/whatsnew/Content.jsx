@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router';
 import Section from './Section';
 import Media from '../components/Card';
+import Loading from '../components/Loading';
 
 const Left = props => {
   if (props.isFetching === true) {
-    return <div className="col-md-10">Loading...</div>;
+    return <Loading />;
   }
 
   let headerCss;
