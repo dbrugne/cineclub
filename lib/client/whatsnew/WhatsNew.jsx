@@ -8,11 +8,11 @@ import SelectEmail from './SelectEmail';
 
 class Whatsnew extends React.Component {
   componentDidMount() {
-    this.props.dispatch(fetchWhatsNew(this.props.period));
+    this.props.fetch(this.props.period);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.period !== this.props.period) {
-      this.props.dispatch(fetchWhatsNew(nextProps.period));
+      this.props.fetch(nextProps.period);
     }
   }
   render() {
@@ -22,12 +22,9 @@ class Whatsnew extends React.Component {
           <Left {...this.props} />
         </Col>
         <Col md={2}>
-          <SelectPeriod
-            period={this.props.period}
-            onPeriodChange={e => this.props.dispatch(changePeriod(parseInt(e.target.value, 10)))}
-          />
+          <SelectPeriod {...this.props} />
           <hr />
-          <SelectEmail period={this.props.period} />
+          <SelectEmail {...this.props} />
         </Col>
       </Row>
     );
@@ -35,9 +32,7 @@ class Whatsnew extends React.Component {
 }
 
 Whatsnew.propTypes = {
-  dispatch: React.PropTypes.func,
   error: React.PropTypes.string,
-  fetchWhatsNew: React.PropTypes.func,
   isFetching: React.PropTypes.bool,
   period: React.PropTypes.number,
   onPeriodChange: React.PropTypes.func,
@@ -45,6 +40,13 @@ Whatsnew.propTypes = {
   series: React.PropTypes.array,
   unknown: React.PropTypes.array,
   removed: React.PropTypes.array,
+  fetch: React.PropTypes.func,
 };
 
-export default connect(({ whatsnew }) => whatsnew)(Whatsnew);
+export default connect(
+  ({ whatsnew }) => whatsnew,
+  dispatch => ({
+    changePeriod: period => dispatch(changePeriod(period)),
+    fetch: period => dispatch(fetchWhatsNew(period)),
+  })
+)(Whatsnew);
