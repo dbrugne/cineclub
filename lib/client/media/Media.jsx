@@ -12,11 +12,11 @@ class Media extends React.Component {
     this.goBack = this.goBack.bind(this);
   }
   componentDidMount() {
-    this.props.dispatch(fetchMedia(this.props.params.mediaId));
+    this.props.fetch(this.props.params.mediaId);
   }
   goBack(e) {
     e.preventDefault();
-    this.props.dispatch(goBack());
+    this.props.goBack();
   }
   render() {
     if (this.props.isFetching === true) {
@@ -56,11 +56,18 @@ class Media extends React.Component {
 }
 
 Media.propTypes = {
-  dispatch: React.PropTypes.func,
   error: React.PropTypes.string,
   params: React.PropTypes.object,
   data: React.PropTypes.object,
   isFetching: React.PropTypes.bool,
+  fetch: React.PropTypes.func,
+  goBack: React.PropTypes.func,
 };
 
-export default connect(({ media }) => media)(Media);
+export default connect(
+  ({ media }) => media,
+  dispatch => ({
+    goBack: () => dispatch(goBack()),
+    fetch: id => dispatch(fetchMedia(id)),
+  })
+)(Media);
