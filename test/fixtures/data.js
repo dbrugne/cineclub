@@ -573,6 +573,7 @@ module.exports = {
         {
           path: '/file1.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {
             name: 'foo',
           },
@@ -584,6 +585,7 @@ module.exports = {
         {
           path: '/file2.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {},
           info: {
             title: 'foo',
@@ -592,11 +594,13 @@ module.exports = {
         {
           path: '/undecorated.txt',
           created: nextDate(),
+          decoration: 'undecorated',
           file: {},
         },
         {
           path: '/file4.txt',
           created: nextDate(),
+          decoration: 'decorated',
           file: {},
           info: {
             category: 'series',

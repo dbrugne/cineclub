@@ -324,7 +324,7 @@ describe('REST API medias', () => {
         })
         .expect(404, done);
     });
-    it('invalid period', done => {
+    it('invalid id', done => {
       request(expressApp)
         .get('/api/medias/not-valid-id')
         .set('Accept', 'application/vnd.api+json')
@@ -344,6 +344,107 @@ describe('REST API medias', () => {
           });
         })
         .expect(400, done);
+    });
+  });
+  describe('PATCH /medias/:id', () => {
+    it('not found', done => {
+      request(expressApp)
+        .patch('/api/medias/1042c88d282c219c2373d0fd')
+        .set('Content-Type', 'application/vnd.api+json')
+        .set('Accept', 'application/vnd.api+json')
+        .send(JSON.stringify({ info: { title: 'Title 1' } }))
+        .expect('Content-Type', /json/)
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 404,
+            title: 'Not Found',
+          });
+        })
+        .expect(404, done);
+    });
+    it('without info', done => {
+      request(expressApp)
+        .patch('/api/medias/1042c88d282c219c2373d0fd')
+        .set('Content-Type', 'application/vnd.api+json')
+        .set('Accept', 'application/vnd.api+json')
+        .expect('Content-Type', /json/)
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 400,
+            title: 'missing or invalid info parameter',
+            source: {
+              pointer: '/body/info',
+            },
+          });
+        })
+        .expect(400, done);
+    });
+    it('empty info', done => {
+      request(expressApp)
+        .patch('/api/medias/1042c88d282c219c2373d0fd')
+        .set('Content-Type', 'application/vnd.api+json')
+        .set('Accept', 'application/vnd.api+json')
+        .send(JSON.stringify({ info: {} }))
+        .expect('Content-Type', /json/)
+        .expect(res => {
+          const body = res.body;
+          body.should.be.an('object').that.not.have.property('data');
+          body.should.have.a.property('errors')
+            .that.is.an('array')
+            .and.have.lengthOf(1);
+          body.errors[0].should.be.an('object').that.has.properties({
+            status: 400,
+            title: 'missing or invalid info parameter',
+            source: {
+              pointer: '/body/info',
+            },
+          });
+        })
+        .expect(400, done);
+    });
+    it('works', done => {
+      collections.media.findOne({ path: '/file1.txt' }).exec()
+        .then(doc => {
+          request(expressApp)
+            .patch(`/api/medias/${doc.id}`)
+            .set('Content-Type', 'application/vnd.api+json')
+            .set('Accept', 'application/vnd.api+json')
+            .send(JSON.stringify({
+              info: {
+                title: 'Title 1',
+                media_type: 'tv',
+                original_name: 'name',
+              },
+            }))
+            .expect('Content-Type', /json/)
+            .expect(res => {
+              const body = res.body;
+              body.should.be.an('object')
+                .and.have.property('links')
+                .that.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
+              body.data.should.be.an('object').and.have.properties({
+                path: '/file1.txt',
+                id: doc.id,
+                decoration: 'decorated',
+                removed: false,
+                category: 'tv',
+                poster: 'http://placehold.it/342?text=no+image',
+                original_title: 'name',
+              });
+            })
+            .expect(200, done);
+        })
+        .catch(done);
     });
   });
 });
