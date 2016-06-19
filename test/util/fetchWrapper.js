@@ -90,8 +90,23 @@ describe('fetchWrapper', () => {
           }));
           break;
         }
+        case '/api/200/patch': {
+          const body = [];
+          request.on('data', chunk => {
+            body.push(chunk);
+          }).on('end', () => {
+            response.writeHead(200, responseHeaders);
+            response.end(JSON.stringify({
+              meta: {},
+              data: {
+                method: request.method,
+                body: Buffer.concat(body).toString(),
+              },
+            }));
+          });
+          break;
+        }
         default:
-          // something goes wrong, we need to return an impossible HTTP code
           response.writeHead(418, responseHeaders);
           response.end(JSON.stringify({}));
           break;
@@ -198,5 +213,19 @@ describe('fetchWrapper', () => {
     fetchWrapper(`http://localhost:${PORT}/api/html`)
       .then(() => done(new Error('Then should not be called in this particular case')))
       .catch(() => done());
+  });
+  it('PATCH and body', (done) => {
+    const body = { foo: 'bar' };
+    fetchWrapper(`http://localhost:${PORT}/api/200/patch`, null, { method: 'PATCH', body })
+      .then(response => {
+        response.should.be.an('object');
+        response.status.should.equal(200);
+        response.should.have.property('data').that.be.an('object');
+        response.data.should.have.property('method', 'PATCH');
+        response.data.should.have.property('body', '{"foo":"bar"}');
+        response.should.not.have.property('error');
+      })
+      .then(done)
+      .catch(done);
   });
 });
