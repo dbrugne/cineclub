@@ -278,34 +278,6 @@ describe('REST API medias', () => {
     });
   });
   describe('GET /medias/:id', () => {
-    it('exists', done => {
-      collections.media.findOne({ path: '/file1.txt' }).exec()
-        .then(doc => {
-          request(expressApp)
-            .get(`/api/medias/${doc.id}`)
-            .set('Accept', 'application/vnd.api+json')
-            .expect('Content-Type', /json/)
-            .expect(res => {
-              const body = res.body;
-              body.should.be.an('object');
-              body.should.have.property('links');
-              body.links.should.have.property('self',
-                `http://127.0.0.1/api/medias/${doc.id}`
-              );
-              body.data.should.be.an('object').and.have.properties({
-                path: '/file1.txt',
-                id: doc.id,
-                removed: false,
-                category: 'movie',
-                poster: 'http://placehold.it/342?text=no+image',
-              });
-              body.data.should.have.property('created')
-                .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
-            })
-            .expect(200, done);
-        })
-        .catch(done);
-    });
     it('not exists', done => {
       request(expressApp)
         .get('/api/medias/1042c88d282c219c2373d0fd')
@@ -344,6 +316,35 @@ describe('REST API medias', () => {
           });
         })
         .expect(400, done);
+    });
+    it('exists', done => {
+      collections.media.findOne({ path: '/file1.txt' }).exec()
+        .then(doc => {
+          request(expressApp)
+            .get(`/api/medias/${doc.id}`)
+            .set('Accept', 'application/vnd.api+json')
+            .expect('Content-Type', /json/)
+            .expect(res => {
+              const body = res.body;
+              body.should.be.an('object').and.have.property('links');
+              const links = body.links;
+              links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
+              links.should.have.property('list',
+                'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10'
+              );
+              body.data.should.be.an('object').and.have.properties({
+                path: '/file1.txt',
+                id: doc.id,
+                removed: false,
+                category: 'movie',
+                poster: 'http://placehold.it/342?text=no+image',
+              });
+              body.data.should.have.property('created')
+                .and.match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.(\d+)Z$/);
+            })
+            .expect(200, done);
+        })
+        .catch(done);
     });
   });
   describe('PATCH /medias/:id', () => {
@@ -429,9 +430,12 @@ describe('REST API medias', () => {
             .expect('Content-Type', /json/)
             .expect(res => {
               const body = res.body;
-              body.should.be.an('object')
-                .and.have.property('links')
-                .that.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
+              body.should.be.an('object').and.have.property('links');
+              const links = body.links;
+              links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
+              links.should.have.property('list',
+                'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10'
+              );
               body.data.should.be.an('object').and.have.properties({
                 path: '/file1.txt',
                 id: doc.id,
