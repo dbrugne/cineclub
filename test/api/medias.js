@@ -37,6 +37,17 @@ describe('REST API medias', () => {
           body.links.should.not.have.property('prev');
           body.links.should.not.have.property('next');
 
+          body.links.should.have.property('failed',
+            'http://127.0.0.1/api/medias/?filter%5Btype%5D=failed');
+          body.links.should.have.property('undecorated',
+            'http://127.0.0.1/api/medias/?filter%5Btype%5D=undecorated');
+          body.links.should.have.property('decorated',
+            'http://127.0.0.1/api/medias/?filter%5Btype%5D=decorated');
+          body.links.should.have.property('movie',
+            'http://127.0.0.1/api/medias/?filter%5Btype%5D=movie');
+          body.links.should.have.property('tv',
+            'http://127.0.0.1/api/medias/?filter%5Btype%5D=tv');
+
           body.data.should.be.an('array').and.have.lengthOf(5);
           const subject = body.data[3];
           subject.should.be.an('object').and.have.properties({
@@ -329,9 +340,7 @@ describe('REST API medias', () => {
               body.should.be.an('object').and.have.property('links');
               const links = body.links;
               links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
-              links.should.have.property('list',
-                'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10'
-              );
+              links.should.have.property('list', 'http://127.0.0.1/api/medias/');
               body.data.should.be.an('object').and.have.properties({
                 path: '/file1.txt',
                 id: doc.id,
@@ -433,9 +442,7 @@ describe('REST API medias', () => {
               body.should.be.an('object').and.have.property('links');
               const links = body.links;
               links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
-              links.should.have.property('list',
-                'http://127.0.0.1/api/medias/?page%5Bnumber%5D=1&page%5Bsize%5D=10'
-              );
+              links.should.have.property('list', 'http://127.0.0.1/api/medias/');
               body.data.should.be.an('object').and.have.properties({
                 path: '/file1.txt',
                 id: doc.id,
