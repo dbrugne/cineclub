@@ -56,7 +56,7 @@ const Results = props => {
               </div>
             </td>
             <td>
-              <Button onClick={() => props.chooseMovie(i.id)}>choose!</Button>
+              <Button onClick={() => props.choose(i)}>choose!</Button>
             </td>
           </tr>
         ))}</tbody>
@@ -72,7 +72,7 @@ Results.propTypes = {
   pages: React.PropTypes.number,
   page: React.PropTypes.number,
   changePage: React.PropTypes.func,
-  chooseMovie: React.PropTypes.func,
+  choose: React.PropTypes.func,
 };
 
 export default Results;
