@@ -39,6 +39,7 @@ class Card extends React.Component {
       const episode = (data.episode)
         ? `E${leftPad(data.episode)}`
         : null;
+
       right = `${data.category}, ${season}${episode}`;
     } else {
       right = data.category;
@@ -76,18 +77,55 @@ class Card extends React.Component {
     );
   }
   overview() {
-    if (!this.props.data.overview) {
+    const data = this.props.data;
+
+    let t;
+    if (data.episodeInfo && data.episodeInfo.name) {
+      t = (
+        <h4 className="mt10">
+          Season {data.season}, Episode {data.episode}: {data.episodeInfo.name}
+          {' '}
+          <small>released: {data.episodeInfo.air_date}</small>
+        </h4>
+      );
+    }
+
+    let e;
+    if (data.episodeInfo && data.episodeInfo.overview) {
+      e = (this.props.mode === 'small' && data.episodeInfo.overview > 230)
+        ? `${data.episodeInfo.overview.substr(0, 230)} (...)`
+        : data.episodeInfo.overview;
+
+      e = (
+        <div>
+          <div className="overview">{e}</div>
+        </div>
+      );
+    }
+
+    let s;
+    if (data.overview) {
+      s = (this.props.mode === 'small' && data.overview.length > 230)
+        ? `${data.overview.substr(0, 230)} (...)`
+        : data.overview;
+
+      s = (
+        <div>
+          <h4>Show overview</h4>
+          <div className="overview">{s}</div>
+        </div>
+      );
+    }
+
+    if (!t && !e && !s) {
       return null;
     }
 
-    const overview = (this.props.mode === 'small' && this.props.data.overview.length > 230)
-      ? `${this.props.data.overview.substr(0, 230)} (...)`
-      : this.props.data.overview;
-
     return (
       <div className="mt10">
-        <h4>Synopsis</h4>
-        <div className="overview">{overview}</div>
+        {t}
+        {e}
+        {s}
       </div>
     );
   }
@@ -331,7 +369,19 @@ class Card extends React.Component {
       );
     }
 
-    if (!direction && !cast) {
+    let guest = null;
+    if (this.props.data.credits.guest) {
+      guest = (
+        <Row>
+          <Col xs={12}>
+            <h4>Guest stars</h4>
+          </Col>
+          {this.props.data.credits.guest.map(p => <Person {...p} />)}
+        </Row>
+      );
+    }
+
+    if (!direction && !cast && !guest) {
       return null;
     }
 
@@ -339,6 +389,7 @@ class Card extends React.Component {
       <div className="mt10">
         {direction}
         {cast}
+        {guest}
       </div>
     );
   }

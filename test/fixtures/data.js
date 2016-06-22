@@ -297,6 +297,12 @@ module.exports = {
           first_air_date: '2007-07-19',
         },
       ],
+      episode: [
+        {
+          name: 'The episode',
+          air_date: '2009-06-01',
+        },
+      ],
     },
   },
   torrent: {
