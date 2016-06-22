@@ -357,13 +357,13 @@ describe('REST API medias', () => {
         .catch(done);
     });
   });
-  describe('PATCH /medias/:id', () => {
+  describe('POST /medias/:id/decoration', () => {
     it('not found', done => {
       request(expressApp)
-        .patch('/api/medias/1042c88d282c219c2373d0fd')
+        .post('/api/medias/1042c88d282c219c2373d0fd/decoration')
         .set('Content-Type', 'application/vnd.api+json')
         .set('Accept', 'application/vnd.api+json')
-        .send(JSON.stringify({ info: { title: 'Title 1' } }))
+        .send(JSON.stringify({ tmdbId: 99, tmdbType: 'movie' }))
         .expect('Content-Type', /json/)
         .expect(res => {
           const body = res.body;
@@ -378,9 +378,9 @@ describe('REST API medias', () => {
         })
         .expect(404, done);
     });
-    it('without info', done => {
+    it('without id', done => {
       request(expressApp)
-        .patch('/api/medias/1042c88d282c219c2373d0fd')
+        .post('/api/medias/1042c88d282c219c2373d0fd/decoration')
         .set('Content-Type', 'application/vnd.api+json')
         .set('Accept', 'application/vnd.api+json')
         .expect('Content-Type', /json/)
@@ -392,20 +392,20 @@ describe('REST API medias', () => {
             .and.have.lengthOf(1);
           body.errors[0].should.be.an('object').that.has.properties({
             status: 400,
-            title: 'missing or invalid info parameter',
+            title: 'tmdbId parameter required',
             source: {
-              pointer: '/body/info',
+              pointer: '/body/tmdbId',
             },
           });
         })
         .expect(400, done);
     });
-    it('empty info', done => {
+    it('without type', done => {
       request(expressApp)
-        .patch('/api/medias/1042c88d282c219c2373d0fd')
+        .post('/api/medias/1042c88d282c219c2373d0fd/decoration')
         .set('Content-Type', 'application/vnd.api+json')
         .set('Accept', 'application/vnd.api+json')
-        .send(JSON.stringify({ info: {} }))
+        .send(JSON.stringify({ tmdbId: 99 }))
         .expect('Content-Type', /json/)
         .expect(res => {
           const body = res.body;
@@ -415,9 +415,9 @@ describe('REST API medias', () => {
             .and.have.lengthOf(1);
           body.errors[0].should.be.an('object').that.has.properties({
             status: 400,
-            title: 'missing or invalid info parameter',
+            title: 'tmdbType parameter required (movie, tv)',
             source: {
-              pointer: '/body/info',
+              pointer: '/body/tmdbType',
             },
           });
         })
@@ -427,15 +427,12 @@ describe('REST API medias', () => {
       collections.media.findOne({ path: '/file1.txt' }).exec()
         .then(doc => {
           request(expressApp)
-            .patch(`/api/medias/${doc.id}`)
+            .post(`/api/medias/${doc.id}/decoration`)
             .set('Content-Type', 'application/vnd.api+json')
             .set('Accept', 'application/vnd.api+json')
             .send(JSON.stringify({
-              info: {
-                title: 'Title 1',
-                media_type: 'tv',
-                original_name: 'name',
-              },
+              tmdbId: 348,
+              tmdbType: 'movie',
             }))
             .expect('Content-Type', /json/)
             .expect(res => {
@@ -447,11 +444,13 @@ describe('REST API medias', () => {
               body.data.should.be.an('object').and.have.properties({
                 path: '/file1.txt',
                 id: doc.id,
+                tmdbId: 348,
                 decoration: 'decorated',
                 removed: false,
-                category: 'tv',
+                category: 'movie',
                 poster: 'http://placehold.it/342?text=no+image',
-                original_title: 'name',
+                title: 'Alien',
+                year: '1979',
               });
             })
             .expect(200, done);
