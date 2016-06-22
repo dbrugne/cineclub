@@ -25,7 +25,7 @@ class Decoration extends React.Component {
       this.props.submitSearch(nextProps.search, nextProps.page);
     }
     if (nextProps.chosen && nextProps.didConfirm) {
-      this.props.patch(nextProps.chosen);
+      this.props.decorate(nextProps.chosen.id, nextProps.chosen.media_type);
     }
   }
   render() {
@@ -55,7 +55,7 @@ Decoration.propTypes = {
   changeSearch: React.PropTypes.func,
   submitSearch: React.PropTypes.func,
   changePage: React.PropTypes.func,
-  patch: React.PropTypes.func,
+  decorate: React.PropTypes.func,
 };
 
 export default connect(

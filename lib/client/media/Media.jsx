@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { goBack } from 'react-router-redux';
-import { fetchMedia, patch } from './MediaActions';
+import { fetchMedia, decorate } from './MediaActions';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 import Card from '../components/Card';
@@ -36,7 +36,7 @@ class Media extends React.Component {
         <Decoration
           decoration={data.decoration}
           initialSearch={data.title}
-          patch={d => this.props.patch(this.props.params.mediaId, d)}
+          decorate={(id, type) => this.props.decorate(this.props.params.mediaId, id, type)}
         />
       </div>
     );
@@ -49,7 +49,7 @@ Media.propTypes = {
   data: React.PropTypes.object,
   isFetching: React.PropTypes.bool,
   fetch: React.PropTypes.func,
-  patch: React.PropTypes.func,
+  decorate: React.PropTypes.func,
   goBack: React.PropTypes.func,
 };
 
@@ -58,6 +58,6 @@ export default connect(
   dispatch => ({
     goBack: () => dispatch(goBack()),
     fetch: id => dispatch(fetchMedia(id)),
-    patch: (id, data) => dispatch(patch(id, data)),
+    decorate: (id, tmdbId, tmdbType) => dispatch(decorate(id, tmdbId, tmdbType)),
   })
 )(Media);
