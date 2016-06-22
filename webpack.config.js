@@ -11,6 +11,7 @@ module.exports = {
       'react-redux',
       'react-router',
       'react-router-redux',
+      'react-youtube',
       'redux',
       'redux-logger',
       'redux-thunk',

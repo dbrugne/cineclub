@@ -1,10 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Grid, Row, Col, Image } from 'react-bootstrap';
+import { Grid, Row, Col, Image, Thumbnail, Modal, Button, Glyphicon } from 'react-bootstrap';
+import YouTube from 'react-youtube';
 
 const leftPad = int => ((int <= 9) ? `0${int}` : int);
 
 class Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      modalContent: null,
+    };
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+  openModal(modalContent) {
+    this.setState({
+      showModal: true,
+      modalContent,
+    });
+  }
+  closeModal() {
+    this.setState({
+      showModal: false,
+      modalContent: null,
+    });
+  }
   title() {
     const data = this.props.data;
     let right = null;
@@ -144,6 +166,22 @@ class Card extends React.Component {
       tmdbId = <li><strong className="text-muted">TMDB id</strong> {element}</li>;
     }
 
+    let imdbId = null;
+    if (data.imdbId) {
+      let element2 = null;
+      if (data.category === 'movie' || data.category === 'tv') {
+        const onOpenImdbPage = () => {
+          event.preventDefault();
+          window.open(`http://www.imdb.com/title/${data.imdbId}`);
+        };
+        element2 = (<a href="#" onClick={onOpenImdbPage}>{data.imdbId}</a>);
+      } else {
+        element2 = data.imdbId;
+      }
+
+      imdbId = <li><strong className="text-muted">IMDB id</strong> {element2}</li>;
+    }
+
     return (
       <div>
         <ul className="list-inline text-right">
@@ -153,6 +191,8 @@ class Card extends React.Component {
           <li><strong>id</strong> {data.id}</li>
           {' '}
           {tmdbId}
+          {' '}
+          {imdbId}
           {' '}
           {created}
           {' '}
@@ -172,6 +212,134 @@ class Card extends React.Component {
       <p className="text-right mt10">
         <Link to={`/medias/${this.props.data.id}`}>see more</Link>
       </p>
+    );
+  }
+  videos() {
+    if (this.props.mode === 'small' || !this.props.data.videos) {
+      return null;
+    }
+
+    const options = {
+      playerVars: {
+        autoplay: 1,
+      },
+    };
+
+    return (
+      <div className="mt10">
+        <h4>Videos</h4>
+        <Row>
+          {this.props.data.videos.map(v => (
+            <Col xs={6} md={4}>
+              <Thumbnail src={`http://img.youtube.com/vi/${v.key}/mqdefault.jpg`} />
+              <Button
+                className="cp"
+                bsSize="large"
+                style={{
+                  position: 'absolute',
+                  left: '41%',
+                  top: '35%',
+                }}
+                onClick={() => {
+                  this.openModal(
+                    <YouTube videoId={v.key} opts={options} />
+                  );
+                }}
+              ><Glyphicon glyph="play" /></Button>
+            </Col>
+          ))}
+        </Row>
+      </div>
+    );
+  }
+  images() {
+    if (this.props.mode === 'small' || !this.props.data.images) {
+      return null;
+    }
+
+    return (
+      <div className="mt10">
+        <h4>Images</h4>
+        <Row>
+          {this.props.data.images.map(i => (
+            <Col key={i.file_path} xs={6} md={2}>
+              <Thumbnail
+                className="cp"
+                src={`https://image.tmdb.org/t/p/w185/${i.file_path}`}
+                onClick={() => {
+                  this.openModal(
+                    <Image
+                      responsive src={`https://image.tmdb.org/t/p/w780/${i.file_path}`}
+                      style={{ margin: 'auto' }}
+                    />
+                  );
+                }}
+              />
+            </Col>
+          ))}
+        </Row>
+      </div>
+    );
+  }
+  credits() {
+    if (this.props.mode === 'small' || !this.props.data.credits) {
+      return null;
+    }
+
+    const openPerson = id => e => {
+      e.preventDefault();
+      window.open(`https://www.themoviedb.org/person/${id}`);
+    };
+
+    const Person = props => (
+      <Col key={props.name} xs={6} sm={3} className="m5 p5" style={{ minHeight: 72 }}>
+        <Image
+          className="pull-left mr10 cp"
+          style={{ width: 45, height: 68 }}
+          src={props.profile_path ? `https://image.tmdb.org/t/p/w92/${props.profile_path}` : 'http://placehold.it/45?text=no+image'}
+          alt={props.name}
+          onClick={openPerson(props.id)}
+        />
+        <div className="mt5">
+          <strong className="cp" onClick={openPerson(props.id)}>{props.name}</strong>
+          {props.character ? <p>as {props.character}</p> : null}
+        </div>
+      </Col>
+    );
+
+    let direction = null;
+    if (this.props.data.credits.direction) {
+      direction = (
+        <Row>
+          <Col xs={12}>
+            <h4>Directed by</h4>
+          </Col>
+          {this.props.data.credits.direction.map(p => <Person {...p} />)}
+        </Row>
+      );
+    }
+
+    let cast = null;
+    if (this.props.data.credits.cast) {
+      cast = (
+        <Row>
+          <Col xs={12}>
+            <h4>With</h4>
+          </Col>
+          {this.props.data.credits.cast.map(p => <Person {...p} />)}
+        </Row>
+      );
+    }
+
+    if (!direction && !cast) {
+      return null;
+    }
+
+    return (
+      <div className="mt10">
+        {direction}
+        {cast}
+      </div>
     );
   }
   decorated(data) {
@@ -200,6 +368,24 @@ class Card extends React.Component {
             <div className="bg-info text-center pt20 pr5 pb20 pl5">{data.path}</div>
           </Col>
         </Row>
+        <Row>
+          <Col xs={12}>
+            {this.videos()}
+            {this.images()}
+            {this.credits()}
+          </Col>
+        </Row>
+        <Modal show={this.state.showModal} bsSize="large" onHide={this.closeModal}>
+          <Modal.Header closeButton />
+          <Modal.Body>
+            <div className="text-center">
+              {this.state.modalContent}
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.closeModal}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </Grid>
     );
   }
