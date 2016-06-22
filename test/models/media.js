@@ -770,13 +770,13 @@ describe('models/media', () => {
           info: {
             credits: {
               crew: [
-                { job: 'Casting', name: 'name1', profile_path: 'path1' },
-                { job: 'Director', name: 'name2', profile_path: 'path2' },
+                { job: 'Casting', id: 1, name: 'name1', profile_path: 'path1' },
+                { job: 'Director', id: 2, name: 'name2', profile_path: 'path2' },
               ],
               cast: [
-                { order: 100, name: 'name1', character: 'char1', profile_path: 'path1' },
-                { order: 10, name: 'name2', character: 'char2', profile_path: 'path2' },
-                { order: 9, name: 'name3', character: 'char3', profile_path: 'path3' },
+                { order: 100, id: 1, name: 'name1', character: 'char1', profile_path: 'path1' },
+                { order: 10, id: 2, name: 'name2', character: 'char2', profile_path: 'path2' },
+                { order: 9, id: 3, name: 'name3', character: 'char3', profile_path: 'path3' },
               ],
             },
           },
@@ -784,13 +784,18 @@ describe('models/media', () => {
         data.should.have.property('credits');
 
         data.credits.should.have.property('direction').that.is.an('array').with.lengthOf(1);
-        data.credits.direction[0].should.have.properties({ name: 'name2', profile_path: 'path2' });
+        data.credits.direction[0]
+          .should.have.properties({ id: 2, name: 'name2', profile_path: 'path2' });
 
         data.credits.should.have.property('cast').that.is.an('array').with.lengthOf(2);
         data.credits.cast[0]
-          .should.have.properties({ name: 'name3', character: 'char3', profile_path: 'path3' });
+          .should.have.properties(
+          { id: 3, name: 'name3', character: 'char3', profile_path: 'path3' }
+        );
         data.credits.cast[1]
-          .should.have.properties({ name: 'name2', character: 'char2', profile_path: 'path2' });
+          .should.have.properties(
+          { id: 2, name: 'name2', character: 'char2', profile_path: 'path2' }
+        );
       });
     });
   });
