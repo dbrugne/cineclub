@@ -183,7 +183,7 @@ class Card extends React.Component {
     }
 
     return (
-      <div>
+      <div className="mt10">
         <ul className="list-inline text-right">
           {language} {quality} {codec} {size}
         </ul>
@@ -230,7 +230,7 @@ class Card extends React.Component {
         <h4>Videos</h4>
         <Row>
           {this.props.data.videos.map(v => (
-            <Col xs={6} md={4}>
+            <Col key={v.key} xs={6} md={4}>
               <Thumbnail src={`http://img.youtube.com/vi/${v.key}/mqdefault.jpg`} />
               <Button
                 className="cp"
