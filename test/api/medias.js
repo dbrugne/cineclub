@@ -341,6 +341,9 @@ describe('REST API medias', () => {
               const links = body.links;
               links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
               links.should.have.property('list', 'http://127.0.0.1/api/medias/');
+              links.should.have.property('decoration',
+                `http://127.0.0.1/api/medias/${doc.id}/decoration`
+              );
               body.data.should.be.an('object').and.have.properties({
                 tmdbId: 99,
                 path: '/file1.txt',
@@ -441,6 +444,9 @@ describe('REST API medias', () => {
               const links = body.links;
               links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
               links.should.have.property('list', 'http://127.0.0.1/api/medias/');
+              links.should.have.property('decoration',
+                `http://127.0.0.1/api/medias/${doc.id}/decoration`
+              );
               body.data.should.be.an('object').and.have.properties({
                 path: '/file1.txt',
                 id: doc.id,
