@@ -26,7 +26,9 @@ describe('decorate/index', () => {
   it('returns promise', () => {
     decorate([]).should.be.a('promise');
   });
-  it('api required', () => decorate([]).should.be.rejected);
+  it('api required', done => {
+    decorate([]).then(() => done(new Error('not rejected'))).catch(() => done());
+  });
   describe('empty', () => {
     it('array', done => {
       decorate([], opts)
@@ -47,17 +49,18 @@ describe('decorate/index', () => {
   });
   it('1 doc', done => {
     const doc = new Medias({
-      path: fixtures.tmdb.alien.file,
+      path: fixtures.torrent.alien.file,
       created: Date.now(),
     });
     doc.should.not.to.have.ownProperty('info');
     decorate([doc], opts)
       .then(r => {
         r.should.be.an('array').and.to.have.lengthOf(1);
+        doc.should.equal(r[0]);
         doc.should.have.property('isNew', false);
         doc.should.have.property('decoration', 'decorated');
-        doc.info.should.have.properties(fixtures.tmdb.alien.done);
-        doc.should.equal(r[0]);
+        doc.torrent.should.have.properties(fixtures.torrent.alien.result);
+        doc.info.should.have.properties(fixtures.tmdb.get.movie[0]);
         done();
       })
       .catch(done);
@@ -65,11 +68,11 @@ describe('decorate/index', () => {
   it('n docs', done => {
     const docs = [
       new Medias({
-        path: fixtures.tmdb.alien.file,
+        path: fixtures.torrent.alien.file,
         created: Date.now(),
       }),
       new Medias({
-        path: fixtures.tmdb.jfk.file,
+        path: fixtures.torrent['mad men'].file,
         created: Date.now(),
       }),
     ];
@@ -78,23 +81,24 @@ describe('decorate/index', () => {
         r.should.be.an('array').and.to.have.lengthOf(2);
 
         // doc 1
+        docs[0].should.equal(r[0]);
         docs[0].should.have.property('isNew', false);
         docs[0].should.have.property('decoration', 'decorated');
-        docs[0].info.should.have.properties(fixtures.tmdb.alien.done);
-        docs[0].should.equal(r[0]);
+        docs[0].torrent.should.have.properties(fixtures.torrent.alien.result);
+        docs[0].info.should.have.properties(fixtures.tmdb.get.movie[0]);
 
         // doc 2
+        docs[1].should.equal(r[1]);
         docs[1].should.have.property('isNew', false);
         docs[1].should.have.property('decoration', 'decorated');
-        docs[1].info.should.have.properties(fixtures.tmdb.jfk.done);
-        docs[1].should.equal(r[1]);
+        docs[1].info.should.have.properties(fixtures.tmdb.get.tv[0]);
 
         done();
       })
       .catch(done);
   });
   describe('failed', () => {
-    it('with no info', done => {
+    it('not found', done => {
       const doc = new Medias({
         path: 'invalid.mkv',
         created: Date.now(),
@@ -110,9 +114,9 @@ describe('decorate/index', () => {
         })
         .catch(done);
     });
-    it('with info', done => {
+    it('invalid media_type', done => {
       const doc = new Medias({
-        path: fixtures.tmdb.unknowncategory.file,
+        path: fixtures.tmdb.search.multi.unknowncategory.file,
         decoration: 'undecorated',
         created: Date.now(),
       });
@@ -121,7 +125,7 @@ describe('decorate/index', () => {
           r.should.be.an('array').and.to.have.lengthOf(1);
           doc.should.have.property('isNew', false);
           doc.should.have.property('decoration', 'failed');
-          doc.should.have.property('info').that.have.properties(fixtures.tmdb.unknowncategory.done);
+          doc.should.have.property('info', undefined);
           r[0].should.equal(doc);
           done();
         })
@@ -131,16 +135,17 @@ describe('decorate/index', () => {
   describe('already decorated', () => {
     it('1 doc', done => {
       const doc = new Medias({
-        path: fixtures.tmdb.alien.file,
+        path: fixtures.tmdb.search.movie.alien.file,
         created: Date.now(),
         decoration: 'decorated',
-        info: fixtures.tmdb.alien.done,
+        info: fixtures.tmdb.search.movie.alien.done,
       });
       decorate([doc], opts)
         .then(r => {
           r.should.be.an('array').and.to.have.lengthOf(1);
           r[0].should.equal(doc);
-          doc.should.have.property('isNew', true);
+          doc.should.have.property('isNew', false);
+          doc.should.have.property('torrent');
           doc.should.have.property('decoration', 'decorated');
           done();
         })
@@ -149,15 +154,18 @@ describe('decorate/index', () => {
     it('n docs', done => {
       const docs = [
         new Medias({
-          path: fixtures.tmdb.alien.file,
+          path: fixtures.torrent.alien.file,
           created: Date.now(),
           decoration: 'decorated',
-          info: fixtures.tmdb.alien.done,
+          info: fixtures.tmdb.search.movie.alien.done,
         }),
         new Medias({
-          path: fixtures.tmdb.jfk.file,
+          path: fixtures.tmdb.search.multi.jfk.file,
           decoration: 'undecorated',
           created: Date.now(),
+          file: {
+            name: 'JFK',
+          },
         }),
       ];
       decorate(docs, opts)
@@ -166,7 +174,8 @@ describe('decorate/index', () => {
 
           // doc 1
           should.exist(docs[0]);
-          docs[0].should.have.property('isNew', true);
+          docs[0].should.have.property('isNew', false);
+          docs[0].should.have.property('torrent');
           docs[0].should.have.property('decoration', 'decorated');
           r[0].should.equal(docs[0]);
 
@@ -185,15 +194,15 @@ describe('decorate/index', () => {
   it('filter keys', done => {
     const docs = [
       new Medias({
-        path: fixtures.tmdb.alien.file,
+        path: fixtures.torrent.alien.file,
         created: Date.now(),
       }),
       new Medias({
-        path: fixtures.tmdb.alien.file,
+        path: fixtures.torrent.alien.file,
         created: Date.now(),
       }),
       new Medias({
-        path: fixtures.tmdb.jfk.file,
+        path: fixtures.torrent['mad men'].file,
         created: Date.now(),
       }),
     ];
@@ -210,32 +219,31 @@ describe('decorate/index', () => {
   it('sequential run', done => {
     const sameDocs = [
       new Medias({
-        path: fixtures.tmdb.alien.file,
+        path: fixtures.torrent.alien.file,
         created: Date.now(),
       }),
       new Medias({
-        path: fixtures.tmdb.alien.file,
+        path: fixtures.torrent.alien.file,
         created: Date.now(),
       }),
     ];
     decorate(sameDocs, opts)
       .then(r => {
-        r.should.be.an('array');
-        r.length.should.equal(2);
+        r.should.be.an('array').with.lengthOf(2);
       })
       .then(() => Cache.where({}).count().exec())
       .then(count => {
-        count.should.equal(1);
+        count.should.equal(2); // search + fetch
         done();
       })
       .catch(done);
   });
   it('ratelimit', done => {
-    tmdbStub.setLimit(2);
+    tmdbStub.setLimit(5);
     const docs = [
-      new Medias({ path: fixtures.tmdb.alien.file }),
-      new Medias({ path: fixtures.tmdb['mad men'].file }),
-      new Medias({ path: fixtures.tmdb.jfk.file }),
+      new Medias({ path: fixtures.torrent.alien.file }),
+      new Medias({ path: fixtures.torrent['mad men'].file }),
+      new Medias({ path: fixtures.tmdb.search.multi.jfk.file, file: { name: 'JFK' } }),
     ];
     decorate(docs, { api: tmdbStub })
       .then(r => {

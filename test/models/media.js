@@ -520,12 +520,18 @@ describe('models/media', () => {
             dir: '/path/to',
             base: 'file.mkv',
           },
-          info: {
-            popularity: '1.000',
+          torrent: {
             excess: 'MULTI',
+          },
+          info: {
+            id: 99,
+            popularity: '1.000',
+            imdb_id: 98,
           },
         }).getApiData();
         data.should.have.properties({
+          tmdbId: 99,
+          imdbId: 98,
           path: '/path/to/file.mkv',
           poster: 'http://placehold.it/342?text=no+image',
           dir: '/path/to',
@@ -628,10 +634,12 @@ describe('models/media', () => {
       });
       it('season / episode', () => {
         new Media({
-          info: {
-            category: 'tv',
+          torrent: {
             season: '1',
             episode: '1',
+          },
+          info: {
+            category: 'tv',
           },
         }).getApiData().should.have.properties({
           season: '1',
@@ -674,17 +682,19 @@ describe('models/media', () => {
           .should.have.property('votes', '0 vote');
       });
       it('codec', () => {
-        new Media({ info: { codec: 'MP4', audio: 'AC3' } }).getApiData()
+        new Media({ torrent: { codec: 'MP4', audio: 'AC3' } }).getApiData()
           .should.have.property('codec', 'MP4, AC3');
-        new Media({ info: { codec: 'MP4' } }).getApiData().should.have.property('codec', 'MP4');
-        new Media({ info: { audio: 'AC3' } }).getApiData().should.have.property('codec', 'AC3');
+        new Media({ torrent: { codec: 'MP4' } }).getApiData()
+          .should.have.property('codec', 'MP4');
+        new Media({ torrent: { audio: 'AC3' } }).getApiData()
+          .should.have.property('codec', 'AC3');
       });
       it('quality', () => {
-        new Media({ info: { quality: 'bluray', resolution: '1080p' } }).getApiData()
+        new Media({ torrent: { quality: 'bluray', resolution: '1080p' } }).getApiData()
           .should.have.property('quality', 'bluray, 1080p');
-        new Media({ info: { quality: 'bluray' } }).getApiData()
+        new Media({ torrent: { quality: 'bluray' } }).getApiData()
           .should.have.property('quality', 'bluray');
-        new Media({ info: { resolution: '1080p' } }).getApiData()
+        new Media({ torrent: { resolution: '1080p' } }).getApiData()
           .should.have.property('quality', '1080p');
       });
       it('size', () => {
@@ -697,6 +707,90 @@ describe('models/media', () => {
           .should.have.property('size', '1.13Mo');
         new Media({ file: { size: 1024 * 1024 * 1024 + 134000000 } }).getApiData()
           .should.have.property('size', '1.12Go');
+      });
+      it('videos', () => {
+        new Media({ path: '/path/to/file.mkv' }).getApiData()
+          .should.not.have.property('videos');
+        new Media({ path: '/path/to/file.mkv', info: { videos: { results: [] } } })
+          .getApiData().should.not.have.property('videos');
+        new Media({ path: '/path/to/file.mkv', info: { videos: { results: null } } })
+          .getApiData().should.not.have.property('videos');
+
+        const data = new Media({
+          path: '/path/to/file.mkv',
+          info: {
+            videos: {
+              results: [
+                { site: 'YouTube', key: 'key1', name: 'name1' },
+                { site: 'YouTube', key: 'key2', name: 'name2' },
+                { site: 'Other', key: 'key3', name: 'name3' },
+              ],
+            },
+          },
+        }).getApiData();
+        data.should.be.an('object').that.have.properties({ path: '/path/to/file.mkv' });
+        data.should.have.property('videos').that.is.an('array').with.lengthOf(2);
+        data.videos[0].should.be.an('object').that.have.properties({ key: 'key1', name: 'name1' });
+        data.videos[1].should.be.an('object').that.have.properties({ key: 'key2', name: 'name2' });
+      });
+      it('images', () => {
+        new Media({ path: '/path/to/file.mkv' }).getApiData()
+          .should.not.have.property('images');
+        new Media({ path: '/path/to/file.mkv', info: { images: { backdrops: [] } } })
+          .getApiData().should.not.have.property('images');
+        new Media({ path: '/path/to/file.mkv', info: { images: { backdrops: null } } })
+          .getApiData().should.not.have.property('images');
+
+        const data = new Media({
+          path: '/path/to/file.mkv',
+          info: {
+            images: {
+              backdrops: [
+                { file_path: '/path1', height: 100, width: 200 },
+                { file_path: '/path2', height: 200, width: 300 },
+              ],
+            },
+          },
+        }).getApiData();
+        data.should.be.an('object').that.have.properties({ path: '/path/to/file.mkv' });
+        data.should.have.property('images').that.is.an('array').with.lengthOf(2);
+        data.images[0].should.be.an('object')
+          .that.have.properties({ file_path: '/path1', height: 100, width: 200 });
+        data.images[1].should.be.an('object')
+          .that.have.properties({ file_path: '/path2', height: 200, width: 300 });
+      });
+      it('credits', () => {
+        new Media({ path: '/file.mkv', info: { credits: { crew: [], cast: [] } } }).getApiData()
+          .should.not.have.property('credits');
+        new Media({ path: '/file.mkv', info: {} }).getApiData()
+          .should.not.have.property('credits');
+
+        const data = new Media({
+          path: '/file.mkv',
+          info: {
+            credits: {
+              crew: [
+                { job: 'Casting', name: 'name1', profile_path: 'path1' },
+                { job: 'Director', name: 'name2', profile_path: 'path2' },
+              ],
+              cast: [
+                { order: 100, name: 'name1', character: 'char1', profile_path: 'path1' },
+                { order: 10, name: 'name2', character: 'char2', profile_path: 'path2' },
+                { order: 9, name: 'name3', character: 'char3', profile_path: 'path3' },
+              ],
+            },
+          },
+        }).getApiData();
+        data.should.have.property('credits');
+
+        data.credits.should.have.property('direction').that.is.an('array').with.lengthOf(1);
+        data.credits.direction[0].should.have.properties({ name: 'name2', profile_path: 'path2' });
+
+        data.credits.should.have.property('cast').that.is.an('array').with.lengthOf(2);
+        data.credits.cast[0]
+          .should.have.properties({ name: 'name3', character: 'char3', profile_path: 'path3' });
+        data.credits.cast[1]
+          .should.have.properties({ name: 'name2', character: 'char2', profile_path: 'path2' });
       });
     });
   });

@@ -60,7 +60,7 @@ describe('REST API tmdb', () => {
     it('with results', done => {
       beforeEachHelper(() => {
         request(expressApp)
-          .get('/api/tmdb?filter%5Bsearch%5D=alien')
+          .get('/api/tmdb?filter%5Bsearch%5D=jfk')
           .set('Accept', 'application/vnd.api+json')
           .expect(res => {
             const body = res.body;
@@ -69,14 +69,14 @@ describe('REST API tmdb', () => {
             body.meta.should.have.property('total-pages', 1);
             body.meta.should.have.property('from-cache', false);
             body.links.should.have.property('self',
-              'http://127.0.0.1/api/tmdb/?page%5Bnumber%5D=1&filter%5Bsearch%5D=alien');
+              'http://127.0.0.1/api/tmdb/?page%5Bnumber%5D=1&filter%5Bsearch%5D=jfk');
             body.links.should.not.have.property('first');
             body.links.should.not.have.property('last');
             body.links.should.not.have.property('prev');
             body.links.should.not.have.property('next');
 
-            body.data.should.be.an('array').and.have.lengthOf(2);
-            body.data.should.have.properties(fixtures.tmdb.alien.result.results);
+            body.data.should.be.an('array').and.have.lengthOf(1);
+            body.data.should.have.properties(fixtures.tmdb.search.multi.jfk.result.results);
           })
           .expect(200, done);
       });

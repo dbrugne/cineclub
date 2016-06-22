@@ -1,4 +1,7 @@
-const { fixtures } = require('../../lib/util/tests');
+const {
+  should,
+  fixtures,
+} = require('../../lib/util/tests');
 
 const parser = require('../../lib/decorate/parse');
 
@@ -8,7 +11,7 @@ describe('decorate/parse', () => {
   });
   it('invalid', () => {
     const r = parser(fixtures.torrent.invalid.file);
-    r.should.be.an('object').and.have.properties(fixtures.torrent.invalid.result);
+    should.not.exist(r);
   });
   it('valid movie', () => {
     const r = parser(fixtures.torrent.movie.file);

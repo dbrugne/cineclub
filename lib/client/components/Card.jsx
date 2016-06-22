@@ -117,15 +117,31 @@ class Card extends React.Component {
     if (data.created) {
       const cd = new Date(data.created);
       created = (
-        <span><strong className="text-muted">downloaded on</strong> {cd.toDateString()}</span>
+        <li><strong className="text-muted">downloaded on</strong> {cd.toDateString()}</li>
       );
     }
     let removed = null;
     if (data.removed) {
       const rd = new Date(data.removed);
       removed = (
-        <span><strong className="text-muted">deleted on</strong> {rd.toDateString()}</span>
+        <li><strong className="text-muted">deleted on</strong> {rd.toDateString()}</li>
       );
+    }
+
+    let tmdbId = null;
+    if (data.tmdbId) {
+      let element = null;
+      if (data.category === 'movie' || data.category === 'tv') {
+        const onOpenTmdbPage = () => {
+          event.preventDefault();
+          window.open(`https://www.themoviedb.org/${data.category}/${data.tmdbId}`);
+        };
+        element = (<a href="#" onClick={onOpenTmdbPage}>{data.tmdbId}</a>);
+      } else {
+        element = data.tmdbId;
+      }
+
+      tmdbId = <li><strong className="text-muted">TMDB id</strong> {element}</li>;
     }
 
     return (
@@ -135,7 +151,11 @@ class Card extends React.Component {
         </ul>
         <ul className="list-inline text-right text-muted small">
           <li><strong>id</strong> {data.id}</li>
+          {' '}
+          {tmdbId}
+          {' '}
           {created}
+          {' '}
           {removed}
         </ul>
       </div>

@@ -70,14 +70,12 @@ describe('tmdb API wrapper', () => {
     it('set and get cache', done => tmdbStub('searchMulti', { query: 'jfk' }) // 1st call
       .then(first => {
         should.exist(first);
-        first.should.have.properties(fixtures.tmdb.jfk.result);
-        first.should.not.property('from_cache');
+        first.should.have.properties(fixtures.tmdb.search.multi.jfk.result);
 
         return tmdbStub('searchMulti', { query: 'jfk' }) // 2nd call
           .then(second => {
             should.exist(second);
-            second.should.have.properties(fixtures.tmdb.jfk.result);
-            second.should.property('from_cache', true);
+            second.should.have.properties(fixtures.tmdb.search.multi.jfk.result);
             done();
           });
       })

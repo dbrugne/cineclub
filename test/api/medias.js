@@ -342,6 +342,7 @@ describe('REST API medias', () => {
               links.should.have.property('self', `http://127.0.0.1/api/medias/${doc.id}`);
               links.should.have.property('list', 'http://127.0.0.1/api/medias/');
               body.data.should.be.an('object').and.have.properties({
+                tmdbId: 99,
                 path: '/file1.txt',
                 id: doc.id,
                 removed: false,
