@@ -35,8 +35,12 @@ class Navigation extends React.Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} active={(this.props.currentLocation === '/medias')}>
-              <Link to="/medias">Medias</Link>
+            <NavItem
+              eventKey={1}
+              active={(this.props.currentLocation === '/medias')}
+              onClick={this.props.goToMedias}
+            >
+              Medias
             </NavItem>
             <Navbar.Form pullLeft>
               <FormGroup>
@@ -53,7 +57,7 @@ class Navigation extends React.Component {
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={3} active={(this.props.currentLocation === '/logout')}>
-              <Link to="/logout">Logout</Link>
+              Logout
             </NavItem>
           </Nav>
         </Navbar.Collapse>
