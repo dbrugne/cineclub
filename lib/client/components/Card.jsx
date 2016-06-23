@@ -80,7 +80,7 @@ class Card extends React.Component {
     const data = this.props.data;
 
     let t;
-    if (data.episodeInfo && data.episodeInfo.name) {
+    if (this.props.mode !== 'small' && data.episodeInfo && data.episodeInfo.name) {
       t = (
         <h4 className="mt10">
           Season {data.season}, Episode {data.episode}: {data.episodeInfo.name}
@@ -91,7 +91,7 @@ class Card extends React.Component {
     }
 
     let e;
-    if (data.episodeInfo && data.episodeInfo.overview) {
+    if (this.props.mode !== 'small' && data.episodeInfo && data.episodeInfo.overview) {
       e = (this.props.mode === 'small' && data.episodeInfo.overview > 230)
         ? `${data.episodeInfo.overview.substr(0, 230)} (...)`
         : data.episodeInfo.overview;
@@ -137,7 +137,7 @@ class Card extends React.Component {
     const data = this.props.data;
 
     return (
-      <div className="mt10">
+      <div className="mt10 mb10">
         {data.episodes.map(e => {
           const season = leftPad(e.season);
           const episode = leftPad(e.episode);
