@@ -4,7 +4,7 @@ import { goBack } from 'react-router-redux';
 import { fetchMedia, decorate } from './MediaActions';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-import Card from '../components/Card';
+import Card from '../card/Card';
 import Decoration from '../decoration/Decoration';
 
 class Media extends React.Component {

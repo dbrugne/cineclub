@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { changeCategory, changePage, fetchMedias } from './MediasActions';
 import Header from '../components/Header';
 import Pagination from '../components/Pagination';
-import Card from '../components/Card';
+import Card from '../card/Card';
 import Loading from '../components/Loading';
 import SelectCategory from './SelectCategory';
 
